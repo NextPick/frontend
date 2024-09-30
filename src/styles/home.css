@@ -1,0 +1,15 @@
+.background-color {
+    height: 100vw;
+    background-size: 100vw;
+    background-color: #ffffff;
+}
+.startview{
+    width: 100vw;          /* 사각형의 너비 */
+    height: 100vw;         /* 사각형의 높이 */
+    background-color: rgb(186, 212, 250); /* 배경색 설정 */
+    display: flex;         /* Flexbox 사용 (선택 사항) */
+    align-items: center;   /* 세로 중앙 정렬 (선택 사항) */
+    justify-content: center; /* 가로 중앙 정렬 (선택 사항) */
+    color: white;          /* 텍스트 색상 (선택 사항) */
+    font-size: 20px;      /* 텍스트 크기 (선택 사항) */
+}
