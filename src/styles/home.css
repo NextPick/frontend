@@ -1,15 +1,111 @@
-.background-color {
-    height: 100vw;
+@font-face {
+    font-family: "강원교육튼튼N";
+    src: url("../assets/fonts/강원교육튼튼.ttf") format("truetype");
+  }
+  
+  @font-face {
+    font-family: "강원교육튼튼B";
+    src: url("../assets/fonts/SB 어그로 B.ttf") format("truetype");
+  }
+   
+  @font-face {
+    font-family: "강원교육튼튼L";
+    src: url("../assets/fonts/SB 어그로 L.ttf") format("truetype");
+  }
+  
+  @font-face {
+    font-family: "강원교육튼튼M";
+    src: url("../assets/fonts/SB 어그로 M.ttf") format("truetype");
+  }
+  @font-face {
+    font-family: "Pretendard";
+    src: url("../assets/fonts/Pretendard-Medium.otf") format("truetype");
+  }
+  @font-face {
+    font-family: "PretendardB";
+    src: url("../assets/fonts/Pretendard-Black.otf") format("truetype");
+  }
+
+.backgroundcolor{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* 자식 요소를 세로 중앙 정렬 */
+    height: calc(100vh - 60px); /* 전체 높이에서 헤더 높이 제외 */
     background-size: 100vw;
+    height: auto;
     background-color: #ffffff;
+ 
 }
-.startview{
-    width: 100vw;          /* 사각형의 너비 */
-    height: 100vw;         /* 사각형의 높이 */
-    background-color: rgb(186, 212, 250); /* 배경색 설정 */
-    display: flex;         /* Flexbox 사용 (선택 사항) */
-    align-items: center;   /* 세로 중앙 정렬 (선택 사항) */
-    justify-content: center; /* 가로 중앙 정렬 (선택 사항) */
-    color: white;          /* 텍스트 색상 (선택 사항) */
-    font-size: 20px;      /* 텍스트 크기 (선택 사항) */
+.section{
+    height: 100vh; /* 각 섹션이 화면 전체 높이를 차지 */
+    display: flex; /* Flexbox 사용 */
+    align-items: center; /* 세로 중앙 정렬 */
+    justify-content: center; /* 가로 중앙 정렬 */
+}.section1 {
+    background-color: #d4e5f0; /* 첫 번째 섹션 배경색 */
+    padding: 0 20px; /* 좌우 패딩 추가 (선택 사항) */
+    display: flex; /* Flexbox 사용 */
+    align-items: center; /* 세로 중앙 정렬 */
+    justify-content: center; /* 세로 중앙 정렬 */
+    height: auto; /* 내용에 맞게 높이 조정 */
+    width: 100%;
+}
+
+.section2 {
+    background-color: #f9faf9; /* 두 번째 섹션 배경색 */
+    padding: 0 0px; /* 좌우 패딩 추가 (선택 사항) */
+    display: flex; /* Flexbox 사용 */
+    flex-direction: column; /* 자식 요소를 수직 방향으로 정렬 */
+    align-items: center; /* 가로 중앙 정렬 */
+    justify-content: center; /* 세로 중앙 정렬 */
+    height: auto;
+    width: 100%;
+}
+
+.section3 {
+    background-color: #ffffff; /* 세 번째 섹션 배경색 */
+    display: flex; /* Flexbox 사용 */
+    flex-direction: column; /* 자식 요소를 수직 방향으로 정렬 */
+    align-items: center; /* 가로 중앙 정렬 */
+    justify-content: center; /* 세로 중앙 정렬 */
+    height: auto;
+    width: 100%;
+}
+
+.mainimg{
+    display: flex; /* Flexbox 사용 */
+    align-items: center; /* 수직 중앙 정렬 */
+    justify-content: center; /* 수평 중앙 정렬 */
+    background-image: url("../assets/homech.png");
+    background-size: contain; /* 이미지 크기를 섹션에 맞게 조정 */
+    background-repeat: no-repeat; /* 이미지 반복 방지 */
+    width: 320px; /* 이미지 너비 (필요에 따라 조정) */
+    height: 230px; /* 이미지 높이 (필요에 따라 조정) */
+    margin-bottom: 20px;
+}
+.maintext1{
+    font-family: "강원교육튼튼M";
+    font-size: large;
+    margin-left: 40px;
+}
+.maintext2{
+    font-family: "Pretendard";
+    font-size: 12px;
+}
+.section2photo{
+    background-image: url("../assets/homeInterview.png");
+    background-size: contain; /* 이미지 크기를 섹션에 맞게 조정 */
+    background-repeat: no-repeat; /* 이미지 반복 방지 */
+    background-position: center; /* 배경 이미지 중앙 정렬 */
+    width: 400px; /* 이미지 너비 (필요에 따라 조정) */
+    height: 250px; /* 이미지 높이 (필요에 따라 조정) */
+}
+.section3photo{
+    background-image: url("../assets/homegraph.png");
+    background-size: contain; /* 이미지 크기를 섹션에 맞게 조정 */
+    background-repeat: no-repeat; /* 이미지 반복 방지 */
+    background-position: center; /* 배경 이미지 중앙 정렬 */
+    width: 260px; /* 이미지 너비 (필요에 따라 조정) */
+    height: 120px; /* 이미지 높이 (필요에 따라 조정) */
 }
