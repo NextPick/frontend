@@ -14,6 +14,7 @@ import {MemberManager} from '../hooks/MemberManager.js'
 import MyNote from '../pages/MyNote.js'
 import Feedback from '../pages/Feedback.js';
 import Cash from '../pages/Cash.js';
+import WebRTC from "../pages/WebRTC";
 
 
 // App 컴포넌트를 정의하는 함수형 컴포넌트
@@ -36,6 +37,7 @@ function App() {
           <Route path='/feedback' element={<Feedback/>} />
           <Route path='/cash' element={<Cash/>} />
           <Route path='/mynote' element={<MyNote/>} />
+          <Route path='/WebRTC' element={<WebRTC/>} />
         </Routes>
         </HeaderManager>
       </div>
