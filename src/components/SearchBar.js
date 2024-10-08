@@ -36,9 +36,10 @@ const SearchBar = ({ width, height, placeholder, onSearch, top, left,  value, on
         placeholder={placeholder || '검색어를 입력하세요...'}
         value={value} // 전달받은 value를 Input에 바인딩
         onChange={onChange} // 전달받은 onChange 핸들러를 Input에 연결
-        $w_width="30vw"
+        $w_width="26vw"
         $w_height="5px"
         $w_fontSize="10px"
+        radius="5px"
       />
       <Button
         color="transparent"

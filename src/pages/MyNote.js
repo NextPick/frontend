@@ -10,9 +10,6 @@ import defaultProfile from '../assets/img-non-login.png';
 import { useProfile } from '../hooks/ProfileContext'; // 프로필 컨텍스트
 import { useMember } from '../hooks/MemberManager'; // 회원 정보를 관리하는 훅
 import Line from '../components/Line';
-import one from '../assets/one.png';
-import two from '../assets/two.png';
-import three from '../assets/three.png';
 import SearchBar from '../components/SearchBar';
 import Input from '../components/Input'
 import search from '../assets/search.png'
@@ -46,6 +43,7 @@ const MyNote = () => {
     const location = useLocation();
     const fileInputRef = useRef(null); // 파일 입력을 참조할 ref 생성
     const [activeTab, setActiveTab] = useState('answer'); // 탭 상태를 관리
+    const [sortOption, setSortOption] = useState('');
 
     const handleButtonClick = (path) => {
         navigate(path); // 이동할 페이지
@@ -74,36 +72,63 @@ const MyNote = () => {
         }
     };
 
-       // 탭을 전환하는 함수
-       const switchTab = (tab) => {
+    // 탭을 전환하는 함수
+    const switchTab = (tab) => {
         setActiveTab(tab);
     };
+    // 옵션 정의
+    const firstOptions = [
+        { value: '', label: 'FE/BE/CS' },
+        { value: 'high', label: 'FE' },
+        { value: 'low', label: 'BE' },
+        { value: 'new', label: 'CS' },
+    ];
 
- // 탭에 따라 표시할 콘텐츠를 정의
- const renderTabContent = () => {
-    if (activeTab === 'answer') {
-        return (
-            <div style={ {display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center', marginTop: "10px"}}>
-               <SearchBar
-               >
-               </SearchBar>
-                <SelectBox></SelectBox>
-                <h5>정답 보드</h5>
-            </div>
-        );
-    } else if (activeTab === 'wrong') {
-        return (
-            <div style={ {display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center', marginTop: "10px"}}>
-           
-            <SearchBar
-            >
-            </SearchBar>
-             <SelectBox></SelectBox>
-             <h5>오답 보드</h5>
-         </div>
-        );
-    }
-};
+    const secondOptions = {
+        high: [{ value: 'subHigh1', label: 'FE 옵션 1-1' },
+            { value: 'subHigh1', label: 'FE 옵션 1-2' }
+        ],
+        low: [{ value: 'subLow1', label: 'BE 옵션 2-1' },
+            { value: 'subLow1', label: 'BE 옵션 2-2' },
+        ],
+        new: [{ value: 'subNew1', label: 'CS 옵션 3-1'  },
+            { value: 'subNew1', label:  'CS 옵션 3-2' },
+        ],
+    };
+
+    // 탭에 따라 표시할 콘텐츠를 정의
+    const renderTabContent = () => {
+        if (activeTab === 'answer') {
+            return (
+                <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center', marginTop: "10px" }}>
+                    <SearchBar
+                    >
+                    </SearchBar>
+                    <SelectBox
+                        firstOptions={firstOptions}
+                        secondOptions={secondOptions}
+                        onFirstChange={(value) => setSortOption(value)}
+                    />
+                    <h5>정답 보드</h5>
+                </div>
+            );
+        } else if (activeTab === 'wrong') {
+            return (
+                <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center', marginTop: "10px" }}>
+
+                    <SearchBar
+                    >
+                    </SearchBar>
+                    <SelectBox
+                        firstOptions={firstOptions}
+                        secondOptions={secondOptions}
+                        onFirstChange={(value) => setSortOption(value)}
+                    />
+                    <h5>오답 보드</h5>
+                </div>
+            );
+        }
+    };
 
     return (
         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-start' }}>
@@ -133,7 +158,7 @@ const MyNote = () => {
                 <Line
                 ></Line>
 
-                
+
                 <Button
                     color="transparent"
                     width="20vw"
@@ -153,48 +178,48 @@ const MyNote = () => {
                     </Font>
                 </Button>
 
-                <Link to="/mynote" style={{ textDecoration: 'none' }}> 
-                <Button
-                    color="transparent"
-                    width="20vw"
-                    textcolor="#000000"
-                    height="25px"
-                    hoverColor="#ffffff"
-                    onClick={() => handleButtonClick('/mynote')}
-                >
-                    <Font
-                        font="PretendardL"
-                        size="10px"
-                        color="#000000"
-                        align="center"
-                        margintop="0px"
-                        paddingtop="7px"
+                <Link to="/mynote" style={{ textDecoration: 'none' }}>
+                    <Button
+                        color="transparent"
+                        width="20vw"
+                        textcolor="#000000"
+                        height="25px"
+                        hoverColor="#ffffff"
+                        onClick={() => handleButtonClick('/mynote')}
                     >
-                        정답 / 오답노트
-                    </Font>
-                </Button>
+                        <Font
+                            font="PretendardL"
+                            size="10px"
+                            color="#000000"
+                            align="center"
+                            margintop="0px"
+                            paddingtop="7px"
+                        >
+                            정답 / 오답노트
+                        </Font>
+                    </Button>
                 </Link>
 
-                <Link to="/feedback" style={{ textDecoration: 'none' }}> 
-                <Button
-                    color="transparent"
-                    width="20vw"
-                    textcolor="#000000"
-                    height="25px"
-                    hoverColor="#ffffff"
-                    onClick={() => handleButtonClick('/feedbackT')}
-                >
-                    <Font
-                        font="PretendardL"
-                        size="10px"
-                        color="#000000"
-                        align="center"
-                        margintop="0px"
-                        paddingtop="7px"
+                <Link to="/feedback" style={{ textDecoration: 'none' }}>
+                    <Button
+                        color="transparent"
+                        width="20vw"
+                        textcolor="#000000"
+                        height="25px"
+                        hoverColor="#ffffff"
+                        onClick={() => handleButtonClick('/feedbackT')}
                     >
-                        받은 피드백
-                    </Font>
-                </Button>
+                        <Font
+                            font="PretendardL"
+                            size="10px"
+                            color="#000000"
+                            align="center"
+                            margintop="0px"
+                            paddingtop="7px"
+                        >
+                            받은 피드백
+                        </Font>
+                    </Button>
                 </Link>
 
 
@@ -248,58 +273,58 @@ const MyNote = () => {
                 direction="column"
                 alignitem="center"
                 padding="0px"
-                style={{ display: 'flex'}} // 자식 박스에서 정렬
+                style={{ display: 'flex' }} // 자식 박스에서 정렬
             >
-                <div style={{display: 'flex', flexDirection: 'row'}}>
-                <Button
-                    height="8vh"
-                    width="17.5vw"
-                    border="none"
-                    radius="3px"
-                    top="none"
-                    color="#0372f396"
-                    onClick={() => switchTab('answer')}
-                >
-                    <Font
-                        font="PretendardB"
-                        size="9px"
-                        color="#000000"
-                        margintop="0px"
-                        paddingtop="7px"
-                        spacing="2px"
-                        align="center"
+                <div style={{ display: 'flex', flexDirection: 'row' }}>
+                    <Button
+                        height="8vh"
+                        width="17.5vw"
+                        border="none"
+                        radius="3px"
+                        top="none"
+                        color="#0372f396"
+                        onClick={() => switchTab('answer')}
                     >
-                        정답
-                    </Font>
-                </Button>
-                <Button
-                    height="8vh"
-                    width="17.5vw"
-                    border="none"
-                    radius="3px"
-                    alignitem="flex-start"
-                    justify="flex-start"
-                    top="none"
-                    color="#0372f396"
-                    onClick={() => switchTab('wrong')}
-                >
-                    <Font
-                        font="PretendardB"
-                        size="9px"
-                        color="#000000"
-                        margintop="0px"
-                        paddingtop="7px"
-                        spacing="2px"
-                         align="center"
+                        <Font
+                            font="PretendardB"
+                            size="9px"
+                            color="#000000"
+                            margintop="0px"
+                            paddingtop="7px"
+                            spacing="2px"
+                            align="center"
+                        >
+                            정답
+                        </Font>
+                    </Button>
+                    <Button
+                        height="8vh"
+                        width="17.5vw"
+                        border="none"
+                        radius="3px"
+                        alignitem="flex-start"
+                        justify="flex-start"
+                        top="none"
+                        color="#0372f396"
+                        onClick={() => switchTab('wrong')}
                     >
-                        오답
-                    </Font>
-                </Button>
+                        <Font
+                            font="PretendardB"
+                            size="9px"
+                            color="#000000"
+                            margintop="0px"
+                            paddingtop="7px"
+                            spacing="2px"
+                            align="center"
+                        >
+                            오답
+                        </Font>
+                    </Button>
                 </div>
-                {renderTabContent()} 
+                {renderTabContent()}
             </Box>
         </div>
     );
-  }
-  
+}
+
 export default MyNote;

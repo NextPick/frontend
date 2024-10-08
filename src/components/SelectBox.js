@@ -11,7 +11,7 @@ const Select = styled.select`
     margin: 10px 6px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    font-size: 8px;
+    font-size: ${(props) => props.size || "8px"};
     cursor: pointer;
 
     &:focus {
@@ -22,79 +22,57 @@ const Select = styled.select`
 `;
 
 
-const SelectBox = () => {
-    // 첫 번째 셀렉트 박스의 상태
+const SelectBox = ({ firstOptions, secondOptions, onFirstChange, onSecondChange, size }) => {
     const [firstSelect, setFirstSelect] = useState('');
-    // 두 번째 셀렉트 박스의 상태
     const [secondSelect, setSecondSelect] = useState('');
 
-    // 첫 번째 셀렉트 박스의 옵션
-    const firstOptions = [
-        { value: '', label: 'FE/BE/CS' },
-        { value: 'option1', label: 'FE' },
-        { value: 'option2', label: 'BE' },
-        { value: 'option3', label: 'CS' },
-    ];
-
-    // 두 번째 셀렉트 박스의 옵션을 결정
-    const secondOptions = {
-        option1: [
-            { value: 'subOption1', label: 'FE 옵션 1-1' },
-            { value: 'subOption2', label: 'FE 옵션 1-2' },
-        ],
-        option2: [
-            { value: 'subOption3', label: 'BE 옵션 2-1' },
-            { value: 'subOption4', label: 'BE 옵션 2-2' },
-        ],
-        option3: [
-            { value: 'subOption5', label: 'CS 옵션 3-1' },
-            { value: 'subOption6', label: 'CS 옵션 3-2' },
-        ]
-    };
-
-    // 첫 번째 셀렉트 박스의 선택을 처리하는 함수
     const handleFirstSelectChange = (e) => {
-        setFirstSelect(e.target.value);
+        const value = e.target.value;
+        setFirstSelect(value);
         setSecondSelect(''); // 첫 번째 선택 변경 시 두 번째 선택 초기화
+        if (onFirstChange) {
+            onFirstChange(value); // 부모 컴포넌트로 선택값 전달
+        }
     };
 
-    // 두 번째 셀렉트 박스의 선택을 처리하는 함수
     const handleSecondSelectChange = (e) => {
-        setSecondSelect(e.target.value);
+        const value = e.target.value;
+        setSecondSelect(value);
+        if (onSecondChange) {
+            onSecondChange(value); // 부모 컴포넌트로 선택값 전달
+        }
     };
 
     return (
-        <div style={{display: 'flex', alignItems: 'center'}}>
-
-            {/* 첫 번째 셀렉트 박스 */}
-            <Select value={firstSelect} onChange={handleFirstSelectChange}>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+            <Select 
+            size={size}
+            value={firstSelect} onChange={handleFirstSelectChange}>
                 {firstOptions.map((option) => (
                     <option key={option.value} value={option.value}>
                         {option.label}
                     </option>
+                    
                 ))}
             </Select>
 
-
             <Font
-                        font="PretendardL"
-                        size="10px"
-                        color="#000000"
-                        align="center"
-                        margintop="none"
-                        justify="center"
-                        paddingleft="5px"
-                        paddingtop="15px"
-                    >
-                     〉
-                    </Font>
-         
-            {/* 두 번째 셀렉트 박스 - 항상 표시 */}
+                font="PretendardL"
+                size="10px"
+                color="#000000"
+                align="center"
+                margintop="none"
+                justify="center"
+                paddingleft="5px"
+                paddingtop="15px"
+            >
+                〉
+            </Font>
+
             <Select value={secondSelect} onChange={handleSecondSelectChange}>
-                {/* 첫 번째 선택에 따라 옵션 변경 */}
                 {(firstSelect
                     ? secondOptions[firstSelect]
-                    : Object.values(secondOptions).flat() // 모든 옵션 표시
+                    : Object.values(secondOptions).flat()
                 ).map((option) => (
                     <option key={option.value} value={option.value}>
                         {option.label}
