@@ -12,8 +12,12 @@ import Mypage from '../pages/Mypage.js';
 import { ProfileProvider } from '../hooks/ProfileContext.js';
 import {MemberManager} from '../hooks/MemberManager.js'
 import MyNote from '../pages/MyNote.js'
-import Feedback from '../pages/Feedback.js';
+import Feedback from '../pages/FeedbackS.js';
 import Cash from '../pages/Cash.js';
+import FeedbackT from '../pages/FeedbackT.js';
+import FeedbackS from '../pages/FeedbackS.js';
+import AdminPage from '../pages/AdminPage.js'
+import AdminPageInterview from '../pages/AdminPageInterview.js'
 
 
 // App 컴포넌트를 정의하는 함수형 컴포넌트
@@ -33,9 +37,12 @@ function App() {
           <Route path='/signup' element={<Signup/>} />
           <Route path='/signupSuccess' element={<SignupSuccess/>} />
           <Route path='/mypage' element={<Mypage/>} />
-          <Route path='/feedback' element={<Feedback/>} />
+          <Route path='/feedbackT' element={<FeedbackT/>} />
+          <Route path='/feedbackS' element={<FeedbackS/>} />
           <Route path='/cash' element={<Cash/>} />
           <Route path='/mynote' element={<MyNote/>} />
+          <Route path='/adminpage-interview' element={<AdminPageInterview/>} />
+          <Route path='/adminpage-service' element={<AdminPage/>} />
         </Routes>
         </HeaderManager>
       </div>

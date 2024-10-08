@@ -17,6 +17,7 @@ import SearchBar from '../components/SearchBar';
 import Input from '../components/Input'
 import search from '../assets/search.png'
 import SelectBox from '../components/SelectBox';
+import Board from '../components/Board';
 
 
 
@@ -82,28 +83,23 @@ const MyNote = () => {
  const renderTabContent = () => {
     if (activeTab === 'answer') {
         return (
-            <div style={ {display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
+            <div style={ {display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center', marginTop: "10px"}}>
                <SearchBar
-               height="10px"
-               width="30vw"
                >
-                <Button
-                  color="transparent"
-                  radius="5px"
-                  hoverColor="#FFFFFF"
-                >
-                <img src={search} alt="search" style={{ width: '18px', height: '20px' }} />
-                </Button>
                </SearchBar>
                 <SelectBox></SelectBox>
+                <h5>정답 보드</h5>
             </div>
         );
     } else if (activeTab === 'wrong') {
         return (
-            <div>
-                <h2>오답 탭</h2>
-                <p>이곳에 오답 관련 내용을 표시합니다.</p>
-            </div>
+            <div style={ {display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center', marginTop: "10px"}}>
+            <SearchBar
+            >
+            </SearchBar>
+             <SelectBox></SelectBox>
+             <h5>오답 보드</h5>
+         </div>
         );
     }
 };
@@ -131,8 +127,8 @@ const MyNote = () => {
                         style={{ display: 'none' }} // 파일 입력 숨기기
                     />
                 </ProfileImgArea>
-                <Font font="PretendardL" size="6.4px" color="#000000">{nickname || '닉네임'}</Font>
-                <Font font="PretendardL" size="5px" color="#A4A5A6">{email || '이메일'}</Font>
+                <Font font="PretendardL" size="6.4px" color="#000000" marginbottom="2px">{nickname || '닉네임'}</Font>
+                <Font font="PretendardL" size="5px" color="#A4A5A6" marginbottom="3px">{email || '이메일'}</Font>
                 <Line
                 ></Line>
 
@@ -185,7 +181,7 @@ const MyNote = () => {
                     textcolor="#000000"
                     height="25px"
                     hoverColor="#ffffff"
-                    onClick={() => handleButtonClick('/feedback')}
+                    onClick={() => handleButtonClick('/feedbackT')}
                 >
                     <Font
                         font="PretendardL"
@@ -249,7 +245,7 @@ const MyNote = () => {
                 left="20px"
                 justify="flex-start"
                 direction="column"
-                alignitem="flex-start"
+                alignitem="center"
                 padding="0px"
                 style={{ display: 'flex'}} // 자식 박스에서 정렬
             >
