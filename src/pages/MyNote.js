@@ -94,6 +94,7 @@ const MyNote = () => {
     } else if (activeTab === 'wrong') {
         return (
             <div style={ {display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center', marginTop: "10px"}}>
+           
             <SearchBar
             >
             </SearchBar>

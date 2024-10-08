@@ -88,11 +88,9 @@ const FeedbackS = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const fileInputRef = useRef(null); // 파일 입력을 참조할 ref 생성
-    const [activeTab, setActiveTab] = useState('searchbar'); // 탭 상태를 관리
     const [reviews, setReviews] = useState([]); // 리뷰 데이터를 저장할 상태
     const [selectedReview, setSelectedReview] = useState(null); // 선택된 리뷰를 저장할 상태
     const [showModal, setShowModal] = useState(false); // 모달창 표시 상태
-    const [averageScore, setAverageScore] = useState(0); // 평균 별점을 저장할 상태
     const [searchTerm, setSearchTerm] = useState(''); // 검색어 상태 관리
     const [filteredReviews, setFilteredReviews] = useState([]); // 검색 결과를 저장할 상태
 
@@ -164,46 +162,6 @@ const handleSearch = (value) => {
     };
 
 
-
-    // 탭에 따라 표시할 콘텐츠를 정의
-    const renderTabContent = () => {
-        if (activeTab === 'searchbar') {
-            return (
-                <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center' }}>
-                    <div style={{ alignSelf: 'flex-start' }}>
-                        <Font
-                            font="PretendardL"
-                            size="10px"
-                            color="#000000"
-                            margintop="5px"
-                            spacing="2px"
-                            paddingleft="13px"
-                            paddingtop="5px"
-                            marginbottom="2px"
-                        >
-                            받은 피드백
-                        </Font>
-                    </div>
-                    <SearchBar
-                        height="15px"
-                        width="30vw"
-                        padding="8px"
-                        top="0px"
-                        value={searchTerm} // 검색어 상태를 입력 필드에 바인딩
-                        onChange={(e) => handleSearch(e.target.value)} // 입력이 변경될 때 필터링 함수 호출
-                    >
-                        <Button
-                            color="transparent"
-                            radius="5px"
-                            hoverColor="#FFFFFF"
-                        >
-                            <img src={search} alt="search" style={{ width: '18px', height: '20px' }} />
-                        </Button>
-                    </SearchBar>
-                </div>
-            );
-        }
-    };
 
     return (
         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-start' }}>
@@ -355,7 +313,7 @@ const handleSearch = (value) => {
             font="PretendardL"
             size="10px"
             color="#000000"
-            margintop="1px"
+            margintop="5px"
             spacing="2px"
             paddingleft="13px"
             paddingtop="5px"
@@ -367,15 +325,8 @@ const handleSearch = (value) => {
         <SearchBar
             value={searchTerm} // 검색어 상태를 입력 필드에 바인딩
             onChange={(e) => handleSearch(e.target.value)} // 입력이 변경될 때 필터링 함수 호출
-            left="8px"
+            left="9px"
        >
-            <Button
-                color="transparent"
-                radius="5px"
-                hoverColor="#FFFFFF"
-            >
-                <img src={search} alt="search" style={{ width: '18px', height: '20px' }} />
-            </Button>
         </SearchBar>
 
 

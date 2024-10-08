@@ -163,45 +163,7 @@ const handleSearch = (value) => {
     };
 
    
- // 탭에 따라 표시할 콘텐츠를 정의
- const renderTabContent = () => {
-    if (activeTab === 'searchbar') {
-        return (
-            <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center' }}>
-                     <div style={{ alignSelf: 'flex-start' , marginBottom: '10px', width:"35vw" }}> {/* 왼쪽 정렬을 위한 스타일 */}
-                    <Font
-                        font="PretendardL"
-                        size="10px"
-                        color="#000000"
-                        margintop="5px"
-                        spacing="2px"
-                        paddingtop="5px"
-                        paddingleft="13px"
-                        marginbottom="2px"
-                    >
-                        면접질문 관리
-                    </Font>
-                    </div>
-                    <SearchBar
-                        height="15px"
-                        width="30vw"
-                        padding="8px"
-                        top="0px"
-                        value={searchTerm} // 검색어 상태를 입력 필드에 바인딩
-                        onChange={(e) => handleSearch(e.target.value)} // 입력이 변경될 때 필터링 함수 호출
-                    >
-                        <Button
-                            color="transparent"
-                            radius="5px"
-                            hoverColor="#FFFFFF"
-                        >
-                            <img src={search} alt="search" style={{ width: '18px', height: '20px' }} />
-                        </Button>
-                    </SearchBar>
-                </div>
-        );
-    } 
-};
+
 
     return (
         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-start' }}>
@@ -346,10 +308,30 @@ const handleSearch = (value) => {
                 direction="column"
                 alignitem="center"
                 padding="0px"
-                style={{ display: 'flex'}} // 자식 박스에서 정렬
+                style={{ display: 'flex' }} // 자식 박스에서 정렬
             >
-    
-                {renderTabContent()} 
+               {/* SearchBar와 피드백 제목을 추가한 부분 */}
+    <div style={{ marginBottom: '5px',width: '100%'  }}>
+        <Font
+            font="PretendardL"
+            size="10px"
+            color="#000000"
+            margintop="5px"
+            spacing="2px"
+            paddingleft="13px"
+            paddingtop="5px"
+            marginbottom="8px"
+        >
+            면접질문 관리
+        </Font>
+        </div>
+        <SearchBar
+            value={searchTerm} // 검색어 상태를 입력 필드에 바인딩
+            onChange={(e) => handleSearch(e.target.value)} // 입력이 변경될 때 필터링 함수 호출
+            left="9px"
+       >
+        </SearchBar>
+         
                 <ReviewContainer>
                     {filteredReviews.map((review, index) => (
                           <ReviewCard key={index} onClick={() => handleReviewClick(review)}>
