@@ -9,6 +9,7 @@ const StyledFont = styled.p`
   margin-top: ${(props) => props.margintop || '0'}; /* 마진, 기본값은 0 */
   margin-left: ${(props) => props.marginleft || 'none'};
   margin-bottom: ${(props) => props.marginbottom || 'none'};
+  margin-right: ${(props) => props.marginright};
   text-align: ${(props) => props.align || 'left'}; /* 텍스트 정렬, 기본값은 왼쪽 */
   padding-top: ${(props) => props.paddingtop || "0px"};
   padding-bottom: ${(props) => props.paddingbottom || "0px"};
@@ -21,7 +22,7 @@ const StyledFont = styled.p`
 
 const Font = (props) => {
     // 1.props{} 안에 추가
-    const{font, size, color, align, children, margintop, marginleft, marginbottom,  paddingtop, paddingbottom, paddingleft, spacing, height, justify, alignitem} = props;
+    const{font, size, color, align, children, margintop, marginleft, marginright, marginbottom,  paddingtop, paddingbottom, paddingleft, spacing, height, justify, alignitem} = props;
 
     return (
         // 3. 아래 props 받을 수 있도록 추가
@@ -32,6 +33,7 @@ const Font = (props) => {
         align={align}
         margintop={margintop}
         marginleft={marginleft}
+        marginright={marginright}
         marginbottom={marginbottom}
         paddingtop={paddingtop}
         paddingbottom={paddingbottom}

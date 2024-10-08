@@ -20,6 +20,7 @@ const StyledButton = styled.button`
     justify-content: ${(props) => props.justify || 'center'}; /* 수평 정렬을 중앙으로 조정 */
     margin-left: ${(props) => props.left};
     padding: ${(props) => props.padding};
+    display: ${(props) => props.display};
 
   &:hover {
     background-color: ${(props) => props.hoverColor || '#2980b9'}; /* 호버 시 어두운 파란색 */
@@ -29,7 +30,7 @@ const StyledButton = styled.button`
 
 const Button = (props) => {
   // 1. props {} 안에 추가
-  const { color, width, children, textcolor, margintop, margintbottom, height, radius, border, hoverColor, fontsize, fontfamily, onClick, align, justify, left, padding } = props;
+  const { color, width, children, textcolor, margintop, margintbottom, height, radius, border, hoverColor, fontsize, fontfamily, onClick, align, justify, left, padding, display } = props;
   return (
     // 3 아래 props 받을 수 있도록 추가
     <StyledButton
@@ -49,6 +50,7 @@ const Button = (props) => {
       justify={justify}
       left={left}
       padding={padding}
+      display={display}
     >
       {children}
     </StyledButton>
