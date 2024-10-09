@@ -20,6 +20,7 @@ import AdminPage from '../pages/AdminPage.js'
 import AdminPageQ from '../pages/AdminPageQ.js';
 import Administration from '../pages/Administration.js';
 import Choice from '../pages/Choice.js';
+import InterviewFeedback from '../pages/InterviewFeedback.js';
 
 
 // App 컴포넌트를 정의하는 함수형 컴포넌트
@@ -47,6 +48,7 @@ function App() {
           <Route path='/adminpage-service' element={<AdminPage/>} />
           <Route path='/administration' element={<Administration/>} />
           <Route path='/choice' element={<Choice/>} />
+          <Route path='/interviewfeedback' element={<InterviewFeedback/>} />
         </Routes>
         </HeaderManager>
       </div>

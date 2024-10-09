@@ -91,8 +91,8 @@ const Mypage = () => {
                         style={{ display: 'none' }} // 파일 입력 숨기기
                     />
                 </ProfileImgArea>
-                <Font font="PretendardL" size="6.4px" color="#000000">{nickname || '닉네임'}</Font>
-                <Font font="PretendardL" size="5px" color="#A4A5A6">{email || '이메일'}</Font>
+                <Font font="PretendardL" size="6.4px" color="#000000" marginbottom="2px">{nickname || '닉네임'}</Font>
+                <Font font="PretendardL" size="5px" color="#A4A5A6" marginbottom="3px">{email || '이메일'}</Font>
                 <Line
                 ></Line>
 
