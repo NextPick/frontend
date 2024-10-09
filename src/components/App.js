@@ -17,8 +17,9 @@ import Cash from '../pages/Cash.js';
 import FeedbackT from '../pages/FeedbackT.js';
 import FeedbackS from '../pages/FeedbackS.js';
 import AdminPage from '../pages/AdminPage.js'
-import AdminPageInterview from '../pages/AdminPageInterview.js'
+import AdminPageQ from '../pages/AdminPageQ.js';
 import Administration from '../pages/Administration.js';
+import Choice from '../pages/Choice.js';
 
 
 // App 컴포넌트를 정의하는 함수형 컴포넌트
@@ -42,9 +43,10 @@ function App() {
           <Route path='/feedbackS' element={<FeedbackS/>} />
           <Route path='/cash' element={<Cash/>} />
           <Route path='/mynote' element={<MyNote/>} />
-          <Route path='/adminpage-interview' element={<AdminPageInterview/>} />
+          <Route path='/adminpageQ' element={<AdminPageQ/>} />
           <Route path='/adminpage-service' element={<AdminPage/>} />
           <Route path='/administration' element={<Administration/>} />
+          <Route path='/choice' element={<Choice/>} />
         </Routes>
         </HeaderManager>
       </div>
