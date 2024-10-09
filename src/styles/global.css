@@ -33,6 +33,11 @@
   src: url("../assets/fonts/Pretendard-Light.otf") format("truetype");
 }
 
+@font-face {
+  font-family: "함박눈";
+  src: url("../assets/fonts/SF함박눈TTF.ttf") format("truetype");
+}
+
 .width-wrapper {
   display: flex; /* Flexbox 사용 */
   justify-content: center; /* 수평 중앙 정렬 */

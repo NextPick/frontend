@@ -22,6 +22,7 @@ const InputForm = styled.input`
     margin-top: ${(props) => props.marginTop || '5px'}; // 위 여백 설정
     resize: none; // 크기 조절 비활성화
     position: relative; // 상대 위치 지정
+    border-radius: ${(props)=> props.radius};
 
     @media all and (max-width: 430px) {
         height: ${(props) => props.$m_height}; // 모바일 높이 설정
@@ -55,7 +56,8 @@ const TextArea = ({
     marginTop,
     border,
     name,
-    $padding
+    $padding,
+    radius
 
 }) => {
     const deleteRef = useRef(null); // 입력필드 참조 생성
@@ -84,6 +86,7 @@ const TextArea = ({
                 border={border}
                 name={name} // name 속성 추가
                 $padding={$padding}
+                radius={radius}
             />
        
         </InputContainer>

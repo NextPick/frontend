@@ -145,7 +145,7 @@ const Mypage = () => {
                     textcolor="#000000"
                     height="25px"
                     hoverColor="#ffffff"
-                    onClick={() => handleButtonClick('/feedback')}
+                    onClick={() => handleButtonClick('/feedbackT')}
                 >
                     <Font
                         font="PretendardL"
