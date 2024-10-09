@@ -48,7 +48,7 @@ const WebRTC = () => {
 
     // 소켓 연결 함수
     const connectSocket = async () => {
-        const socket = new SockJS('https://172.30.1.27:8443/signaling'); // 소켓 서버 URL
+        const socket = new SockJS('https://localhost:8443/signaling'); // 소켓 서버 URL
         stompClient.current = Stomp.over(socket); // STOMP 클라이언트 생성
         stompClient.debug = null;
 

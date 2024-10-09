@@ -15,6 +15,7 @@ import MyNote from '../pages/MyNote.js'
 import Feedback from '../pages/Feedback.js';
 import Cash from '../pages/Cash.js';
 import WebRTC from "../pages/WebRTC";
+import InterviewRoom from "../pages/InterviewRoom"
 
 
 // App 컴포넌트를 정의하는 함수형 컴포넌트
@@ -37,7 +38,8 @@ function App() {
           <Route path='/feedback' element={<Feedback/>} />
           <Route path='/cash' element={<Cash/>} />
           <Route path='/mynote' element={<MyNote/>} />
-          <Route path='/WebRTC' element={<WebRTC/>} />
+          <Route path='/webrtc' element={<WebRTC/>} />
+          <Route path='/interviewRoom' element={<InterviewRoom/>} />
         </Routes>
         </HeaderManager>
       </div>
