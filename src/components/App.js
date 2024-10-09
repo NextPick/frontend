@@ -19,6 +19,8 @@ import FeedbackS from '../pages/FeedbackS.js';
 import AdminPage from '../pages/AdminPage.js'
 import AdminPageInterview from '../pages/AdminPageInterview.js'
 import Administration from '../pages/Administration.js';
+import Board from '../pages/Board.jsx';
+import BoardContent from '../pages/BoardContent.jsx';
 
 
 // App 컴포넌트를 정의하는 함수형 컴포넌트
@@ -45,6 +47,8 @@ function App() {
           <Route path='/adminpage-interview' element={<AdminPageInterview/>} />
           <Route path='/adminpage-service' element={<AdminPage/>} />
           <Route path='/administration' element={<Administration/>} />
+          <Route path='/board' element={<Board/>} />
+          <Route path='/board/content' element={<BoardContent/>} />
         </Routes>
         </HeaderManager>
       </div>
