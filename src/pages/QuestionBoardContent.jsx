@@ -1,6 +1,31 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
 
 const PostDetail = () => {
+  const { boardId } = useParams();
+  const [post, setPost] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchPost = async () => {
+      try {
+        const response = await axios.get(`/posts/${boardId}`);
+        setPost(response.data);
+      } catch (err) {
+        setError('게시글을 불러오는 중 오류가 발생했습니다.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPost();
+  }, [boardId]);
+
+  if (loading) return <p>로딩 중...</p>;
+  // if (error) return <p>{error}</p>;
+
   return (
     <div style={styles.container}>
       <div style={styles.contentContainer}>
@@ -61,14 +86,6 @@ const PostDetail = () => {
           <input type="text" placeholder="답글" style={styles.commentInput} />
           <button style={styles.commentButton}>ENTER</button>
         </div>
-      </div>
-
-      {/* 페이지네이션 */}
-      <div style={styles.pagination}>
-        <span>1</span>
-        <span>2</span>
-        <span>3</span>
-        <span>4</span>
       </div>
     </div>
   );
@@ -198,14 +215,13 @@ const styles = {
   commentInput: {
     flex: 1,
     padding: '10px',
-    borderRadius: '4px',
+    borderRadius: '7px 0 0 7px',
     border: '1px solid black',
     boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
-    marginRight: '10px',
   },
   commentButton: {
     padding: '10px',
-    borderRadius: '4px',
+    borderRadius: '0 7px 7px 0',
     border: '1px solid black',
     backgroundColor: '#fff',
     cursor: 'pointer',
