@@ -57,11 +57,12 @@ const TextArea = ({
     border,
     name,
     $padding,
-    radius
+    radius,
 
 }) => {
     const deleteRef = useRef(null); // 입력필드 참조 생성
     // useKeyboardAvoider(); // 키보드 회피 훅 사용 -> 사용여부 나중 결정
+    
 
     return (
          <InputContainer>

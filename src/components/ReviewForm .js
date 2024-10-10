@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { FaStar } from 'react-icons/fa'; // 별점 아이콘
 import Button from './Button'; // Button 컴포넌트 임포트
 import Font from './Font'; // Font 컴포넌트 임포트
+import Input from '../components/Input'
 
 const ReviewForm = ({ onSubmitReview }) => {
     const [userScore, setUserScore] = useState(0); // 사용자 점수 상태
@@ -20,36 +20,34 @@ const ReviewForm = ({ onSubmitReview }) => {
         }
     };
 
+    // 글자 수 제한을 적용한 handleChange 함수 정의
+    const handleChange = (e) => {
+        const inputText = e.target.value;
+        if (inputText.length <= 70) { // 글자 수가 70자 이하인 경우에만 업데이트
+            setUserReview(inputText);
+        }
+    };
     return (
         <div>
-            {/* 리뷰 입력 폼 */}
-            <div style={{ margin: '20px 0' }}>
-                <Font font="PretendardL" size="10px" color="#000000" marginbottom="5px">
-                    튜터링의 평가
-                </Font>
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <div style={{ display: 'flex', marginRight: '10px' }}>
-                        {Array.from({ length: 5 }, (_, index) => (
-                            <FaStar
-                                key={index}
-                                size={20}
-                                color={index < userScore ? '#FFD700' : '#e4e5e9'}
-                                onClick={() => setUserScore(index + 1)} // 클릭 시 별점 설정
-                                style={{ cursor: 'pointer' }}
-                            />
-                        ))}
-                    </div>
-                    <input
-                        type="text"
-                        value={userReview}
-                        onChange={(e) => setUserReview(e.target.value)} // 리뷰 텍스트 업데이트
-                        placeholder="리뷰를 입력하세요"
-                        style={{ flex: 1, padding: '5px', borderRadius: '5px', border: '1px solid #ccc' }}
-                    />
-                    <Button onClick={handleSubmitReview}>제출</Button>
-                </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', marginBottom: '10px' }}> {/* 수평 정렬 */}
+                <Input
+                    $w_fontSize="9px"
+                    type="text"
+                    $w_width="26vw"
+                    $w_height="15vh"
+                    marginBottom='-3px'
+                    marginTop="0px"
+                    value={userReview}
+                    onChange={handleChange} // 글자 수 제한 핸들러 사용
+                    placeholder="리뷰를 입력하세요 (최대 70자)"
+                    radius='10px'
+                    style={{ flex: 1, padding: '13px', border: '1px solid #ccc' }}
+                />
             </div>
+
+
         </div>
+
     );
 };
 

@@ -7,6 +7,8 @@ import Button from '../components/Button';
 import Font from '../components/Font';
 import styled from 'styled-components';
 import Input from "../components/Input";
+import { FaStar } from 'react-icons/fa'; // 별점 아이콘
+
 import ReviewForm from '../components/ReviewForm ';
 
 
@@ -51,7 +53,7 @@ const InterviewFeedback = () => {
                     </Font>
                 </div>
                 <Box
-                    height="60vh"
+                    height="57vh"
                     width="30vw"
                     border="none"
                     alignItems="center"
@@ -62,7 +64,7 @@ const InterviewFeedback = () => {
                 >
                 </Box>
                 <Box
-                    height="15vh"
+                    height="32vh"
                     width="30vw"
                     border="none"
                     alignItems="flex-start"
@@ -72,76 +74,61 @@ const InterviewFeedback = () => {
                     bottom="10px"
                     style={{ display: 'flex', flexDirection: 'column' }} // 자식 박스에서 정렬
                 >
-                    <div style={{ marginBottom: '5px', width: '100%' }}>
-                        <Font
-                            font="PretendardL"
-                            size="10px"
-                            color="#000000"
-                            margintop="5px"
-                            spacing="2px"
-                            paddingleft="13px"
-                            paddingtop="5px"
-                            marginbottom="8px"
-                        >
-                            튜터링 만족평가
-                        </Font>
-                    </div>
-                    <Font font="PretendardL" size="10px" color="#000000" marginbottom="5px">
-                    튜터링 리뷰 작성
-                    </Font>
-                <ReviewForm onSubmitReview={handleSubmitReview} /> {/* ReviewForm 컴포넌트 사용 */}
-                {/* 제출된 리뷰 목록 */}
-                <div>
-                    {submittedReviews.map((review, index) => (
-                        <div key={index}>
-                            <div>익명</div> {/* 익명 표시 */}
-                            <div>{review.score}점</div>
-                            <div>{review.userComment}</div>
+                    <div style={{ marginBottom: '0px', width: '100%' }}>
+                        {/* 텍스트와 별점을 수평으로 정렬 */}
+                        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <Font
+                                font="PretendardB"
+                                size="9px"
+                                color="#000000"
+                                margintop="5px"
+                                spacing="2px"
+                                paddingleft="13px"
+                                paddingtop="5px"
+                                marginbottom="8px"
+                            >
+                                멘토링 후기를 작성해주세요!
+                            </Font>
+                            {/* 별점 컴포넌트가 텍스트 오른쪽에 수평으로 위치 */}
+                            <div style={{ display: 'flex', marginLeft: '8px' }}>
+                                {Array.from({ length: 5 }, (_, index) => (
+                                    <FaStar
+                                        key={index}
+                                        size={10}
+                                        color={index < userScore ? '#FFD700' : '#e4e5e9'}
+                                        onClick={() => setUserScore(index + 1)}
+                                        style={{ cursor: 'pointer' }}
+                                    />
+                                ))}
+                            </div>
                         </div>
-                    ))}
-                </div>
-                    <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}> {/* 버튼들을 수평으로 정렬하기 위한 div */}
+                    </div>
+
+                    <ReviewForm onSubmitReview={handleSubmitReview} /> {/* ReviewForm 컴포넌트 사용 */}
+                    {/* 제출된 리뷰 목록 */}
+                    <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%' }}>
+                        <div style={{ height: "20px", width: "30px" }}></div>
                         <Button
-                            height="4vh"
-                            width="5vw"
-                            border="none"
-                            radius="3px"
-                            color="#0372f396"
-                            padding="0px"
+                            right="5px"
+                            margintbottom="6px"
+                            onClick={handleSubmitReview}
+                            fontsize="12px"
+                            radius="5px"
                         >
-                            <Font
-                                font="PretendardB"
-                                size="8px"
-                                color="#000000"
-                                margintop="0px"
-                                paddingtop="1px"
-                                spacing="2px"
-                                align="center"
-                            >
-                                제출하기
-                            </Font>
-                        </Button>
-                        <Button
-                            height="4vh"
-                            width="5vw"
-                            border="none"
-                            radius="3px"
-                            color="#0372f396"
-                            padding="0px"
-                        >
-                            <Font
-                                font="PretendardB"
-                                size="8px"
-                                color="#000000"
-                                margintop="0px"
-                                paddingtop="1px"
-                                spacing="2px"
-                                align="center"
-                            >
-                                신고하기
-                            </Font>
+                            제출
                         </Button>
                     </div>
+
+                    <div>
+                        {submittedReviews.map((review, index) => (
+                            <div key={index}>
+                                <div>익명</div> {/* 익명 표시 */}
+                                <div>{review.score}점</div>
+                                <div>{review.userComment}</div>
+                            </div>
+                        ))}
+                    </div>
+
                 </Box>
             </Box>
         </div>
