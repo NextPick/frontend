@@ -6,7 +6,8 @@ import Headers from './Header.js';
 import Login from '../pages/Login.js';
 import SignupOption from '../pages/SignupOption.js'
 import Agree from '../pages/Agree.js';
-import Signup from '../pages/Signup.js';
+// import Signup from '../pages/Signup.js';
+import Signup from '../pages/Signup.jsx';
 import SignupSuccess from '../pages/SignupSuccess.js';
 import Mypage from '../pages/Mypage.js';
 import { ProfileProvider } from '../hooks/ProfileContext.js';
@@ -40,6 +41,7 @@ function App() {
           <Route path='/singupOption' element={<SignupOption/>} />
           <Route path='/agree' element={<Agree/>} />
           <Route path='/signup' element={<Signup/>} />
+          {/* <Route path='/signupx' element={<Signupx/>} /> */}
           <Route path='/signupSuccess' element={<SignupSuccess/>} />
           <Route path='/mypage' element={<Mypage/>} />
           <Route path='/feedbackT' element={<FeedbackT/>} />
