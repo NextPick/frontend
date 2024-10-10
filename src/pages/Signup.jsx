@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import Slider from '../components/Slider';
 import { emailValidation, nameValidation, nicknameValidation, passwordValidation, numberValidation } from '../utils/Validation.js';
+import iconImage from '../assets/logo.png'; 
 
 const Signup = () => {
   const { setHeaderMode } = useHeaderMode();
@@ -175,7 +176,7 @@ const Signup = () => {
           confirmButtonText: '확인'
         }).then((result) => {
           if (result.isConfirmed) {
-            navigate('/mypage');
+            navigate('/login');
           }
         });
       }
@@ -190,6 +191,8 @@ const Signup = () => {
 
   return (
     <div style={styles.container}>
+      <img src={iconImage} alt="아이콘" style={styles.icon} /> 
+      <div style={SignupTitle}>회원가입</div>
       <div style={styles.formContainer}>
         <form onSubmit={handleSignup}>
           {['이름', '닉네임', '이메일', '비밀번호', '비밀번호확인', '전화번호', '성별', '직군'].map((field, index) => (
@@ -225,13 +228,23 @@ const Signup = () => {
   );
 };
 
+const SignupTitle = {
+    textAlign: 'center',
+    fontSize: '24px',
+    fontWeight: 'bold',
+    marginBottom: '20px',
+  };
 const styles = {
     container: {
       display: 'flex',
+      flexDirection: 'column',
       justifyContent: 'center',
       alignItems: 'center',
       height: '100vh',
       backgroundColor: '#FFF',
+    },
+    icon: {
+      marginBottom: '20px',
     },
     formContainer: {
       display: 'flex',
@@ -239,19 +252,20 @@ const styles = {
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: '#D3E2ED',
-      padding: '30px',
+      padding: '50px 30px 30px 30px',
       borderRadius: '10px',
       width: '40vw',
       minWidth: '400px',
       maxWidth: '600px',
       textAlign: 'center',
       boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+      marginBottom: '10vh',
     },
     inputGroup: {
-      width: '100%', // 추가: 전체 너비를 사용하도록 설정
+      width: '100%',
       marginBottom: '15px',
       display: 'flex',
-      justifyContent: 'center', // 수정: 중앙 정렬 추가
+      justifyContent: 'center',
       alignItems: 'center',
     },
     label: {
@@ -262,7 +276,7 @@ const styles = {
     },
     inputContainer: {
       display: 'flex',
-      justifyContent: 'center', // 추가: 요소 중앙 정렬
+      justifyContent: 'center',
       flexGrow: 1,
       maxWidth: '300px',
     },
@@ -287,7 +301,8 @@ const styles = {
     submitButton: {
       backgroundColor: '#fffefe',
       border: 'none',
-      padding: '10px 20px',
+      padding: '10px 0',
+      width: '100%',
       fontSize: '14px',
       cursor: 'pointer',
       borderRadius: '5px',

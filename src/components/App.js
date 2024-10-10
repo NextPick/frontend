@@ -38,10 +38,9 @@ function App() {
         <Routes> {/* 경로 설정 */}
           <Route path="/" element={<Home />} />
           <Route path='/login' element={< Login/>} />
-          <Route path='/singupOption' element={<SignupOption/>} />
+          <Route path='/signupOption' element={<SignupOption/>} />
           <Route path='/agree' element={<Agree/>} />
           <Route path='/signup' element={<Signup/>} />
-          {/* <Route path='/signupx' element={<Signupx/>} /> */}
           <Route path='/signupSuccess' element={<SignupSuccess/>} />
           <Route path='/mypage' element={<Mypage/>} />
           <Route path='/feedbackT' element={<FeedbackT/>} />
