@@ -3,14 +3,14 @@ import {useState} from "react";
 import {useNavigate} from "react-router-dom";
 
 const InterviewRoom = () => {
-    let accessToken = window.localStorage.getItem('accessToken');
+    let accessToken = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiMTIzQDEyMy5jb20iLCJzdWIiOiIxMjNAMTIzLmNvbSIsImV4cCI6MTcyODkwNzk4NSwiaWF0IjoxNzI4NTQ3OTg1fQ.KPCWo5zTHzxCXu34f8ZQltOlfKw07vn7QtOzYfEBL-Q"
     const [roomTitle, setRoomTitle] = useState('');
     const [roomOccupation, setRoomOccupation] = useState('');
     const navigate = useNavigate();
 
     const handlePostInterviewRoom = async () => {
         try {
-            const response = await axios.post('https://192.168.0.126:8443/rooms',
+            const response = await axios.post('https://localhost:8443/rooms',
                 {
                     title: roomTitle,
                     occupation: roomOccupation,

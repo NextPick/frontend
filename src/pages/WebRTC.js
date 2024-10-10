@@ -13,6 +13,8 @@ const WebRTC = () => {
     const [isMuted, setIsMuted] = useState(false); // 음소거 상태
     const [isVideoEnabled, setIsVideoEnabled] = useState(true); // 비디오 활성화 상태
     let stompClient = useRef(null); // STOMP 클라이언트 참조
+    let accessToken = window.localStorage.getItem('accessToken');
+    let occupation = "BE";
 
     // 카메라 시작 함수
     const startCam = async () => {
@@ -54,8 +56,9 @@ const WebRTC = () => {
 
         // STOMP 클라이언트 연결
         stompClient.current.connect({
-            roomId: roomId, // 서버로 roomId header에 담아서 보내기
             camKey: myKey, // 서버로 camKey header에 담아서 보내기
+            occupation: occupation,
+            email: "123@123.com",
         }, () => {
             console.log('Connected to WebRTC server');
 
