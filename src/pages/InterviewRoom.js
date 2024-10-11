@@ -3,7 +3,7 @@ import {useState} from "react";
 import {useNavigate} from "react-router-dom";
 
 const InterviewRoom = () => {
-    let accessToken = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiMTIzQDEyMy5jb20iLCJzdWIiOiIxMjNAMTIzLmNvbSIsImV4cCI6MTcyODkwNzk4NSwiaWF0IjoxNzI4NTQ3OTg1fQ.KPCWo5zTHzxCXu34f8ZQltOlfKw07vn7QtOzYfEBL-Q"
+    let accessToken = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiMTIzQDEyMy5jb20iLCJzdWIiOiIxMjNAMTIzLmNvbSIsImV4cCI6MTcyODk2NzA1MywiaWF0IjoxNzI4NjA3MDUzfQ.tG6YiR6LJTLvqCa9_poNJb0LYIbQL-jIzsicKheagso"
     const [roomTitle, setRoomTitle] = useState('');
     const [roomOccupation, setRoomOccupation] = useState('');
     const navigate = useNavigate();
