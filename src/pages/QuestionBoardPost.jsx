@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Swal from 'sweetalert2'; 
 
 const CreatePost = () => {
   const [images, setImages] = useState([]);
@@ -30,135 +31,196 @@ const CreatePost = () => {
   };
 
   return (
-    <div style={styles.container}>
-      {/* 제목 입력 */}
-      <input type="text" placeholder="제목" style={styles.titleInput} />
+    <div style={container}>
+      <h2 style={titleContainer}>
+        <span style={mainTitle}>면접 질문 게시판</span>
+        <span style={{ margin: '0 5px -6px', fontSize: '18px'}}>|</span>
+        <span style={subTitle}>게시글 작성</span>
+      </h2>
+      <hr style={{ ...divider, width: '900px' }} />
+      <div style={contentContainer}>
+        <div style={boardContainer}>
+          {/* 제목 입력 */}
+          <input type="text" placeholder="제목" style={titleInput} />
 
-      {/* 내용 입력 */}
-      <textarea placeholder="내용" style={styles.contentInput}></textarea>
+          {/* 내용 입력 */}
+          <textarea placeholder="내용" style={contentInput}></textarea>
 
-      {/* 이미지 추가 */}
-      <div style={styles.imageSection}>
-        <input
-          id="imageInput"
-          type="file"
-          accept="image/*"
-          multiple
-          style={styles.fileInput}
-          onChange={handleImageAdd}
-        />
-        <button
-          onClick={() => document.getElementById('imageInput').click()}
-          style={styles.imageAddButton}
-        >
-          이미지 추가 ➕
-        </button>
-        <div style={styles.imageList}>
-          {images.map((image, index) => (
-            <div key={index} style={styles.imageContainer}>
-              <img
-                src={image.url}
-                alt={`Preview ${index + 1}`}
-                style={styles.imagePlaceholder}
-              />
-              <button
-                onClick={() => handleImageRemove(index)}
-                style={styles.removeButton}
-              >
-                ❌
-              </button>
+          {/* 이미지 추가 */}
+          <div style={imageSection}>
+            <input
+              id="imageInput"
+              type="file"
+              accept="image/*"
+              multiple
+              style={fileInput}
+              onChange={handleImageAdd}
+            />
+            <button
+              onClick={() => document.getElementById('imageInput').click()}
+              style={imageAddButton}
+            >
+              이미지 추가 ➕
+            </button>
+            <div style={imageList}>
+              {images.map((image, index) => (
+                <div key={index} style={imageContainer}>
+                  <img
+                    src={image.url}
+                    alt={`Preview ${index + 1}`}
+                    style={imagePlaceholder}
+                  />
+                  <button
+                    onClick={() => handleImageRemove(index)}
+                    style={removeButton}
+                  >
+                    ❌
+                  </button>
+                </div>
+              ))}
             </div>
-          ))}
+          </div>
+
         </div>
       </div>
-
-      {/* 작성하기 버튼 */}
-      <button style={styles.submitButton}>작성하기</button>
+          {/* 작성하기 버튼 */}
+          <button style={submitButton}>작성하기</button>
     </div>
   );
 };
 
-const styles = {
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    padding: '20px',
-    fontFamily: 'Arial, sans-serif',
-    backgroundColor: '#f7f7f7',
-    minHeight: '100vh',
-  },
-  titleInput: {
-    width: '100%',
-    maxWidth: '800px',
-    padding: '10px',
-    fontSize: '16px',
-    border: '1px solid black',
-    borderRadius: '4px',
-    marginBottom: '20px',
-    boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)', 
-  },
-  contentInput: {
-    width: '100%',
-    maxWidth: '800px',
-    height: '200px',
-    padding: '10px',
-    fontSize: '16px',
-    border: '1px solid black',
-    borderRadius: '4px',
-    marginBottom: '20px',
-    boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)', 
-  },
-  imageSection: {
-    width: '100%',
-    maxWidth: '800px',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'flex-start',
-    marginBottom: '20px',
-  },
-  imageAddButton: {
-    marginBottom: '10px',
-    fontSize: '14px',
-    border: '1px solid black',
-    borderRadius: '4px',
-    padding: '5px 10px',
-    backgroundColor: '#fff',
-    cursor: 'pointer',
-  },
-  fileInput: {
-    display: 'none',
-  },
-  imageList: {
-    display: 'flex',
-    gap: '10px',
-  },
-  imageContainer: {
-    position: 'relative',
-  },
-  imagePlaceholder: {
-    width: '80px',
-    height: '80px',
-    objectFit: 'cover',
-    borderRadius: '4px',
-  },
-  removeButton: {
-    position: 'absolute',
-    top: '-5px',
-    right: '-5px',
-    fontSize: '12px',
-    border: 'none',
-    backgroundColor: 'transparent',
-    cursor: 'pointer',
-  },
-  submitButton: {
-    fontSize: '14px',
-    border: '1px solid black',
-    borderRadius: '20px',
-    padding: '8px 16px',
-    backgroundColor: '#fff',
-    cursor: 'pointer',
-  },
+
+const container = {
+  display: 'flex',
+  flexDirection: 'column',
+  marginTop: '5vh',
+  alignItems: 'center',
+  height: '90vh',
+  backgroundColor: '#FFF',
+};
+
+const titleContainer = {
+  marginBottom: '-10px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'flex-start', // Aligns content to the start of the flex container
+  width: '900px', // Matches the width of the divider for alignment
+  marginLeft: '20px', // Adds some space from the left edge
+};
+
+const mainTitle = {
+  fontWeight: 'Bold',
+  fontSize: '26px', // Updated font size
+};
+
+const subTitle = {
+  fontSize: '18px', // Updated font size
+  marginTop: '10px',
+};
+
+const divider = {
+  borderTop: '2px solid #A0A0A0',
+  marginBottom: '40px',
+};
+const contentContainer ={
+  justifyContent: 'center',
+  flexDirection: 'column',
+  backgroundColor: '#E0EBF5',
+  alignItems: 'center',
+  width: '800px',
+  padding: '20px',
+  boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
+  borderRadius: '20px',
+}
+const boardContainer = {
+  width: '100%',
+  maxWidth: '800px',
+  backgroundColor: '#f7f7f7',
+  borderRadius: '8px',
+  border: '1px solid #ccc',
+  padding: '20px',
+};
+
+const titleInput = {
+  width: '100%',
+  maxWidth: '800px',
+  padding: '10px',
+  fontSize: '16px',
+  border: '1px solid #ccc',
+  borderRadius: '4px',
+  marginBottom: '20px',
+  boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
+};
+
+const contentInput = {
+  width: '100%',
+  maxWidth: '800px',
+  height: '200px',
+  padding: '10px',
+  fontSize: '16px',
+  border: '1px solid #ccc',
+  borderRadius: '4px',
+  marginBottom: '20px',
+  boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
+};
+
+const imageSection = {
+  width: '100%',
+  maxWidth: '800px',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'flex-start',
+  marginBottom: '20px',
+};
+
+const imageAddButton = {
+  marginBottom: '10px',
+  fontSize: '14px',
+  border: '1px solid #ccc',
+  borderRadius: '4px',
+  padding: '5px 10px',
+  backgroundColor: '#E0EBF5',
+  cursor: 'pointer',
+};
+
+const fileInput = {
+  display: 'none',
+};
+
+const imageList = {
+  display: 'flex',
+  gap: '10px',
+};
+
+const imageContainer = {
+  position: 'relative',
+};
+
+const imagePlaceholder = {
+  width: '80px',
+  height: '80px',
+  objectFit: 'cover',
+  borderRadius: '4px',
+};
+
+const removeButton = {
+  position: 'absolute',
+  top: '-5px',
+  right: '-5px',
+  fontSize: '12px',
+  border: 'none',
+  backgroundColor: 'transparent',
+  cursor: 'pointer',
+};
+
+const submitButton = {
+  fontSize: '14px',
+  border: '1px solid #ccc',
+  borderRadius: '20px',
+  padding: '8px 16px',
+  backgroundColor: '#fff',
+  marginTop: '20px',
+  cursor: 'pointer',
 };
 
 export default CreatePost;
