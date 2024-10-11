@@ -109,7 +109,7 @@ const ProfileImage = styled.img`
 
 
 
-const AdminPageInterview = () => {
+const AdminPageQ = () => {
     const { profileUrl, setProfileUrl, nickname, email } = useMember();
     const { headerMode, setHeaderMode } = useHeaderMode();
     const navigate = useNavigate();
@@ -535,4 +535,4 @@ const AdminPageInterview = () => {
     );
 }
 
-export default AdminPageInterview;
+export default AdminPageQ;

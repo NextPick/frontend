@@ -19,8 +19,10 @@ import Cash from '../pages/Cash.js';
 import FeedbackT from '../pages/FeedbackT.js';
 import FeedbackS from '../pages/FeedbackS.js';
 import AdminPage from '../pages/AdminPage.js'
-import AdminPageInterview from '../pages/AdminPageInterview.js'
+import AdminPageQ from '../pages/AdminPageQ.js';
 import Administration from '../pages/Administration.js';
+import Choice from '../pages/Choice.js';
+import InterviewFeedback from '../pages/InterviewFeedback.js';
 import QuestionBoard from '../pages/QuestionBoard.jsx';
 import QuestionBoardDetails from '../pages/QuestionBoardContent.jsx';
 import QuestionBoardPost from '../pages/QuestionBoardPost.jsx'
@@ -48,9 +50,11 @@ function App() {
           <Route path='/feedbackS' element={<FeedbackS/>} />
           <Route path='/cash' element={<Cash/>} />
           <Route path='/mynote' element={<MyNote/>} />
-          <Route path='/adminpage-interview' element={<AdminPageInterview/>} />
+          <Route path='/adminpageQ' element={<AdminPageQ/>} />
           <Route path='/adminpage-service' element={<AdminPage/>} />
           <Route path='/administration' element={<Administration/>} />
+          <Route path='/choice' element={<Choice/>} />
+          <Route path='/interviewfeedback' element={<InterviewFeedback/>} />
           <Route path='/board/question' element={<QuestionBoard/>} />
           <Route path='/board/question/:boardId' element={<QuestionBoardDetails/>} />
           <Route path='/board/question/post' element={<QuestionBoardPost/>} />
