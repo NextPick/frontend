@@ -42,7 +42,7 @@ const TextArea = ({
     onChange, // 입력 변화 핸들러
     onBlur,
     onKeyDown, // 키다운 핸들러
-    type = 'text', // 기본 입력 타입 설정
+    type = 'text', // 기본 입력 타입 설정 
     placeholder, // 플레이스홀더
     $m_height, // 모바일 높이
     $m_width, // 모바일 너비
