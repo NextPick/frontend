@@ -11,7 +11,7 @@ import { useProfile } from '../hooks/ProfileContext'; // 프로필 컨텍스트
 import { useMember } from '../hooks/MemberManager'; // 회원 정보를 관리하는 훅
 import Line from '../components/Line';
 import { FaStar } from 'react-icons/fa'; // 별점 표시를 위한 react-icons
-
+import ReviewForm from '../components/ReviewForm ';
 
 const ProfileImgArea = styled.div`
 justify-content: center;
@@ -64,54 +64,40 @@ const ReviewSlide = styled.div`
 `;
 
 
-// 마우스 휠 이벤트 핸들러
-const handleWheel = (event) => {
-    event.preventDefault(); // 기본 스크롤 이벤트 방지
-    event.currentTarget.scrollBy({
-        left: event.deltaY, // 마우스 휠 방향에 따라 수평으로 스크롤
-        behavior: 'smooth', // 부드럽게 스크롤
-    });
-};
-
-
 const FeedbackT = () => {
     const { profileUrl, setProfileUrl, nickname, email } = useMember();
     const { headerMode, setHeaderMode } = useHeaderMode();
     const navigate = useNavigate();
     const location = useLocation();
     const fileInputRef = useRef(null); // 파일 입력을 참조할 ref 생성
-    const [activeTab, setActiveTab] = useState('answer'); // 탭 상태를 관리
-    // 리뷰 관련 상태
     const [reviews, setReviews] = useState([]); // 리뷰 데이터를 저장할 상태
     const [averageScore, setAverageScore] = useState(0); // 평균 별점을 저장할 상태
 
-    // 백 연결하기전 mock 리뷰 데이터를 기반으로 평균 별점 계산
     useEffect(() => {
         setHeaderMode('main');
-
-        const mockData = [
-            { userName: 'User1', score: 4, userComment: 'Great!' },
-            { userName: 'User2', score: 5, userComment: 'Excellent!' },
-            { userName: 'User3', score: 3, userComment: 'Good, but can improve. 룰루 냐옹 서연이 코드침 오늘 너무 바쁨 흐규흐규 라면 냥냥 글자 100글자로 Not what I expected. I was hoping for more guidance and support. ' },
-        ];
-        setReviews(mockData);
-        // 평균 별점 계산
-        const totalScore = mockData.reduce((acc, curr) => acc + curr.score, 0);
-        const average = totalScore / mockData.length;
-        setAverageScore(average.toFixed(1)); // 소수점 첫째 자리로 고정
     }, [setHeaderMode]);
+
+    const handleButtonClick = (path) => {
+        navigate(path); // 이동할 페이지
+    };
+
 
     const handleImageClick = () => {
         if (fileInputRef.current) {
             fileInputRef.current.click();
         }
     };
-
-
-    const handleButtonClick = (path) => {
-        navigate(path); // 이동할 페이지
+    // 리뷰 데이터를 추가하는 함수
+    const handleReviewSubmit = (newReview) => {
+        setReviews((prevReviews) => {
+            const updatedReviews = [...prevReviews, newReview];
+            // 평균 점수 계산
+            const totalScore = updatedReviews.reduce((sum, review) => sum + review.score, 0);
+            const average = totalScore / updatedReviews.length;
+            setAverageScore(average); // 평균 점수 업데이트
+            return updatedReviews;
+        });
     };
-
 
     // 프로필 이미지를 변경하는 함수
     const changeProfileImg = (event) => {
@@ -197,27 +183,13 @@ const FeedbackT = () => {
                     </Button>
                 </Link>
 
-                <Link to="/feedback" style={{ textDecoration: 'none' }}>
-                    <Button
-                        color="transparent"
-                        width="20vw"
-                        textcolor="#000000"
-                        height="25px"
-                        hoverColor="#ffffff"
-                        onClick={() => handleButtonClick('/feedbackT')}
-                    >
-                        <Font
-                            font="PretendardL"
-                            size="10px"
-                            color="#000000"
-                            align="center"
-                            margintop="0px"
-                            paddingtop="7px"
-                        >
-                            받은 피드백
-                        </Font>
-                    </Button>
-                </Link>
+
+
+                <div style={{ alignSelf: 'flex-start' }}>
+                    <Font font="PretendardL" size="10px" color="#000000" margintop="0px" paddingtop="7px" spacing="2px" paddingleft="13px">
+                        받은 피드백
+                    </Font>
+                </div>
 
 
                 <Button
@@ -273,7 +245,7 @@ const FeedbackT = () => {
                 padding="0px"
                 style={{ display: 'flex' }} // 자식 박스에서 정렬
             >
-                <div style={{ alignSelf: 'flex-start'}}>
+                <div style={{ alignSelf: 'flex-start' }}>
                     <Font
                         font="PretendardL"
                         size="10px"
@@ -315,33 +287,24 @@ const FeedbackT = () => {
                         </div>
                     </div>
                 </div>
-               
-                    <div style={{ alignSelf: 'flex-start'}}>
-                        <Font
-                            font="PretendardL"
-                            size="10px"
-                            color="#000000"
-                            margintop="0px"
-                            paddingtop="7px"
-                            spacing="2px"
-                            paddingleft="13px"
-                        >
-                            받은 피드백
-                        </Font>
-                    </div>
-                    <div>
-                </div>
 
-                {/* 슬라이더를 추가하는 부분 */}
-                <ReviewContainer onWheel={handleWheel}>
-                    {reviews.map((review, index) => (
-                        <ReviewSlide key={index}>
-                            <div>{review.userName}</div>
-                            <div>{review.score}점</div>
-                            <div>{review.userComment}</div>
-                        </ReviewSlide>
-                    ))}
-                </ReviewContainer>
+
+                <div style={{ alignSelf: 'flex-start' }}>
+                    <Font font="PretendardL" size="10px" color="#000000" margintop="0px" paddingtop="7px" spacing="2px" paddingleft="13px">
+                        받은 피드백
+                    </Font>
+                </div>
+                {/* 리뷰 목록 출력 */}
+                {reviews.map((review, index) => (
+                    <div key={index}>
+                        <div>익명</div> {/* 익명 표시 */}
+                        <div>{review.score}점</div>
+                        <div>{review.userComment}</div>
+                    </div>
+                ))}
+
+                {/* ReviewForm 컴포넌트 사용 */}
+                <ReviewForm onSubmit={handleReviewSubmit} />
             </Box>
         </div>
     );

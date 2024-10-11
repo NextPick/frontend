@@ -21,6 +21,9 @@ const RequestBox = styled.div`
     height: 25px; // 요청 박스의 높이 조정
     display: flex;
     align-items: center; // 수직 중앙 정렬
+    gap: 4px;
+    justify-content: space-between; // 텍스트는 왼쪽, 버튼은 오른쪽에 배치
+    padding: 10px; // 좌우 여백 추가
 `;
 
 const ProfileImgArea = styled.div`
@@ -276,20 +279,17 @@ const Administration = () => {
                                 {request.userName}: {request.content}
                             </Font>
 
-                            <div style={{
-                display: 'flex', // 버튼을 수평으로 정렬
-                gap: '5px' // 버튼 간의 간격 설정
-            }}>
                             <Button
                                 height="4vh"
                                 width="5vw"
                                 border="none"
                                 radius="3px"
-                                alignitem="flex-start"
-                                justify="flex-start"
+                                alignitem="flex-end"
+                                 justify="flex-end"
                                 top="none"
                                 color="#0372f396"
                                 padding="0px"
+
                                 onClick={() => handleAcceptRequest(request.id)}>
                                 <Font
                                     font="PretendardB"
@@ -309,7 +309,7 @@ const Administration = () => {
                                 border="none"
                                 radius="3px"
                                 alignitem="flex-start"
-                                justify="flex-start"
+                                justify="flex-end"
                                 top="none"
                                 color="#0372f396"
                                 padding="0px"
@@ -326,7 +326,6 @@ const Administration = () => {
                                     거절
                                 </Font>
                             </Button>
-                            </div>
                         </RequestBox>
                     ))}
                 </Box>
