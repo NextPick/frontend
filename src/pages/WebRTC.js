@@ -45,7 +45,7 @@ const WebRTC = () => {
     };
 
     const connectSocket = async () => {
-        const socket = new SockJS('https://localhost:8443/signaling');
+        const socket = new SockJS('https://172.30.1.27:8443/signaling');
         stompClient = Stomp.over(socket);
         stompClient.debug = null;
 
@@ -53,7 +53,7 @@ const WebRTC = () => {
             {
                 camKey: myKey,
                 occupation: occupation,
-                email: "123456@123.com",
+                email: "1234@123.com",
             }, function () {
                 console.log('Connected to WebRTC server');
                 console.log(myKey);
