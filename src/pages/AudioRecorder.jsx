@@ -28,6 +28,7 @@ function App() {
     <div align="center">
       <ReactMediaRecorder
           audio
+          mimeType="audio/mpeg"
           render={({status, startRecording, stopRecording, mediaBlobUrl }) => (
             <div>
               <p>{status}</p>
@@ -35,7 +36,7 @@ function App() {
               <button onClick={stopRecording}>stop recording</button><br /><br />
               <audio src={mediaBlobUrl} controls></audio><br />
 
-              <a href={mediaBlobUrl} download="mySound.wav">download</a>
+              <a href={mediaBlobUrl} download="mySound.mp3">download</a>
             </div>            
           )}
        />
