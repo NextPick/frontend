@@ -265,7 +265,7 @@ const FeedbackT = () => {
                 <div style={{ alignSelf: 'flex-start' }}>
                     <Font
                         font="PretendardL"
-                        size="10px"
+                        size="25px"
                         color="#000000"
                         margintop="0px"
                         paddingtop="7px"
@@ -292,12 +292,12 @@ const FeedbackT = () => {
                     </ProfileImgArea>
                     {/* 별점 및 평점 수직 정렬 */}
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginLeft: '10px' }}>
-                        <span style={{ marginBottom: '10px', fontFamily: "함박눈" }}>{averageScore} / 5</span> {/* 평균 평점 */}
+                        <span style={{ marginBottom: '10px', fontFamily: "함박눈", fontSize:"30px"}}>{averageScore} / 5</span> {/* 평균 평점 */}
                         <div style={{ display: 'flex' }}> {/* 별점을 가로로 나열 */}
                             {Array.from({ length: 5 }, (_, i) => (
                                 <FaStar
                                     key={i}
-                                    size={14}
+                                    size={40}
                                     color={i < Math.round(averageScore) ? '#FFD700' : '#e4e5e9'} // 별점 채우기
                                 />
                             ))}
@@ -307,7 +307,7 @@ const FeedbackT = () => {
 
 
                 <div style={{ alignSelf: 'flex-start' }}>
-                    <Font font="PretendardL" size="10px" color="#000000" margintop="0px" paddingtop="7px" spacing="2px" paddingleft="13px">
+                    <Font font="PretendardL" size="25px" color="#000000" margintop="0px" paddingtop="7px" spacing="2px" paddingleft="13px">
                         받은 피드백
                     </Font>
                 </div>

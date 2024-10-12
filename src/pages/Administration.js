@@ -18,31 +18,38 @@ const RequestBox = styled.div`
     border: 1px solid #91a7c1;
     border-radius: 8px;
     width: 100%;
-    height: 25px; // 요청 박스의 높이 조정
+    height: 42px; // 요청 박스의 높이 조정
     display: flex;
     align-items: center; // 수직 중앙 정렬
-    gap: 4px;
     justify-content: space-between; // 텍스트는 왼쪽, 버튼은 오른쪽에 배치
     padding: 10px; // 좌우 여백 추가
 `;
 
+const TextContainer = styled.div`
+    flex-grow: 1; // 텍스트가 있는 컨테이너가 공간을 차지하도록 설정
+`;
+
+const ButtonContainer = styled.div`
+    display: flex;
+    gap: 10px; // 버튼 간의 간격 조정
+`;
+
 const ProfileImgArea = styled.div`
 justify-content: center;
-padding: 10px;
+margin-top: 18px;
+padding: 5px;
 display: flex; // 플렉스 박스 설정
     align-items: flex-start; // 이미지가 박스 시작 부분에 정렬되도록 설정
 `;
 
 
 const ProfileImage = styled.img`
-    width: 50px; // 원하는 너비
-    height: 50px; // 원하는 높이
+    width: 90px; // 원하는 너비
+    height: 90px; // 원하는 높이
     object-fit: cover; // 이미지 크기를 유지하며 잘림
     border-radius: 50%; // 원하는 경우 둥글게 만들기
     cursor: pointer; // 커서를 포인터로 변경
 `;
-
-
 
 const Administration = () => {
     const { profileUrl, setProfileUrl, nickname, email } = useMember();
@@ -60,7 +67,7 @@ const Administration = () => {
     useEffect(() => {
         setHeaderMode('main');
 
-         const mockRequests = [
+        const mockRequests = [
             { id: 1, userName: 'RequestUser1', content: '멘토가입 요청 1' },
             { id: 2, userName: 'RequestUser2', content: '멘토가입 요청 2' }
         ];
@@ -104,8 +111,8 @@ const Administration = () => {
     return (
         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-start' }}>
             <Box
-                height="65vh"
-                width="17vw"
+                height="70vh"
+                width="16vw"
                 border="none"
                 alignItems="flex-start"
                 justify="flex-start"
@@ -124,26 +131,27 @@ const Administration = () => {
                         style={{ display: 'none' }} // 파일 입력 숨기기
                     />
                 </ProfileImgArea>
-                <Font font="PretendardL" size="6.4px" color="#000000" marginbottom="2px">{nickname || '닉네임'}</Font>
-                <Font font="PretendardL" size="5px" color="#A4A5A6" marginbottom="3px">{email || '이메일'}</Font>
+                <Font font="PretendardL" size="20px" color="#000000" marginbottom="1px">{nickname || '닉네임'}</Font>
+                <Font font="PretendardL" size="185x" color="#A4A5A6" marginbottom="3px">{email || '이메일'}</Font>
                 <Line
+                    margintop="10px"
                 ></Line>
 
 
                 <Button
                     color="transparent"
-                    width="20vw"
+                    width="17vw"
                     textcolor="#000000"
-                    height="25px"
+                    height="54px"
                     hoverColor="#ffffff"
+                    margintbottom="2px"
                 >
                     <Font
                         font="PretendardL"
-                        size="10px"
+                        size="23px"
                         color="#000000"
                         align="center"
-                        margintop="0px"
-                        paddingtop="7px"
+                        paddingtop="6px"
                     >
                         서비스 이용비율
                     </Font>
@@ -152,21 +160,21 @@ const Administration = () => {
                 <Link to="/mynote" style={{ textDecoration: 'none' }}>
                     <Button
                         color="transparent"
-                        width="20vw"
+                        width="17vw"
                         textcolor="#000000"
-                        height="25px"
+                        height="54px"
                         hoverColor="#ffffff"
+                        margintbottom="2px"
                         onClick={() => handleButtonClick('/mynote')}
                     >
                         <Font
                             font="PretendardL"
-                            size="10px"
+                            size="23px"
                             color="#000000"
                             align="center"
-                            margintop="0px"
-                            paddingtop="7px"
+                            paddingtop="6px"
                         >
-                            멘토가입 신청관리
+                            면접질문 관리
                         </Font>
                     </Button>
                 </Link>
@@ -174,19 +182,19 @@ const Administration = () => {
                 <Link to="/feedback" style={{ textDecoration: 'none' }}>
                     <Button
                         color="transparent"
-                        width="20vw"
+                        width="17vw"
                         textcolor="#000000"
-                        height="25px"
+                        height="54px"
                         hoverColor="#ffffff"
+                        margintbottom="2px"
                         onClick={() => handleButtonClick('/feedbackT')}
                     >
                         <Font
                             font="PretendardL"
-                            size="10px"
+                            size="23px"
                             color="#000000"
                             align="center"
-                            margintop="0px"
-                            paddingtop="7px"
+                            paddingtop="6px"
                         >
                             멘토가입 신청관리
                         </Font>
@@ -196,47 +204,47 @@ const Administration = () => {
 
                 <Button
                     color="transparent"
-                    width="20vw"
+                    width="17vw"
                     textcolor="#000000"
-                    height="25px"
+                    height="54px"
                     hoverColor="#ffffff"
+                    margintbottom="2px"
                     onClick={() => handleButtonClick('/cash')}
                 >
                     <Font
                         font="PretendardL"
-                        size="10px"
+                        size="23px"
                         color="#000000"
                         align="center"
-                        margintop="0px"
-                        paddingtop="7px"
+                        paddingtop="6px"
                     >
                         사용자 신고목록 관리
                     </Font>
                 </Button>
                 <Line
-                    marginbottom="10px"
+                    marginbottom="14px"
                 ></Line>
                 <Button
                     color="transparent"
-                    width="20vw"
+                    width="17vw"
                     textcolor="#000000"
-                    height="25px"
+                    height="54px"
                     hoverColor="#ffffff"
                 >
                     <Font
                         font="PretendardL"
-                        size="10px"
+                        size="20px"
                         color="#A4A5A6"
                         align="center"
-                        margintop="0px"
-                        paddingtop="7px"
+                        paddingtop="6px"
+                        marginbottom="0px"
                     >
                         로그아웃
                     </Font>
                 </Button>
             </Box>
             <Box
-                height="65vh"
+                height="70vh"
                 width="35vw"
                 border="none"
                 left="20px"
@@ -250,7 +258,7 @@ const Administration = () => {
                 <div style={{ marginBottom: '5px', width: '100%', display: 'flex', alignItems: 'center' }}>
                     <Font
                         font="PretendardL"
-                        size="10px"
+                        size="20px"
                         color="#000000"
                         margintop="5px"
                         spacing="2px"
@@ -262,7 +270,7 @@ const Administration = () => {
                     </Font>
                 </div>
                 <Box
-                    height="47vh"
+                    height="55vh"
                     width="30vw"
                     border="none"
                     justify="flex-start"
@@ -275,57 +283,55 @@ const Administration = () => {
 
                     {requests.map((request) => (
                         <RequestBox key={request.id}>
-                            <Font font="PretendardL" size="8px" color="#000000" margintop="15px" marginleft="15px" >
-                                {request.userName}: {request.content}
-                            </Font>
-
-                            <Button
-                                height="4vh"
-                                width="5vw"
-                                border="none"
-                                radius="3px"
-                                alignitem="flex-end"
-                                 justify="flex-end"
-                                top="none"
-                                color="#0372f396"
-                                padding="0px"
-
-                                onClick={() => handleAcceptRequest(request.id)}>
-                                <Font
-                                    font="PretendardB"
-                                    size="8px"
-                                    color="#000000"
-                                    margintop="0px"
-                                    paddingtop="1px"
-                                    spacing="2px"
-                                    align="center"
-                                >
-                                    수락
+                            <TextContainer>
+                                <Font font="PretendardL" size="16px" color="#000000" margintop="15px" marginleft="17px">
+                                    {request.userName}: {request.content}
                                 </Font>
-                            </Button>
-                            <Button
-                                height="4vh"
-                                width="5vw"
-                                border="none"
-                                radius="3px"
-                                alignitem="flex-start"
-                                justify="flex-end"
-                                top="none"
-                                color="#0372f396"
-                                padding="0px"
-                                onClick={() => handleAcceptRequest(request.id)}>
-                                <Font
-                                     font="PretendardB"
-                                     size="8px"
-                                     color="#000000"
-                                     margintop="0px"
-                                     paddingtop="1px"
-                                     spacing="2px"
-                                     align="center"
+                            </TextContainer>
+                            <ButtonContainer>
+                                <Button
+                                    height="4vh"
+                                    width="5vw"
+                                    border="none"
+                                    radius="3px"
+                                    color="#0372f396"
+                                    padding="0px"
+                                    onClick={() => handleAcceptRequest(request.id)}
                                 >
-                                    거절
-                                </Font>
-                            </Button>
+                                    <Font
+                                        font="PretendardB"
+                                        size="15px"
+                                        color="#000000"
+                                        margintop="0px"
+                                        paddingtop="1px"
+                                        spacing="2px"
+                                        align="center"
+                                    >
+                                        수락
+                                    </Font>
+                                </Button>
+                                <Button
+                                    height="4vh"
+                                    width="5vw"
+                                    border="none"
+                                    radius="3px"
+                                    color="#0372f396"
+                                    padding="0px"
+                                    onClick={() => handleAcceptRequest(request.id)}
+                                >
+                                    <Font
+                                        font="PretendardB"
+                                        size="15px"
+                                        color="#000000"
+                                        margintop="0px"
+                                        paddingtop="1px"
+                                        spacing="2px"
+                                        align="center"
+                                    >
+                                        거절
+                                    </Font>
+                                </Button>
+                            </ButtonContainer>
                         </RequestBox>
                     ))}
                 </Box>

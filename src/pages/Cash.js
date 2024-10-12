@@ -17,15 +17,16 @@ import cashpage from '../assets/cashpage.png';
 
 const ProfileImgArea = styled.div`
 justify-content: center;
-padding: 10px;
+margin-top: 18px;
+padding: 5px;
 display: flex; // 플렉스 박스 설정
     align-items: flex-start; // 이미지가 박스 시작 부분에 정렬되도록 설정
 `;
 
 
 const ProfileImage = styled.img`
-    width: 50px; // 원하는 너비
-    height: 50px; // 원하는 높이
+    width: 90px; // 원하는 너비
+    height: 90px; // 원하는 높이
     object-fit: cover; // 이미지 크기를 유지하며 잘림
     border-radius: 50%; // 원하는 경우 둥글게 만들기
     cursor: pointer; // 커서를 포인터로 변경
@@ -69,8 +70,8 @@ const Cash = () => {
     return (
         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-start' }}>
             <Box
-                height="65vh"
-                width="17vw"
+                height="70vh"
+                width="16vw"
                 border="none"
                 alignItems="flex-start"
                 justify="flex-start"
@@ -89,26 +90,27 @@ const Cash = () => {
                         style={{ display: 'none' }} // 파일 입력 숨기기
                     />
                 </ProfileImgArea>
-                <Font font="PretendardL" size="6.4px" color="#000000">{nickname || '닉네임'}</Font>
-                <Font font="PretendardL" size="5px" color="#A4A5A6">{email || '이메일'}</Font>
+                <Font font="PretendardL" size="20px" color="#000000" marginbottom="1px">{nickname || '닉네임'}</Font>
+                <Font font="PretendardL" size="185x" color="#A4A5A6" marginbottom="3px">{email || '이메일'}</Font>
                 <Line
+                margintop="10px"
                 ></Line>
 
                 
                 <Button
                     color="transparent"
-                    width="20vw"
+                    width="17vw"
                     textcolor="#000000"
-                    height="25px"
+                    height="54px"
                     hoverColor="#ffffff"
+                    margintbottom="2px"
                 >
                     <Font
                         font="PretendardL"
-                        size="10px"
+                        size="23px"
                         color="#000000"
                         align="center"
-                        margintop="0px"
-                        paddingtop="7px"
+                        paddingtop="6px"
                     >
                         프로필
                     </Font>
@@ -117,19 +119,19 @@ const Cash = () => {
                 <Link to="/mynote" style={{ textDecoration: 'none' }}> 
                 <Button
                     color="transparent"
-                    width="20vw"
+                    width="17vw"
                     textcolor="#000000"
-                    height="25px"
+                    height="54px"
                     hoverColor="#ffffff"
+                    margintbottom="2px"
                     onClick={() => handleButtonClick('/mynote')}
                 >
                     <Font
                         font="PretendardL"
-                        size="10px"
+                        size="23px"
                         color="#000000"
                         align="center"
-                        margintop="0px"
-                        paddingtop="7px"
+                        paddingtop="6px"
                     >
                         정답 / 오답노트
                     </Font>
@@ -139,19 +141,19 @@ const Cash = () => {
                 <Link to="/feedback" style={{ textDecoration: 'none' }}> 
                 <Button
                     color="transparent"
-                    width="20vw"
+                    width="17vw"
                     textcolor="#000000"
-                    height="25px"
+                    height="54px"
                     hoverColor="#ffffff"
-                    onClick={() => handleButtonClick('/feedback')}
+                    margintbottom="2px"
+                    onClick={() => handleButtonClick('/feedbackT')}
                 >
                     <Font
                         font="PretendardL"
-                        size="10px"
+                        size="23px"
                         color="#000000"
                         align="center"
-                        margintop="0px"
-                        paddingtop="7px"
+                        paddingtop="6px"
                     >
                         받은 피드백
                     </Font>
@@ -161,47 +163,47 @@ const Cash = () => {
 
                 <Button
                     color="transparent"
-                    width="20vw"
+                    width="17vw"
                     textcolor="#000000"
-                    height="25px"
+                    height="54px"
                     hoverColor="#ffffff"
+                    margintbottom="2px"
                     onClick={() => handleButtonClick('/cash')}
                 >
                     <Font
                         font="PretendardL"
-                        size="10px"
+                        size="23px"
                         color="#000000"
                         align="center"
-                        margintop="0px"
-                        paddingtop="7px"
+                        paddingtop="6px"
                     >
                         결제관리
                     </Font>
                 </Button>
                 <Line
-                    marginbottom="10px"
+                    marginbottom="14px"
                 ></Line>
                 <Button
                     color="transparent"
-                    width="20vw"
+                    width="17vw"
                     textcolor="#000000"
-                    height="25px"
+                    height="54px"
                     hoverColor="#ffffff"
                 >
                     <Font
                         font="PretendardL"
-                        size="10px"
+                        size="20px"
                         color="#A4A5A6"
                         align="center"
-                        margintop="0px"
-                        paddingtop="7px"
+                        paddingtop="6px"
+                        marginbottom="0px"
                     >
                         로그아웃
                     </Font>
                 </Button>
             </Box>
             <Box
-                height="36vh"
+                height="70vh"
                 width="30vw"
                 border="none"
                 left="30px"
@@ -209,7 +211,7 @@ const Cash = () => {
                 color="#ffffff"
                 style={{ display: 'flex', flexDirection: 'column', alignItems: 'center'}} // 자식 박스에서 정렬
             >
-               <img src={cashpage} alt="공사중" style={{  height: '100%', marginLeft: "50px" }} /> {/* //나중에 미디어커리 적용해서 작은화면에서도 안넘치더록하자 */}
+               <img src={cashpage} alt="공사중" style={{  height: '60%', width: "90% ", marginLeft: "50px" }} /> {/* //나중에 미디어커리 적용해서 작은화면에서도 안넘치더록하자 */}
             </Box>
         </div>
     );
