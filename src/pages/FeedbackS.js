@@ -24,7 +24,7 @@ const ReviewContainer = styled.div`
     width: 100%;
     padding: 10px;
     gap: 10px;
-    padding-right: 5px; // 스크롤바 여백
+    margin-top: 20px;
     overflow-y: auto; // 수직 스크롤 활성화
     scroll-snap-type: x mandatory; // 스크롤 스냅 설정
     scrollbar-width: none; // 스크롤바 숨기기 (Firefox)
@@ -36,14 +36,14 @@ const ReviewContainer = styled.div`
 `;
 
 const ReviewCard = styled.div`
-    width: 250px;
-    height: 25px;
+    width: 100%;
+    height: 80px;
     background-color: #f0f8ff;
     border: 1px solid #3f8cec;
     border-radius: 6px;
     display: flex;
     font-family: 강원교육튼튼L;
-    font-size: 10px;
+    font-size: 20px;
     flex-direction: column;
     justify-content: space-between;
     cursor: pointer;
@@ -66,15 +66,16 @@ const ModalContent = styled.div`
 
 const ProfileImgArea = styled.div`
 justify-content: center;
-padding: 10px;
+margin-top: 18px;
+padding: 5px;
 display: flex; // 플렉스 박스 설정
     align-items: flex-start; // 이미지가 박스 시작 부분에 정렬되도록 설정
 `;
 
 
 const ProfileImage = styled.img`
-    width: 50px; // 원하는 너비
-    height: 50px; // 원하는 높이
+    width: 90px; // 원하는 너비
+    height: 90px; // 원하는 높이
     object-fit: cover; // 이미지 크기를 유지하며 잘림
     border-radius: 50%; // 원하는 경우 둥글게 만들기
     cursor: pointer; // 커서를 포인터로 변경
@@ -165,9 +166,9 @@ const handleSearch = (value) => {
 
     return (
         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-start' }}>
-            <Box
-                height="65vh"
-                width="17vw"
+              <Box
+                height="70vh"
+                width="16vw"
                 border="none"
                 alignItems="flex-start"
                 justify="flex-start"
@@ -186,118 +187,120 @@ const handleSearch = (value) => {
                         style={{ display: 'none' }} // 파일 입력 숨기기
                     />
                 </ProfileImgArea>
-                <Font font="PretendardL" size="6.4px" color="#000000" marginbottom="2px">{nickname || '닉네임'}</Font>
-                <Font font="PretendardL" size="5px" color="#A4A5A6" marginbottom="3px">{email || '이메일'}</Font>
+                <Font font="PretendardL" size="20px" color="#000000" marginbottom="1px">{nickname || '닉네임'}</Font>
+                <Font font="PretendardL" size="185x" color="#A4A5A6" marginbottom="3px">{email || '이메일'}</Font>
                 <Line
+                margintop="10px"
                 ></Line>
 
+                
                 <Button
                     color="transparent"
-                    width="20vw"
+                    width="17vw"
                     textcolor="#000000"
-                    height="25px"
+                    height="54px"
                     hoverColor="#ffffff"
+                    margintbottom="2px"
                 >
                     <Font
                         font="PretendardL"
-                        size="10px"
+                        size="23px"
                         color="#000000"
                         align="center"
-                        margintop="0px"
-                        paddingtop="7px"
+                        paddingtop="6px"
                     >
                         프로필
                     </Font>
                 </Button>
 
-                <Link to="/mynote" style={{ textDecoration: 'none' }}>
-                    <Button
-                        color="transparent"
-                        width="20vw"
-                        textcolor="#000000"
-                        height="25px"
-                        hoverColor="#ffffff"
-                        onClick={() => handleButtonClick('/mynote')}
+                <Link to="/mynote" style={{ textDecoration: 'none' }}> 
+                <Button
+                    color="transparent"
+                    width="17vw"
+                    textcolor="#000000"
+                    height="54px"
+                    hoverColor="#ffffff"
+                    margintbottom="2px"
+                    onClick={() => handleButtonClick('/mynote')}
+                >
+                    <Font
+                        font="PretendardL"
+                        size="23px"
+                        color="#000000"
+                        align="center"
+                        paddingtop="6px"
                     >
-                        <Font
-                            font="PretendardL"
-                            size="10px"
-                            color="#000000"
-                            align="center"
-                            margintop="0px"
-                            paddingtop="7px"
-                        >
-                            정답 / 오답노트
-                        </Font>
-                    </Button>
+                        정답 / 오답노트
+                    </Font>
+                </Button>
                 </Link>
 
-                <Link to="/feedback" style={{ textDecoration: 'none' }}>
-                    <Button
-                        color="transparent"
-                        width="20vw"
-                        textcolor="#000000"
-                        height="25px"
-                        hoverColor="#ffffff"
-                        onClick={() => handleButtonClick('/feedbackT')}
+                <Link to="/feedback" style={{ textDecoration: 'none' }}> 
+                <Button
+                    color="transparent"
+                    width="17vw"
+                    textcolor="#000000"
+                    height="54px"
+                    hoverColor="#ffffff"
+                    margintbottom="2px"
+                    onClick={() => handleButtonClick('/feedbackT')}
+                >
+                    <Font
+                        font="PretendardL"
+                        size="23px"
+                        color="#000000"
+                        align="center"
+                        paddingtop="6px"
                     >
-                        <Font
-                            font="PretendardL"
-                            size="10px"
-                            color="#000000"
-                            align="center"
-                            margintop="0px"
-                            paddingtop="7px"
-                        >
-                            받은 피드백
-                        </Font>
-                    </Button>
+                        받은 피드백
+                    </Font>
+                </Button>
                 </Link>
 
 
                 <Button
                     color="transparent"
-                    width="20vw"
+                    width="17vw"
                     textcolor="#000000"
-                    height="25px"
+                    height="54px"
                     hoverColor="#ffffff"
+                    margintbottom="2px"
                     onClick={() => handleButtonClick('/cash')}
                 >
                     <Font
                         font="PretendardL"
-                        size="10px"
+                        size="23px"
                         color="#000000"
                         align="center"
-                        margintop="0px"
-                        paddingtop="7px"
+                        paddingtop="6px"
                     >
                         결제관리
                     </Font>
                 </Button>
                 <Line
-                    marginbottom="10px"
+                    marginbottom="14px"
                 ></Line>
                 <Button
                     color="transparent"
-                    width="20vw"
+                    width="17vw"
                     textcolor="#000000"
-                    height="25px"
+                    height="54px"
                     hoverColor="#ffffff"
                 >
                     <Font
                         font="PretendardL"
-                        size="10px"
+                        size="20px"
                         color="#A4A5A6"
                         align="center"
-                        margintop="0px"
-                        paddingtop="7px"
+                        paddingtop="6px"
+                        marginbottom="0px"
                     >
                         로그아웃
                     </Font>
                 </Button>
             </Box>
             <Box
-                height="65vh"
+                height="70vh"
                 width="35vw"
                 border="none"
                 left="20px"
@@ -311,13 +314,13 @@ const handleSearch = (value) => {
     <div style={{ marginBottom: '5px',width: '100%'  }}>
         <Font
             font="PretendardL"
-            size="10px"
+            size="25px"
             color="#000000"
-            margintop="5px"
+            margintop="15px"
             spacing="2px"
-            paddingleft="13px"
+            paddingleft="15px"
             paddingtop="5px"
-            marginbottom="8px"
+            marginbottom="-5px"
         >
             받은 피드백
         </Font>
@@ -326,6 +329,7 @@ const handleSearch = (value) => {
             value={searchTerm} // 검색어 상태를 입력 필드에 바인딩
             onChange={(e) => handleSearch(e.target.value)} // 입력이 변경될 때 필터링 함수 호출
             left="9px"
+            top="20px"
        >
         </SearchBar>
 
@@ -334,10 +338,10 @@ const handleSearch = (value) => {
                     {filteredReviews.map((review, index) => (
                           <ReviewCard key={index} onClick={() => handleReviewClick(review)}>
                           <div style={{ padding: '10px' }}>
-                              <Font font="PretendardB" size="12px" color="#3f8cec">
+                              <Font font="PretendardB" size="15px" color="#3f8cec">
                                   {review.userName}
                               </Font>
-                              <Font font="PretendardL" size="10px" color="#A1A1A1" margintop="5px" spacing="2px">
+                              <Font font="PretendardL" size="15px" color="#A1A1A1" margintop="5px" spacing="2px">
                                   점수: {review.score}
                               </Font>
                               <Font font="PretendardL" size="10px" color="#000000" margintop="5px" spacing="2px">
@@ -355,13 +359,13 @@ const handleSearch = (value) => {
                     </Modal.Header>
                     <Modal.Body>
                         <ModalContent>
-                            <Font font="PretendardB" size="14px" color="#3f8cec">
+                            <Font font="PretendardB" size="20px" color="#3f8cec" marginbottom="5px" >
                                 {selectedReview?.userName}
                             </Font>
-                            <Font font="PretendardL" size="12px" color="#000000" margintop="5px">
+                            <Font font="PretendardL" size="15px" color="#000000" margintop="0px" paddingbottom="10px">
                                 점수: {selectedReview?.score}
                             </Font>
-                            <Font font="PretendardL" size="12px" color="#000000" margintop="5px">
+                            <Font font="PretendardL" size="20px" color="#000000" margintop="5px">
                                 {selectedReview?.userComment}
                             </Font>
                         </ModalContent>

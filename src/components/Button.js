@@ -9,6 +9,8 @@ const StyledButton = styled.button`
   color: ${(props) => props.textcolor}; /* 텍스트 색상 */
   margin-top: ${(props) => props.margintop};
   margin-bottom: ${(props) => props.margintbottom};
+  margin-right: ${(props) => props.marginright};
+  margin-left: ${(props) => props.marginleft};
   height: ${(props) => props.height};
   border: ${(props) => props.border || 'none'}; /* 기본 테두리 제거 */
   border-radius: ${(props) => props.radius || '25px'}; /* 둥근 테두리 */
@@ -31,7 +33,7 @@ const StyledButton = styled.button`
 
 const Button = (props) => {
   // 1. props {} 안에 추가
-  const { color, width, children, textcolor, margintop, margintbottom, height, right,  radius, border, hoverColor, fontsize, fontfamily, onClick, align, justify, left, padding, display } = props;
+  const { color, width, children, textcolor, margintop, margintbottom, marginleft, marginright, height, right,  radius, border, hoverColor, fontsize, fontfamily, onClick, align, justify, left, padding, display } = props;
   return (
     // 3 아래 props 받을 수 있도록 추가
     <StyledButton
@@ -40,6 +42,8 @@ const Button = (props) => {
       textcolor={textcolor}
       margintop={margintop}
       margintbottom={margintbottom}
+      marginright={marginright}
+      marginleft={marginleft}
       height={height}
       radius={radius}
       border={border}
