@@ -12,6 +12,11 @@ import Signup from '../pages/Signup.jsx';
 import SignupSuccess from '../pages/SignupSuccess.js';
 import Mypage from '../pages/Mypage.js';
 import { ProfileProvider } from '../hooks/ProfileContext.js';
+import { MemberManager } from '../hooks/MemberManager.js';
+import MyNote from '../pages/MyNote.js';
+import Feedback from '../pages/Feedback.js';
+import Cash from '../pages/Cash.js';
+import AudioRecorder from '../pages/AudioRecorder.jsx'; // 추가한 페이지 임포트
 import {MemberManager} from '../hooks/MemberManager.js'
 import MyNote from '../pages/MyNote.js'
 import Feedback from '../pages/FeedbackS.js';
@@ -34,6 +39,27 @@ function App() {
   return (
     <MemberManager>
       <ProfileProvider>
+        <BrowserRouter> {/* 라우터 설정 */}
+          <div className="App"> {/* 최상위 div 요소, 클래스 이름 "App" */}
+            <HeaderManager>
+              <Headers />
+              <Routes> {/* 경로 설정 */}
+                <Route path="/" element={<Home />} />
+                <Route path='/login' element={< Login />} />
+                <Route path='/singupOption' element={<SignupOption />} />
+                <Route path='/agree' element={<Agree />} />
+                <Route path='/signup' element={<Signup />} />
+                <Route path='/signupSuccess' element={<SignupSuccess />} />
+                <Route path='/mypage' element={<Mypage />} />
+                <Route path='/feedback' element={<Feedback />} />
+                <Route path='/cash' element={<Cash />} />
+                <Route path='/mynote' element={<MyNote />} />
+                <Route path='/audio-recorder' element={<AudioRecorder />} /> {/* 음성인식 페이지 추가 */}
+              </Routes>
+            </HeaderManager>
+          </div>
+        </BrowserRouter>
+      </ProfileProvider>
     <BrowserRouter> {/* 라우터 설정 */}
       <div className="App"> {/* 최상위 div 요소, 클래스 이름 "App" */}
       <HeaderManager>
@@ -68,4 +94,4 @@ function App() {
   );
 }
 
-export default App; // App 컴포넌트를 외부로 export
+export default App;
