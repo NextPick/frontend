@@ -16,7 +16,7 @@ const Chart = () => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', width: '100%', alignItems: 'center', justifyContent: 'flex-start' }}>
       {/* 그래프 */}
-      <div style={{ flex: '0 0 auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '10px' }}>
+      <div style={{ flex: '0 0 auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '20px' }}>
         <VictoryPie
           data={localData} // 로컬 데이터 사용
           colorScale={['#FF5722', '#FF9800', '#FFC107', '#FFEB3B', '#CDDC39']}
@@ -24,9 +24,9 @@ const Chart = () => {
           innerRadius={50} // 파이 내부 빈 공간
           style={{
             parent: {
-              viewBox: '0 0 400 400',
-              width: '150px', // 그래프 너비 조정
-              height: '150px', // 그래프 높이 조정
+              viewBox: '0 0 800 800', // 원 그래프의 크기를 2배로 키움
+              width: '360px', // 너비를 2배로 조정
+              height: '300px', // 높이를 2배로 조정npm
             },
             data: {
               stroke: 'white',
@@ -51,11 +51,17 @@ const Chart = () => {
       </div>
 
       {/* 데이터 표시 */}
-      <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'left', marginTop: '10px', maxHeight: '50%', overflowY: 'auto' }}>
+      <div  style={{
+    display: 'grid', // grid 레이아웃 사용
+    gridTemplateColumns: 'repeat(3, 1fr)', // 1행에 2개의 열로 구성
+    gridGap: '12px', // 요소 간의 간격 조정
+  }}>
         {localData.map((datum, index) => (
           <div
             key={datum.x}
             style={{
+              fontSize:"21px",
+              fontFamily:"함박눈",
               color: index === hoveredIndex ? '#FF5722' : 'black', // 호버된 인덱스에 따라 색상 변경
               fontWeight: index === hoveredIndex ? 'bold' : 'normal', // 호버된 인덱스에 따라 굵게 표시
               cursor: 'pointer',

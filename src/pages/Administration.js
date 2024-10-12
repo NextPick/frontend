@@ -18,7 +18,7 @@ const RequestBox = styled.div`
     border: 1px solid #91a7c1;
     border-radius: 8px;
     width: 100%;
-    height: 42px; // 요청 박스의 높이 조정
+    height: 45px; // 요청 박스의 높이 조정
     display: flex;
     align-items: center; // 수직 중앙 정렬
     justify-content: space-between; // 텍스트는 왼쪽, 버튼은 오른쪽에 배치
