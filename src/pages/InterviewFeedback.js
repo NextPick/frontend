@@ -41,7 +41,7 @@ const InterviewFeedback = () => {
                 <div style={{ marginBottom: '5px', width: '100%' }}>
                     <Font
                         font="PretendardL"
-                        size="10px"
+                        size="22px"
                         color="#000000"
                         margintop="5px"
                         spacing="2px"
@@ -64,7 +64,7 @@ const InterviewFeedback = () => {
                 >
                 </Box>
                 <Box
-                    height="32vh"
+                    height="28vh"
                     width="30vw"
                     border="none"
                     alignItems="flex-start"
@@ -79,7 +79,7 @@ const InterviewFeedback = () => {
                         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                             <Font
                                 font="PretendardB"
-                                size="9px"
+                                size="18px"
                                 color="#000000"
                                 margintop="5px"
                                 spacing="2px"
@@ -94,7 +94,7 @@ const InterviewFeedback = () => {
                                 {Array.from({ length: 5 }, (_, index) => (
                                     <FaStar
                                         key={index}
-                                        size={10}
+                                        size={20}
                                         color={index < userScore ? '#FFD700' : '#e4e5e9'}
                                         onClick={() => setUserScore(index + 1)}
                                         style={{ cursor: 'pointer' }}
@@ -110,9 +110,10 @@ const InterviewFeedback = () => {
                         <div style={{ height: "20px", width: "30px" }}></div>
                         <Button
                             right="5px"
-                            margintbottom="6px"
+                            margintbottom="3px"
+                            margintop="5px"
                             onClick={handleSubmitReview}
-                            fontsize="12px"
+                            fontsize="20px"
                             radius="5px"
                         >
                             제출

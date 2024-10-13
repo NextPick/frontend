@@ -31,7 +31,7 @@ const ReviewForm = ({ onSubmitReview }) => {
         <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', marginBottom: '10px' }}> {/* 수평 정렬 */}
                 <Input
-                    $w_fontSize="9px"
+                    $w_fontSize="18px"
                     type="text"
                     $w_width="26vw"
                     $w_height="15vh"

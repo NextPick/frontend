@@ -19,19 +19,21 @@ import three from '../assets/three.png';
 
 const ProfileImgArea = styled.div`
 justify-content: center;
-padding: 10px;
+margin-top: 18px;
+padding: 5px;
 display: flex; // 플렉스 박스 설정
     align-items: flex-start; // 이미지가 박스 시작 부분에 정렬되도록 설정
 `;
 
 
 const ProfileImage = styled.img`
-    width: 50px; // 원하는 너비
-    height: 50px; // 원하는 높이
+    width: 90px; // 원하는 너비
+    height: 90px; // 원하는 높이
     object-fit: cover; // 이미지 크기를 유지하며 잘림
     border-radius: 50%; // 원하는 경우 둥글게 만들기
     cursor: pointer; // 커서를 포인터로 변경
 `;
+
 
 const Mypage = () => {
     const { profileUrl, setProfileUrl, nickname, email } = useMember();
@@ -70,9 +72,9 @@ const Mypage = () => {
 
     return (
         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-start' }}>
-            <Box
-                height="65vh"
-                width="17vw"
+         <Box
+                height="70vh"
+                width="16vw"
                 border="none"
                 alignItems="flex-start"
                 justify="flex-start"
@@ -91,26 +93,27 @@ const Mypage = () => {
                         style={{ display: 'none' }} // 파일 입력 숨기기
                     />
                 </ProfileImgArea>
-                <Font font="PretendardL" size="6.4px" color="#000000" marginbottom="2px">{nickname || '닉네임'}</Font>
-                <Font font="PretendardL" size="5px" color="#A4A5A6" marginbottom="3px">{email || '이메일'}</Font>
+                <Font font="PretendardL" size="20px" color="#000000" marginbottom="1px">{nickname || '닉네임'}</Font>
+                <Font font="PretendardL" size="185x" color="#A4A5A6" marginbottom="3px">{email || '이메일'}</Font>
                 <Line
+                margintop="10px"
                 ></Line>
 
                 
                 <Button
                     color="transparent"
-                    width="20vw"
+                    width="17vw"
                     textcolor="#000000"
-                    height="25px"
+                    height="54px"
                     hoverColor="#ffffff"
+                    margintbottom="2px"
                 >
                     <Font
                         font="PretendardL"
-                        size="10px"
+                        size="23px"
                         color="#000000"
                         align="center"
-                        margintop="0px"
-                        paddingtop="7px"
+                        paddingtop="6px"
                     >
                         프로필
                     </Font>
@@ -119,19 +122,19 @@ const Mypage = () => {
                 <Link to="/mynote" style={{ textDecoration: 'none' }}> 
                 <Button
                     color="transparent"
-                    width="20vw"
+                    width="17vw"
                     textcolor="#000000"
-                    height="25px"
+                    height="54px"
                     hoverColor="#ffffff"
+                    margintbottom="2px"
                     onClick={() => handleButtonClick('/mynote')}
                 >
                     <Font
                         font="PretendardL"
-                        size="10px"
+                        size="23px"
                         color="#000000"
                         align="center"
-                        margintop="0px"
-                        paddingtop="7px"
+                        paddingtop="6px"
                     >
                         정답 / 오답노트
                     </Font>
@@ -141,19 +144,19 @@ const Mypage = () => {
                 <Link to="/feedback" style={{ textDecoration: 'none' }}> 
                 <Button
                     color="transparent"
-                    width="20vw"
+                    width="17vw"
                     textcolor="#000000"
-                    height="25px"
+                    height="54px"
                     hoverColor="#ffffff"
+                    margintbottom="2px"
                     onClick={() => handleButtonClick('/feedbackT')}
                 >
                     <Font
                         font="PretendardL"
-                        size="10px"
+                        size="23px"
                         color="#000000"
                         align="center"
-                        margintop="0px"
-                        paddingtop="7px"
+                        paddingtop="6px"
                     >
                         받은 피드백
                     </Font>
@@ -163,56 +166,56 @@ const Mypage = () => {
 
                 <Button
                     color="transparent"
-                    width="20vw"
+                    width="17vw"
                     textcolor="#000000"
-                    height="25px"
+                    height="54px"
                     hoverColor="#ffffff"
+                    margintbottom="2px"
                     onClick={() => handleButtonClick('/cash')}
                 >
                     <Font
                         font="PretendardL"
-                        size="10px"
+                        size="23px"
                         color="#000000"
                         align="center"
-                        margintop="0px"
-                        paddingtop="7px"
+                        paddingtop="6px"
                     >
                         결제관리
                     </Font>
                 </Button>
                 <Line
-                    marginbottom="10px"
+                    marginbottom="14px"
                 ></Line>
                 <Button
                     color="transparent"
-                    width="20vw"
+                    width="17vw"
                     textcolor="#000000"
-                    height="25px"
+                    height="54px"
                     hoverColor="#ffffff"
                 >
                     <Font
                         font="PretendardL"
-                        size="10px"
+                        size="20px"
                         color="#A4A5A6"
                         align="center"
-                        margintop="0px"
-                        paddingtop="7px"
+                        paddingtop="6px"
+                        marginbottom="0px"
                     >
                         로그아웃
                     </Font>
                 </Button>
             </Box>
             <Box
-                height="36vh"
-                width="30vw"
+                height="43vh"
+                width="33vw"
                 border="none"
                 left="20px"
                 justify="space-between"
                 style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', height: '50%' }} // 자식 박스에서 정렬
             >
                 <Box
-                    height="6vh"
-                    width="30vw"
+                    height="7vh"
+                    width="33vw"
                     border="none"
                     alignitem="flex-start"
                     justify="flex-start"
@@ -221,55 +224,62 @@ const Mypage = () => {
                 >
                     <Font
                         font="PretendardB"
-                        size="6px"
+                        size="18px"
                         color="#000000"
                         margintop="0px"
-                        paddingtop="7px"
+                        marginbottom="0px"
+                        paddingtop="9px"
                         marginleft="10px"
-                        spacing="2px"
+                        spacing="3px"
                     >
                         내 프로필
                     </Font>
                 </Box>
 
-                <div style={{ display: 'flex', alignItems: 'center',  marginRight: "auto", marginLeft:"5px"}}> {/* 수평 정렬을 위한 flexbox */}
-                    <img src={one} alt="one" style={{ width: '20px', height: '20px' }} /> {/* 로고 이미지 */}
+                <div style={{ display: 'flex', alignItems: 'center',  marginRight: "auto", marginLeft:"5px", marginBottom:"-5px"}}> {/* 수평 정렬을 위한 flexbox */}
+                    <img src={one} alt="one" style={{ width: '33px', height: '34px' }} /> {/* 로고 이미지 */}
                     <Font
                         font="PretendardL"
-                        size="6px"
+                        size="16px"
                         color="#000000"
                         align="center"
+                        marginbottom="0px"
                         margintop="none"
                         justify="center"
+                        marginleft="10px"
                     >
                         이름
                     </Font>
                 </div>
                 <div class="line2"></div>
 
-                <div style={{ display: 'flex', alignItems: 'center', marginRight: "auto", marginLeft:"5px" }}> {/* 수평 정렬을 위한 flexbox */}
-                <img src={two} alt="two" style={{ width: '20px', height: '20px'}} /> {/* 로고 이미지 */}
+                <div style={{ display: 'flex', alignItems: 'center', marginRight: "auto", marginLeft:"5px", marginBottom:"-5px" }}> {/* 수평 정렬을 위한 flexbox */}
+                <img src={two} alt="two" style={{width: '33px', height: '34px'}} /> {/* 로고 이미지 */}
                 <Font
                     font="PretendardL"
-                    size="6px"
+                    size="16px"
                     color="#000000"
                     align="center"
+                    marginbottom="0px"
                     margintop="none"
                     justify="center"
+                    marginleft="10px"
                 >
                     번호
                 </Font>
                 </div>
                 <div class="line2"></div>
 
-                <div style={{ display: 'flex', alignItems: 'center', marginRight: "auto", marginLeft:"5px" }}> {/* 수평 정렬을 위한 flexbox */}
-                <img src={three} alt="three" style={{ width: '20px', height: '20px'}} /> {/* 로고 이미지 */}
+                <div style={{ display: 'flex', alignItems: 'center', marginRight: "auto", marginLeft:"5px", marginBottom:"-5px" }}> {/* 수평 정렬을 위한 flexbox */}
+                <img src={three} alt="three" style={{ width: '33px', height: '34px'}} /> {/* 로고 이미지 */}
                 <Font
                     font="PretendardL"
-                    size="6px"
+                    size="16px"
                     color="#000000"
                     align="center"
+                    marginbottom="0px"
                     margintop="none"
+                    marginleft="10px"
                     justify="center"
                 >
                     이메일
@@ -278,22 +288,24 @@ const Mypage = () => {
                 <div class="line2"></div>
                 <Button
                     color="transparent"
-                    width="83px"
+                    width="158px"
                     textcolor="#000000"
-                    height="20px"
+                    height="35px"
                     hoverColor="#ffffff"
-                    margintop="none"
+                    margintop="-6px"
                     paddingtop="7px"
                     align="none"
                     justify="none"
                     left="auto"
-                    margintbottom="3px"
+                    margintbottom="10px"
+                    marginright="5px"
                 >
                     <Font
                         font="PretendardL"
-                        size="7px"
+                        size="14px"
                         color="#000000"
                         align="center"
+                        marginbottom="0px"
                         margintop="none"
                         justify="center"
                     >

@@ -50,10 +50,11 @@ const Home = () => {
           <Link to={'/login'}>
             <Button
               color="#177FF9"
-              width="140px"
+              width="230px"
               textcolor="#ffffff"
-              margintop="200px"
-              height="30px"
+              margintop="310px"
+              height="75px"
+              fontsize="1.9rem"
             >
               체험하러 가기
             </Button>
@@ -64,7 +65,7 @@ const Home = () => {
       <div className="section2">
         <Font
         font="PretendardB"
-        size="17px"
+        size="40px"
         color="#000000"
         align="center"
         paddingtop="20px"
@@ -77,7 +78,7 @@ const Home = () => {
       <div className="section3">
       <Font
         font="PretendardB"
-        size="17px"
+        size="35px"
         color="#000000"
         align="center"
         paddingtop="5px"
