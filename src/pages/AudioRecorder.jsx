@@ -169,9 +169,9 @@ function App() {
           </div>
         )}
       />
-      {mediaBlobUrl && (
+      {/* {mediaBlobUrl && (
         <button onClick={uploadRecordedAudio}>녹음 파일 업로드</button>
-      )}
+      )} */}
       <hr />
       <h2>음성 파일 업로드</h2>
       <form name="frm" onSubmit={uploadSelectedFile} encType="multipart/form-data">
