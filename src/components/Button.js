@@ -33,7 +33,7 @@ const StyledButton = styled.button`
 
 const Button = (props) => {
   // 1. props {} 안에 추가
-  const { color, width, children, textcolor, margintop, margintbottom, marginleft, marginright, height, right,  radius, border, hoverColor, fontsize, fontfamily, onClick, align, justify, left, padding, display } = props;
+  const { color, width, children, textcolor, margintop, margintbottom, marginleft, marginright, height, right, radius, border, hoverColor, fontsize, fontfamily, onClick, align, justify, left, padding, display } = props;
   return (
     // 3 아래 props 받을 수 있도록 추가
     <StyledButton
