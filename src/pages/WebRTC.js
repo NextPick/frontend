@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
+import "../styles/WebRTC.css";
 
 const WebRTC = () => {
     const localStreamElement = useRef(null);
@@ -10,9 +11,12 @@ const WebRTC = () => {
     let otherKeyList = [];
     let localStream = undefined;
     let stompClient;
-    const [isMuted, setIsMuted] = useState(false);
-    const [isVideoEnabled, setIsVideoEnabled] = useState(true);
     const occupation = "BE";
+    let camCount = 0;
+
+    const [memo, setMemo] = useState('');
+    const [tutor1, setTutor1] = useState('');
+    const [tutor2, setTutor2] = useState('');
 
     const startCam = async () => {
         if (navigator.mediaDevices !== undefined) {
@@ -24,28 +28,29 @@ const WebRTC = () => {
                     if (localStreamElement.current) {
                         localStreamElement.current.srcObject = localStream;
                     }
+                    localStreamElement.current.style.border = '2px solid red'; // 강조 스타일
                 }).catch(error => {
                     console.error("Error accessing media devices:", error);
                 });
         }
     };
 
-    const toggleMute = () => {
-        if (localStream) {
-            localStream.getAudioTracks()[0].enabled = !isMuted;
-            setIsMuted(prev => !prev);
-        }
-    };
-
-    const toggleVideo = () => {
-        if (localStream) {
-            localStream.getVideoTracks()[0].enabled = !isVideoEnabled;
-            setIsVideoEnabled(prev => !prev);
-        }
-    };
+    // const toggleMute = () => {
+    //     if (localStream) {
+    //         localStream.getAudioTracks()[0].enabled = !isMuted;
+    //         setIsMuted(prev => !prev);
+    //     }
+    // };
+    //
+    // const toggleVideo = () => {
+    //     if (localStream) {
+    //         localStream.getVideoTracks()[0].enabled = !isVideoEnabled;
+    //         setIsVideoEnabled(prev => !prev);
+    //     }
+    // };
 
     const connectSocket = async () => {
-        const socket = new SockJS('https://172.30.1.27:8443/signaling');
+        const socket = new SockJS('https://localhost:8443/signaling');
         stompClient = Stomp.over(socket);
         stompClient.debug = null;
 
@@ -53,7 +58,7 @@ const WebRTC = () => {
             {
                 camKey: myKey,
                 occupation: occupation,
-                email: "1234@123.com",
+                email: "123@123.com",
             }, function () {
                 console.log('Connected to WebRTC server');
                 console.log(myKey);
@@ -196,8 +201,13 @@ const WebRTC = () => {
             video.autoplay = true;
             video.controls = true;
             video.id = otherKey;
+            video.style.width = '100%';
+            video.style.height = '100%';
             video.srcObject = event.streams[0];
-            document.getElementById('remoteStreamDiv').appendChild(video);
+            camCount = camCount + 1;
+            console.log(camCount);
+
+            document.getElementById('remoteStreamDiv' + camCount).appendChild(video);
         }
     };
 
@@ -220,15 +230,56 @@ const WebRTC = () => {
         }, 1000);
     };
 
+    const handleButtonClick = async () => {
+        await handleEnterRoom();
+    };
+
     return (
-        <div>
-            <button onClick={handleEnterRoom}>Enter Room</button>
-            <button onClick={toggleMute}>{isMuted ? 'Unmute' : 'Mute'}</button>
-            <button onClick={toggleVideo}>{isVideoEnabled ? 'Turn Off Video' : 'Turn On Video'}</button>
-            <video ref={localStreamElement} id="localStream" autoPlay playsInline controls />
-            <div id="remoteStreamDiv"></div>
+        <div className="container">
+            <div className="video-section">
+                <h2>진지한 자세로 참여부탁드립니다</h2>
+                <div className="video-grid">
+                    <div className="video-placeholder">
+                        <video ref={localStreamElement} id="localStream" autoPlay playsInline controls style={{ width: '100%', height: '100%', display: "none"}}/>
+                    </div>
+                    <div className="video-placeholder">
+                        <div id="remoteStreamDiv1"></div>
+                    </div>
+                    <div className="video-placeholder">
+                        <div id="remoteStreamDiv2"></div>
+                    </div>
+                    <div className="video-placeholder">
+                        <div id="remoteStreamDiv3"></div>
+                    </div>
+                </div>
+                <button onClick={handleButtonClick}>입장하기</button> {/* 버튼 추가 */}
+            </div>
+
+            <div className="input-section">
+                <h2>나의 메모장</h2>
+                <textarea
+                    value={memo}
+                    onChange={(e) => setMemo(e.target.value)}
+                    placeholder="여기에 메모를 입력하세요..."
+                />
+                <div>
+                    <h3>튜터 피드백</h3>
+                    <input
+                        placeholder="1번 튜터"
+                        value={tutor1}
+                        onChange={(e) => setTutor1(e.target.value)}
+                    />
+                    <input
+                        placeholder="2번 튜터"
+                        value={tutor2}
+                        onChange={(e) => setTutor2(e.target.value)}
+                    />
+                </div>
+                <button>제출</button>
+            </div>
         </div>
     );
 };
 
 export default WebRTC;
+
