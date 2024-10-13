@@ -13,8 +13,8 @@ const SearchBarContainer = styled.div`
   border: 1px solid #ccc;
   border-radius: 5px;
   padding: 5px;
-  width: ${(props) => props.width || '20vw'};
-  height: ${(props) => props.height || '10px'};
+  width: ${(props) => props.width || '22vw'};
+  height: ${(props) => props.height || '38px'};
   margin-top: ${(props) => props.top};
   margin-left: ${(props) => props.left};
 `;
@@ -37,17 +37,22 @@ const SearchBar = ({ width, height, placeholder, onSearch, top, left,  value, on
         value={value} // 전달받은 value를 Input에 바인딩
         onChange={onChange} // 전달받은 onChange 핸들러를 Input에 연결
         $w_width="26vw"
-        $w_height="5px"
-        $w_fontSize="10px"
+        $w_height="30px"
+        $w_fontSize="20px"
         radius="5px"
+        marginBottom="5px"
+        marginTop="7px"
+        $padding="22px"
       />
       <Button
+      marginleft="5px"
         color="transparent"
         radius="5px"
+        height="45px"
         hoverColor="#FFFFFF"
         onClick={handleSearch} // 버튼 클릭 시 검색 실행
       >
-        <img src={search} alt="search" style={{ width: '18px', height: '20px' }} />
+        <img src={search} alt="search" style={{ width: '30px', height: '35px' }} />
       </Button>
     </SearchBarContainer>
   );

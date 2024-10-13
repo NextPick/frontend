@@ -73,8 +73,6 @@ const Login = () => {
   return (
     <div style={container}>
       <div style={wrap}>
-        <img src={iconImage} alt="아이콘" style={icon} />
-        <div style={loginTitle}>로그인</div>
         <div style={backgroundBox}>
           <div style={inputContainer}>
             <div style={inputField}>
@@ -124,16 +122,7 @@ const wrap = {
   alignItems: 'center',
 };
 
-const icon = {
-  marginBottom: '20px',
-};
 
-const loginTitle = {
-  textAlign: 'center',
-  fontSize: '24px',
-  fontWeight: 'bold',
-  marginBottom: '20px',
-};
 
 const backgroundBox = {
   display: 'flex',
@@ -143,8 +132,8 @@ const backgroundBox = {
   padding: '30px',
   borderRadius: '8px',
   backgroundColor: '#d3e0ea',
-  width: '400px',
-  height: '300px',
+  width: '550px',
+  height: '400px',
   marginBottom: '20px', // Space between the box and footer links
 };
 
@@ -153,7 +142,9 @@ const inputContainer = {
   flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'center', // Center items within the container
-  width: '100%',
+  width: '85%',
+  marginTop: "113px",
+  gap: "30px",
 };
 
 const inputField = {
@@ -162,17 +153,18 @@ const inputField = {
   alignItems: 'center',
   marginBottom: '20px',
   width: '100%',
+  height: "25px",
 };
 
 const label = {
-  fontSize: '14px',
+  fontSize: '20px',
   marginRight: '10px',
   width: '70px', // Align labels with inputs
   textAlign: 'center',
 };
 
 const input = {
-  padding: '5px',
+  padding: '12px',
   border: '1px solid #ccc',
   borderRadius: '4px',
   width: '100%', // Full width of the container
@@ -182,9 +174,9 @@ const loginButton = {
   backgroundColor: '#ffffff',
   padding: '10px 20px',
   border: '1px solid #ccc',
-  borderRadius: '5px',
-  marginTop: '10px',
-  width: '100%',
+  borderRadius: '15px',
+  marginTop: '65px',
+  width: '50%',
   cursor: 'pointer',
 };
 
@@ -200,6 +192,6 @@ const linkButton = {
   border: 'none',
   cursor: 'pointer',
   color: '#000000',
-  fontSize: '12px',
+  fontSize: '14px',
   textDecoration: 'underline',
 };

@@ -8,10 +8,10 @@ import Font from '../components/Font';
 // 스타일드 컴포넌트 정의
 const Select = styled.select`
     padding: 5px;
-    margin: 10px 6px;
+    margin: 15px 6px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    font-size: ${(props) => props.size || "8px"};
+    font-size: ${(props) => props.size || "20px"};
     cursor: pointer;
 
     &:focus {
