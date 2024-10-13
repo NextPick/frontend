@@ -78,6 +78,38 @@
     transform: scale(1.1); /* 마우스를 올렸을 때 커짐 */
 }
 
+
+.fe {
+    background-image: url('../assets/choicefe.png');
+    background-repeat: no-repeat;
+    /* 이미지 반복 방지 */
+    background-size: contain;
+    /* 이미지 비율 유지하며 크기 조정 */
+    width: 52vw;
+    /* 너비를 50%로 설정 */
+    height: 46vh;
+    /* 전체 높이 */
+    transition: transform 0.3s ease; /* 변환 효과 추가 */
+
+}
+
+.be {
+    background-image: url('../assets/choicebe.png');
+    background-repeat: no-repeat;
+    /* 이미지 반복 방지 */
+    background-size: contain;
+    width: 52vw;
+    /* 너비를 50%로 설정 */
+    height: 46vh;
+    /* 전체 높이 */
+    transition: transform 0.3s ease; /* 변환 효과 추가 */
+}
+
+.fe:hover,
+.be:hover {
+    transform: scale(1.1); /* 마우스를 올렸을 때 커짐 */
+}
+
 .wrapBox {
     display: flex; /* Flexbox 사용 */
     flex-direction: column; /* 수직 정렬 */

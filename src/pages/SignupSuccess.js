@@ -18,19 +18,19 @@ const SignupSuccess = () => {
                 <div style={{ marginBottom: '0px' }}>
                     <Font
                         font="PretendardB"
-                        size="18px"
+                        size="40px"
                         color="#000000"
                         align="left"
                         margintop="45px"
-                        spacing="4px"
-                        height="10px"
+                        spacing="6px"
+                        height="52px"
                     >
                         지금 바로 나의 지식을 
                         <p>확인하세요</p>
                     </Font>
                     <Font
                         font="PretendardL"
-                        size="9px"
+                        size="22px"
                         color="#000000"
                         align="left"
                         margintop="12px"
@@ -42,11 +42,11 @@ const SignupSuccess = () => {
                     <Link to={'/login'}>
                         <Button
                             color="transparent"
-                            width="20vw"
+                            width="25vw"
                             textcolor="#000000"
                             hoverColor="#ffffff"
-                            fontsize="10px"
-                            margintop="50px"
+                            fontsize="25px"
+                            margintop="55px"
                         >
                             로그인으로 계속하기
                         </Button>

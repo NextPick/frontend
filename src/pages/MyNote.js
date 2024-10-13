@@ -10,27 +10,26 @@ import defaultProfile from '../assets/img-non-login.png';
 import { useProfile } from '../hooks/ProfileContext'; // 프로필 컨텍스트
 import { useMember } from '../hooks/MemberManager'; // 회원 정보를 관리하는 훅
 import Line from '../components/Line';
-import one from '../assets/one.png';
-import two from '../assets/two.png';
-import three from '../assets/three.png';
 import SearchBar from '../components/SearchBar';
 import Input from '../components/Input'
 import search from '../assets/search.png'
 import SelectBox from '../components/SelectBox';
+import Board from '../components/Board';
 
 
 
 const ProfileImgArea = styled.div`
 justify-content: center;
-padding: 10px;
+margin-top: 18px;
+padding: 5px;
 display: flex; // 플렉스 박스 설정
     align-items: flex-start; // 이미지가 박스 시작 부분에 정렬되도록 설정
 `;
 
 
 const ProfileImage = styled.img`
-    width: 50px; // 원하는 너비
-    height: 50px; // 원하는 높이
+    width: 90px; // 원하는 너비
+    height: 90px; // 원하는 높이
     object-fit: cover; // 이미지 크기를 유지하며 잘림
     border-radius: 50%; // 원하는 경우 둥글게 만들기
     cursor: pointer; // 커서를 포인터로 변경
@@ -45,6 +44,7 @@ const MyNote = () => {
     const location = useLocation();
     const fileInputRef = useRef(null); // 파일 입력을 참조할 ref 생성
     const [activeTab, setActiveTab] = useState('answer'); // 탭 상태를 관리
+    const [sortOption, setSortOption] = useState('');
 
     const handleButtonClick = (path) => {
         navigate(path); // 이동할 페이지
@@ -73,46 +73,68 @@ const MyNote = () => {
         }
     };
 
-       // 탭을 전환하는 함수
-       const switchTab = (tab) => {
+    // 탭을 전환하는 함수
+    const switchTab = (tab) => {
         setActiveTab(tab);
     };
+    // 옵션 정의
+    const firstOptions = [
+        { value: '', label: 'FE/BE/CS' },
+        { value: 'high', label: 'FE' },
+        { value: 'low', label: 'BE' },
+        { value: 'new', label: 'CS' },
+    ];
 
- // 탭에 따라 표시할 콘텐츠를 정의
- const renderTabContent = () => {
-    if (activeTab === 'answer') {
-        return (
-            <div style={ {display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
-               <SearchBar
-               height="10px"
-               width="30vw"
-               >
-                <Button
-                  color="transparent"
-                  radius="5px"
-                  hoverColor="#FFFFFF"
-                >
-                <img src={search} alt="search" style={{ width: '18px', height: '20px' }} />
-                </Button>
-               </SearchBar>
-                <SelectBox></SelectBox>
-            </div>
-        );
-    } else if (activeTab === 'wrong') {
-        return (
-            <div>
-                <h2>오답 탭</h2>
-                <p>이곳에 오답 관련 내용을 표시합니다.</p>
-            </div>
-        );
-    }
-};
+    const secondOptions = {
+        high: [{ value: 'subHigh1', label: 'FE 옵션 1-1' },
+            { value: 'subHigh1', label: 'FE 옵션 1-2' }
+        ],
+        low: [{ value: 'subLow1', label: 'BE 옵션 2-1' },
+            { value: 'subLow1', label: 'BE 옵션 2-2' },
+        ],
+        new: [{ value: 'subNew1', label: 'CS 옵션 3-1'  },
+            { value: 'subNew1', label:  'CS 옵션 3-2' },
+        ],
+    };
+
+    // 탭에 따라 표시할 콘텐츠를 정의
+    const renderTabContent = () => {
+        if (activeTab === 'answer') {
+            return (
+                <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center', marginTop: "20px" }}>
+                    <SearchBar
+                    >
+                    </SearchBar>
+                    <SelectBox
+                        firstOptions={firstOptions}
+                        secondOptions={secondOptions}
+                        onFirstChange={(value) => setSortOption(value)}
+                    />
+                    <h5>정답 보드</h5>
+                </div>
+            );
+        } else if (activeTab === 'wrong') {
+            return (
+                <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center', marginTop: "20px" }}>
+                    <SearchBar
+                    >
+                    </SearchBar>
+                    <SelectBox
+                        firstOptions={firstOptions}
+                        secondOptions={secondOptions}
+                        onFirstChange={(value) => setSortOption(value)}
+                    />
+                    <h5>오답 보드</h5>
+                </div>
+            );
+        }
+    };
 
     return (
         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-start' }}>
-            <Box
-                height="65vh"
-                width="17vw"
+              <Box
+                height="70vh"
+                width="16vw"
                 border="none"
                 alignItems="flex-start"
                 justify="flex-start"
@@ -131,26 +153,27 @@ const MyNote = () => {
                         style={{ display: 'none' }} // 파일 입력 숨기기
                     />
                 </ProfileImgArea>
-                <Font font="PretendardL" size="6.4px" color="#000000">{nickname || '닉네임'}</Font>
-                <Font font="PretendardL" size="5px" color="#A4A5A6">{email || '이메일'}</Font>
+                <Font font="PretendardL" size="20px" color="#000000" marginbottom="1px">{nickname || '닉네임'}</Font>
+                <Font font="PretendardL" size="185x" color="#A4A5A6" marginbottom="3px">{email || '이메일'}</Font>
                 <Line
+                margintop="10px"
                 ></Line>
 
                 
                 <Button
                     color="transparent"
-                    width="20vw"
+                    width="17vw"
                     textcolor="#000000"
-                    height="25px"
+                    height="54px"
                     hoverColor="#ffffff"
+                    margintbottom="2px"
                 >
                     <Font
                         font="PretendardL"
-                        size="10px"
+                        size="23px"
                         color="#000000"
                         align="center"
-                        margintop="0px"
-                        paddingtop="7px"
+                        paddingtop="6px"
                     >
                         프로필
                     </Font>
@@ -159,19 +182,19 @@ const MyNote = () => {
                 <Link to="/mynote" style={{ textDecoration: 'none' }}> 
                 <Button
                     color="transparent"
-                    width="20vw"
+                    width="17vw"
                     textcolor="#000000"
-                    height="25px"
+                    height="54px"
                     hoverColor="#ffffff"
+                    margintbottom="2px"
                     onClick={() => handleButtonClick('/mynote')}
                 >
                     <Font
                         font="PretendardL"
-                        size="10px"
+                        size="23px"
                         color="#000000"
                         align="center"
-                        margintop="0px"
-                        paddingtop="7px"
+                        paddingtop="6px"
                     >
                         정답 / 오답노트
                     </Font>
@@ -181,19 +204,19 @@ const MyNote = () => {
                 <Link to="/feedback" style={{ textDecoration: 'none' }}> 
                 <Button
                     color="transparent"
-                    width="20vw"
+                    width="17vw"
                     textcolor="#000000"
-                    height="25px"
+                    height="54px"
                     hoverColor="#ffffff"
-                    onClick={() => handleButtonClick('/feedback')}
+                    margintbottom="2px"
+                    onClick={() => handleButtonClick('/feedbackT')}
                 >
                     <Font
                         font="PretendardL"
-                        size="10px"
+                        size="23px"
                         color="#000000"
                         align="center"
-                        margintop="0px"
-                        paddingtop="7px"
+                        paddingtop="6px"
                     >
                         받은 피드백
                     </Font>
@@ -203,106 +226,110 @@ const MyNote = () => {
 
                 <Button
                     color="transparent"
-                    width="20vw"
+                    width="17vw"
                     textcolor="#000000"
-                    height="25px"
+                    height="54px"
                     hoverColor="#ffffff"
+                    margintbottom="2px"
                     onClick={() => handleButtonClick('/cash')}
                 >
                     <Font
                         font="PretendardL"
-                        size="10px"
+                        size="23px"
                         color="#000000"
                         align="center"
-                        margintop="0px"
-                        paddingtop="7px"
+                        paddingtop="6px"
                     >
                         결제관리
                     </Font>
                 </Button>
                 <Line
-                    marginbottom="10px"
+                    marginbottom="14px"
                 ></Line>
                 <Button
                     color="transparent"
-                    width="20vw"
+                    width="17vw"
                     textcolor="#000000"
-                    height="25px"
+                    height="54px"
                     hoverColor="#ffffff"
                 >
                     <Font
                         font="PretendardL"
-                        size="10px"
+                        size="20px"
                         color="#A4A5A6"
                         align="center"
-                        margintop="0px"
-                        paddingtop="7px"
+                        paddingtop="6px"
+                        marginbottom="0px"
                     >
                         로그아웃
                     </Font>
                 </Button>
             </Box>
             <Box
-                height="65vh"
+                height="70vh"
                 width="35vw"
                 border="none"
                 left="20px"
                 justify="flex-start"
                 direction="column"
-                alignitem="flex-start"
+                alignitem="center"
                 padding="0px"
-                style={{ display: 'flex'}} // 자식 박스에서 정렬
+                style={{ display: 'flex' }} // 자식 박스에서 정렬
             >
-                <div style={{display: 'flex', flexDirection: 'row'}}>
-                <Button
-                    height="8vh"
-                    width="17.5vw"
-                    border="none"
-                    radius="3px"
-                    top="none"
-                    color="#0372f396"
-                    onClick={() => switchTab('answer')}
-                >
-                    <Font
-                        font="PretendardB"
-                        size="9px"
-                        color="#000000"
-                        margintop="0px"
-                        paddingtop="7px"
-                        spacing="2px"
-                        align="center"
+                <div style={{ display: 'flex', flexDirection: 'row' }}>
+                    <Button
+                        height="12vh"
+                        width="17.5vw"
+                        border="none"
+                        radius="3px"
+                        top="none"
+                        color="#0372f396"
+                         margintbottom="0px"
+                        onClick={() => switchTab('answer')}
                     >
-                        정답
-                    </Font>
-                </Button>
-                <Button
-                    height="8vh"
-                    width="17.5vw"
-                    border="none"
-                    radius="3px"
-                    alignitem="flex-start"
-                    justify="flex-start"
-                    top="none"
-                    color="#0372f396"
-                    onClick={() => switchTab('wrong')}
-                >
-                    <Font
-                        font="PretendardB"
-                        size="9px"
-                        color="#000000"
-                        margintop="0px"
-                        paddingtop="7px"
-                        spacing="2px"
-                         align="center"
+                        <Font
+                            font="PretendardB"
+                            size="24px"
+                            color="#000000"
+                            margintop="0px"
+                            paddingtop="7px"
+                            spacing="2px"
+                            align="center"
+                            marginbottom="0px"
+                        >
+                            정답
+                        </Font>
+                    </Button>
+                    <Button
+                        height="12vh"
+                        width="17.5vw"
+                        border="none"
+                        radius="3px"
+                        alignitem="flex-start"
+                        justify="flex-start"
+                        top="none"
+                        color="#0372f396"
+                          margintbottom="0px"
+                        onClick={() => switchTab('wrong')}
                     >
-                        오답
-                    </Font>
-                </Button>
+                        <Font
+                            font="PretendardB"
+                            size="24px"
+                            color="#000000"
+                            margintop="0px"
+                            paddingtop="7px"
+                            spacing="2px"
+                            align="center"
+                            marginbottom="0px"
+                        >
+                            오답
+                        </Font>
+                    </Button>
                 </div>
-                {renderTabContent()} 
+                {renderTabContent()}
             </Box>
         </div>
     );
-  }
-  
+}
+
 export default MyNote;
