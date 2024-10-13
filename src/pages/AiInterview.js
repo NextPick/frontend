@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import Box from '../components/Box';
 import Font from '../components/Font';
 import styled from 'styled-components';
-import { useMember } from '../hooks/MemberManager'; // 회원 정보를 관리하는 훅
 import Button from '../components/Button';
 import Ai코치 from '../assets/Ai코치.png'; // 이미지 파일 import
 import mic from '../assets/mic.png'; // 이미지 파일 import
@@ -43,7 +42,11 @@ const AiInterview = () => {
 
     // 예시 질문과 답변 처리 (실제 로직에 맞게 수정 필요)
     const exampleQuestion = "오늘 기분이 어떠신가요?";
-    const exampleUserResponse = "매우 좋습니다!";
+
+    // 인풋 변화 처리
+    const handleInputChange = (event) => {
+        setUserResponse(event.target.value);
+    };
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
@@ -71,21 +74,29 @@ const AiInterview = () => {
                     <img src={Ai코치} alt="Ai" style={{ width: '360px', height: '400px', marginLeft: "20px" }} />
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', marginLeft: '10px' }}>
                         <QuestionBubble>
-                            <Font font="PretendardM" size="16px" color="#000000">
+                            <Font font="PretendardM" size="18px" color="#000000">
                                 {exampleQuestion}
                             </Font>
                         </QuestionBubble>
                         <ResponseBubble>
-                            <Font font="PretendardM" size="16px" color="#000000">
-                                {exampleUserResponse}
-                            </Font>
+                            {/* 인풋 필드 추가 */}
+                            <InputField 
+                                type="text" 
+                                value={userResponse} 
+                                onChange={handleInputChange}
+                                placeholder="대답을 입력하세요..." // 기본 텍스트 추가
+                            />
                         </ResponseBubble>
                     </div>
                 </Container>
 
-
+                {/* 버튼과 마이크 이미지를 수평으로 정렬하기 위한 컨테이너 추가 */}
                 <MicrophoneContainer>
-                    <img src={mic} alt="Mic" style={{ width: '35px', height: '40px' }} />
+                    <Button
+                        color="#FFFFFF"
+                    >
+                        <img src={mic} alt="Mic" style={{ width: '35px', height: '40px' }} />
+                    </Button>
                     <Font
                         font="PretendardM"
                         size="15px"
@@ -98,17 +109,18 @@ const AiInterview = () => {
                     >
                         마이크를 눌러 대답을 시작하세요
                     </Font>
+                    <Button
+                        width="130px"
+                        height="50px"
+                        fontsize="27px"
+                        radius="15px"
+                        marginleft="33vw"
+                        color="#f4fdff"
+                        style={{ marginLeft: '10px' }} // 버튼과 마이크 간의 간격
+                    >
+                        제출하기
+                    </Button>
                 </MicrophoneContainer>
-
-                <Button
-                width="100px"
-                height="50px"
-                fontsize="20px"
-                radius="15px"
-                style={{ marginLeft: '10px' }} // 버튼과 마이크 간의 간격
-                >
-                    제출하기
-                </Button>
             </Box>
         </div>
     );
@@ -118,7 +130,7 @@ const AiInterview = () => {
 const MicrophoneContainer = styled.div`
     display: flex;
     align-items: center;  /* 수직 정렬을 가운데로 설정 */
-    margin-top: 10px;  /* 필요 시 여백 조정 */
+    margin-top: 70px;  /* 필요 시 여백 조정 */
 `;
 
 const Container = styled.div`
@@ -160,16 +172,28 @@ const ResponseBubble = styled.div`
     margin-left: -40px;
     position: relative; /* 자식 요소의 위치 설정을 위한 */
 
-&::after {
-    content:'';
-    position:absolute;
-    top:50%;
-    right:-16px;
-    border-left:16px solid #FFFFFF;
-    border-top:10px solid transparent;
-    border-bottom:10px solid transparent;
-    transform:translateY(-50%);
-}
+    &::after {
+        content:'';
+        position:absolute;
+        top:50%;
+        right:-16px;
+        border-left:16px solid #FFFFFF;
+        border-top:10px solid transparent;
+        border-bottom:10px solid transparent;
+        transform:translateY(-50%);
+    }
+`;
+
+// 인풋 필드를 위한 styled-component 정의
+const InputField = styled.input`
+    width: 100%; /* 인풋 필드 너비를 말풍선 너비에 맞추기 */
+    height: 100%; /* 말풍선 높이에 맞추기 */
+    border: none; /* 테두리 제거 */
+    outline: none; /* 포커스 시 테두리 제거 */
+    font-family: 'PretendardM', sans-serif; /* 폰트 설정 */
+    font-size: 18px; /* 폰트 크기 */
+    padding: 10px; /* 패딩 추가 */
+    border-radius: 15px; /* 둥근 모서리 */
 `;
 
 export default AiInterview;
