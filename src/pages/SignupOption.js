@@ -93,7 +93,7 @@ const subTitle = {
 };
 
 const divider = {
-  borderTop: '2px solid #ccc',
+  borderTop: '2px solid #A0A0A0',
   marginBottom: '40px',
 };
 
