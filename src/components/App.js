@@ -20,7 +20,9 @@ import FeedbackT from '../pages/FeedbackT.js';
 import FeedbackS from '../pages/FeedbackS.js';
 import AdminPage from '../pages/AdminPage.js'
 import AdminPageQ from '../pages/AdminPageQ.js';
+import AdminPageQx from '../pages/AdminPageQ.jsx';
 import Administration from '../pages/Administration.js';
+import AdministrationX from '../pages/Administration.jsx';
 import Choice from '../pages/Choice.js';
 import InterviewFeedback from '../pages/InterviewFeedback.js';
 import QuestionBoard from '../pages/QuestionBoard.jsx';
@@ -53,8 +55,10 @@ function App() {
               <Route path='/cash' element={<Cash/>} />
               <Route path='/mynote' element={<MyNote/>} />
               <Route path='/adminpageQ' element={<AdminPageQ/>} />
+              <Route path='/adminpageQx' element={<AdminPageQx/>} />
               <Route path='/adminpage-service' element={<AdminPage/>} />
               <Route path='/administration' element={<Administration/>} />
+              <Route path='/administrationx' element={<AdministrationX/>} />
               <Route path='/choice' element={<Choice/>} />
               <Route path='/interviewfeedback' element={<InterviewFeedback/>} />
               <Route path='/aihome' element={<AiHome/>} />
