@@ -211,7 +211,7 @@ const Cash = () => {
                 color="#ffffff"
                 style={{ display: 'flex', flexDirection: 'column', alignItems: 'center'}} // 자식 박스에서 정렬
             >
-               <img src={cashpage} alt="공사중" style={{  height: '60%', width: "90% ", marginLeft: "50px" }} /> {/* //나중에 미디어커리 적용해서 작은화면에서도 안넘치더록하자 */}
+               <img src={cashpage} alt="공사중" style={{  height: '60%', width: "95% ", marginLeft: "50px" }} /> {/* //나중에 미디어커리 적용해서 작은화면에서도 안넘치더록하자 */}
             </Box>
         </div>
     );

@@ -27,6 +27,7 @@ import QuestionBoard from '../pages/QuestionBoard.jsx';
 import QuestionBoardDetails from '../pages/QuestionBoardContent.jsx';
 import QuestionBoardPost from '../pages/QuestionBoardPost.jsx'
 import ReviewBoard from '../pages/ReviewBoard.jsx';
+import AiHome from '../pages/AiHome.js';
 
 
 // App 컴포넌트를 정의하는 함수형 컴포넌트
@@ -55,6 +56,7 @@ function App() {
           <Route path='/administration' element={<Administration/>} />
           <Route path='/choice' element={<Choice/>} />
           <Route path='/interviewfeedback' element={<InterviewFeedback/>} />
+          <Route path='/aihome' element={<AiHome/>} />
           <Route path='/board/question' element={<QuestionBoard/>} />
           <Route path='/board/question/:boardId' element={<QuestionBoardDetails/>} />
           <Route path='/board/question/post' element={<QuestionBoardPost/>} />

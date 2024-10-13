@@ -62,10 +62,10 @@ const Choice = () => {
         <div className='wrap' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '90vh', gap: "10px", width: "100%" }}>
             {/* 버튼 클릭 시 모달 열기 */}
             <Button color="transparent" radius="5px" hoverColor="#FFFFFF" onClick={handleShowAddModal}>
-                <img src={choicefe} alt="fe" style={{ width: '130px', height: '110px' }} />
+                <img src={choicefe} alt="fe" style={{ width: '350px', height: '340px' }} />
             </Button>
             <Button color="transparent" radius="5px" hoverColor="#FFFFFF" onClick={handleShowAddModal}>
-                <img src={choicebe} alt="be" style={{ width: '130px', height: '110px' }} />
+                <img src={choicebe} alt="be" style={{ width: '350px', height: '340px' }} />
             </Button>
     
             {/* 방 만들기 모달 */}

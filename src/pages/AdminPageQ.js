@@ -21,8 +21,8 @@ import Input from '../components/Input'
 
 // Styled SelectBox 컴포넌트
 const StyledSelect = styled.select`
-    padding: 3px;
-    font-size: 6px;
+    padding: 7px;
+    font-size: 10px;
     border: 2px solid #526f8d; // 보더 색상
     border-radius: 5px; // 둥근 모서리
     background-color: #f8f9fa; // 배경 색상
@@ -63,14 +63,13 @@ const ReviewContainer = styled.div`
 `;
 
 const ReviewCard = styled.div`
-    width: 250px;
-    height: 25px;
+    width: 100%;
     background-color: #f0f8ff;
     border: 1px solid #3f8cec;
     border-radius: 6px;
     display: flex;
     font-family: 강원교육튼튼L;
-    font-size: 10px;
+    font-size: 20px;
     flex-direction: column;
     justify-content: space-between;
     cursor: pointer;
@@ -93,15 +92,16 @@ const ModalContent = styled.div`
 
 const ProfileImgArea = styled.div`
 justify-content: center;
-padding: 10px;
+margin-top: 18px;
+padding: 5px;
 display: flex; // 플렉스 박스 설정
     align-items: flex-start; // 이미지가 박스 시작 부분에 정렬되도록 설정
 `;
 
 
 const ProfileImage = styled.img`
-    width: 50px; // 원하는 너비
-    height: 50px; // 원하는 높이
+    width: 90px; // 원하는 너비
+    height: 90px; // 원하는 높이
     object-fit: cover; // 이미지 크기를 유지하며 잘림
     border-radius: 50%; // 원하는 경우 둥글게 만들기
     cursor: pointer; // 커서를 포인터로 변경
@@ -257,9 +257,9 @@ const AdminPageQ = () => {
 
     return (
         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-start' }}>
-            <Box
-                height="65vh"
-                width="17vw"
+              <Box
+                height="70vh"
+                width="16vw"
                 border="none"
                 alignItems="flex-start"
                 justify="flex-start"
@@ -278,26 +278,27 @@ const AdminPageQ = () => {
                         style={{ display: 'none' }} // 파일 입력 숨기기
                     />
                 </ProfileImgArea>
-                <Font font="PretendardL" size="6.4px" color="#000000" marginbottom="2px">{nickname || '닉네임'}</Font>
-                <Font font="PretendardL" size="5px" color="#A4A5A6" marginbottom="3px">{email || '이메일'}</Font>
+                <Font font="PretendardL" size="20px" color="#000000" marginbottom="1px">{nickname || '닉네임'}</Font>
+                <Font font="PretendardL" size="185x" color="#A4A5A6" marginbottom="3px">{email || '이메일'}</Font>
                 <Line
+                    margintop="10px"
                 ></Line>
 
 
                 <Button
                     color="transparent"
-                    width="20vw"
+                    width="17vw"
                     textcolor="#000000"
-                    height="25px"
+                    height="54px"
                     hoverColor="#ffffff"
+                    margintbottom="2px"
                 >
                     <Font
                         font="PretendardL"
-                        size="10px"
+                        size="23px"
                         color="#000000"
                         align="center"
-                        margintop="0px"
-                        paddingtop="7px"
+                        paddingtop="6px"
                     >
                         서비스 이용비율
                     </Font>
@@ -306,19 +307,19 @@ const AdminPageQ = () => {
                 <Link to="/mynote" style={{ textDecoration: 'none' }}>
                     <Button
                         color="transparent"
-                        width="20vw"
+                        width="17vw"
                         textcolor="#000000"
-                        height="25px"
+                        height="54px"
                         hoverColor="#ffffff"
+                        margintbottom="2px"
                         onClick={() => handleButtonClick('/mynote')}
                     >
                         <Font
                             font="PretendardL"
-                            size="10px"
+                            size="23px"
                             color="#000000"
                             align="center"
-                            margintop="0px"
-                            paddingtop="7px"
+                            paddingtop="6px"
                         >
                             면접질문 관리
                         </Font>
@@ -328,19 +329,19 @@ const AdminPageQ = () => {
                 <Link to="/feedback" style={{ textDecoration: 'none' }}>
                     <Button
                         color="transparent"
-                        width="20vw"
+                        width="17vw"
                         textcolor="#000000"
-                        height="25px"
+                        height="54px"
                         hoverColor="#ffffff"
+                        margintbottom="2px"
                         onClick={() => handleButtonClick('/feedbackT')}
                     >
                         <Font
                             font="PretendardL"
-                            size="10px"
+                            size="23px"
                             color="#000000"
                             align="center"
-                            margintop="0px"
-                            paddingtop="7px"
+                            paddingtop="6px"
                         >
                             멘토가입 신청관리
                         </Font>
@@ -350,47 +351,47 @@ const AdminPageQ = () => {
 
                 <Button
                     color="transparent"
-                    width="20vw"
+                    width="17vw"
                     textcolor="#000000"
-                    height="25px"
+                    height="54px"
                     hoverColor="#ffffff"
+                    margintbottom="2px"
                     onClick={() => handleButtonClick('/cash')}
                 >
                     <Font
                         font="PretendardL"
-                        size="10px"
+                        size="23px"
                         color="#000000"
                         align="center"
-                        margintop="0px"
-                        paddingtop="7px"
+                        paddingtop="6px"
                     >
                         사용자 신고목록 관리
                     </Font>
                 </Button>
                 <Line
-                    marginbottom="10px"
+                    marginbottom="14px"
                 ></Line>
                 <Button
                     color="transparent"
-                    width="20vw"
+                    width="17vw"
                     textcolor="#000000"
-                    height="25px"
+                    height="54px"
                     hoverColor="#ffffff"
                 >
                     <Font
                         font="PretendardL"
-                        size="10px"
+                        size="20px"
                         color="#A4A5A6"
                         align="center"
-                        margintop="0px"
-                        paddingtop="7px"
+                        paddingtop="6px"
+                        marginbottom="0px"
                     >
                         로그아웃
                     </Font>
                 </Button>
             </Box>
             <Box
-                height="65vh"
+                height="70vh"
                 width="35vw"
                 border="none"
                 left="20px"
@@ -404,7 +405,7 @@ const AdminPageQ = () => {
                 <div style={{ marginBottom: '5px', width: '100%', display: 'flex', alignItems: 'center' }}>
                     <Font
                         font="PretendardL"
-                        size="10px"
+                        size="20px"
                         color="#000000"
                         margintop="5px"
                         spacing="2px"
@@ -422,11 +423,11 @@ const AdminPageQ = () => {
                         fontsize="none"
                         padding="3px"
                         scale={1} // 원하는 확대 비율
-                        height="16px"
+                        height="30px"
 
                     >
                         <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-                            <img src={plusbutton} alt="plusbotton" style={{ width: '13px', height: '13px' }} />
+                            <img src={plusbutton} alt="plusbotton" style={{ width: '25px', height: '25px' }} />
                         </div>
                     </Button>
 
@@ -452,7 +453,7 @@ const AdminPageQ = () => {
 
 
                 <Box
-                    height="42vh"
+                    height="50vh"
                     width="30vw"
                     border="none"
                     justify="flex-start"
@@ -465,13 +466,13 @@ const AdminPageQ = () => {
                         {filteredReviews.map((review, index) => (
                             <ReviewCard key={index} onClick={() => handleReviewClick(review)}>
                                 <div style={{ padding: '10px' }}>
-                                    <Font font="PretendardB" size="12px" color="#3f8cec">
+                                    <Font font="PretendardB" size="15px" color="#3f8cec">
                                         {review.userName}
                                     </Font>
-                                    <Font font="PretendardL" size="10px" color="#A1A1A1" margintop="5px" spacing="2px">
+                                    <Font font="PretendardL" size="12px" color="#A1A1A1" margintop="5px" spacing="2px">
                                         점수: {review.score}
                                     </Font>
-                                    <Font font="PretendardL" size="10px" color="#000000" margintop="5px" spacing="2px">
+                                    <Font font="PretendardL" size="15px" color="#000000" margintop="5px" spacing="2px">
                                         {review.userComment}
                                     </Font>
                                 </div>

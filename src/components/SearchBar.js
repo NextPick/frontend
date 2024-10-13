@@ -52,7 +52,7 @@ const SearchBar = ({ width, height, placeholder, onSearch, top, left,  value, on
         hoverColor="#FFFFFF"
         onClick={handleSearch} // 버튼 클릭 시 검색 실행
       >
-        <img src={search} alt="search" style={{ width: '27px', height: '35px' }} />
+        <img src={search} alt="search" style={{ width: '30px', height: '35px' }} />
       </Button>
     </SearchBarContainer>
   );
