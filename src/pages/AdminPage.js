@@ -66,10 +66,6 @@ const AdminPage = () => {
         }
     };
 
-       // 탭을 전환하는 함수
-       const switchTab = (tab) => {
-        setActiveTab(tab);
-    };
 
  // 탭에 따라 표시할 콘텐츠를 정의
  const renderTabContent = () => {

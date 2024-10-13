@@ -11,7 +11,7 @@ const Footer = () => {
         <div className='footer'>
         <Font 
         font="PretendardB"
-        size="13px"
+        size="16px"
         color="#FFFFFF"
         align="center"
         paddingtop="20px"
