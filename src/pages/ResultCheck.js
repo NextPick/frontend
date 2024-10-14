@@ -5,15 +5,16 @@ import Box from '../components/Box';
 import Font from '../components/Font';
 import styled from 'styled-components';
 import Button from '../components/Button';
-import Ai코치 from '../assets/Ai코치.png'; // 이미지 파일 import
-import 정답확인캐릭터 from '../assets/정답확인캐릭터.png'; // 이미지 파일 import
+import AiCoach from '../assets/AiCoach.png'; // 이미지 파일 import
+import correctImage from '../assets/correctImage.png'; // 이미지 파일 import
+import incorrectImage from '../assets/incorrectImage.png'; // 이미지 파일 import
 import axios from 'axios';
 
 const ResultCheck = () => {
     const { setHeaderMode } = useHeaderMode();
     const navigate = useNavigate();
     const location = useLocation();
-    const { questionListId, userResponse, selectedSubcategory } = location.state || {};
+    const { questionListId, userResponse, selectedSubcategory, correct } = location.state || {};
     const [correctAnswer, setCorrectAnswer] = useState('정답을 불러오고 있습니다...');
     const [correctRate, setCorrectRate] = useState('N/L');
 
@@ -28,11 +29,15 @@ const ResultCheck = () => {
     useEffect(() => {
         if (questionListId) {
             // API 요청으로 정답과 정답률 가져오기
-            axios.get(`http://localhost:8080/questions/${questionListId}`)
+            axios.get(process.env.REACT_APP_API_URL + `questions/${questionListId}`)
                 .then(response => {
                     const data = response.data.data;
                     setCorrectAnswer(data.answer || '정답을 불러올 수 없습니다.');
                     setCorrectRate(data.correctRate ? `${data.correctRate}%` : '0%');
+                    if(correct)
+                        localStorage.setItem('Correctquestion', localStorage.getItem('Correctquestion') + '/' + questionListId);
+                    else
+                        localStorage.setItem('Incorrectquestion', localStorage.getItem('Incorrectquestion') + '/' + questionListId);
                 })
                 .catch(error => {
                     console.error('정답을 가져오는 중 오류 발생:', error);
@@ -75,7 +80,7 @@ const ResultCheck = () => {
                 </Font>
 
                 <Container>
-                    <img src={정답확인캐릭터} alt="Ai" style={{ width: '330px', height: '430px', marginLeft: "-80px" }} />
+                    <img src={correct ? correctImage : incorrectImage} alt="Ai" style={{ width: '330px', height: '430px', marginLeft: "-80px" }} />
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', marginLeft: '10px', marginTop:'-10px' }}>
                         <AnswerContainer>
                             <Font
