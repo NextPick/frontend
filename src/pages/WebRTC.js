@@ -2,6 +2,8 @@ import React, { useRef, useState } from 'react';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
 import "../styles/WebRTC.css";
+import {useLocation} from "react-router-dom";
+import axios from "axios";
 
 const WebRTC = () => {
     const localStreamElement = useRef(null);
@@ -11,8 +13,10 @@ const WebRTC = () => {
     let otherKeyList = [];
     let localStream = undefined;
     let stompClient;
-    const occupation = "BE";
+    const location = useLocation();
+    const roomOccupation = location.state;
     let camCount = 0;
+    let memberEmail = localStorage.getItem('email');
 
     const [memo, setMemo] = useState('');
     const [tutor1, setTutor1] = useState('');
@@ -50,15 +54,15 @@ const WebRTC = () => {
     // };
 
     const connectSocket = async () => {
-        const socket = new SockJS('https://localhost:8443/signaling');
+        const socket = new SockJS('https://server.nextpick.site/signaling');
         stompClient = Stomp.over(socket);
         stompClient.debug = null;
 
         stompClient.connect(
             {
                 camKey: myKey,
-                occupation: occupation,
-                email: "123@123.com",
+                occupation: roomOccupation,
+                email: memberEmail,
             }, function () {
                 console.log('Connected to WebRTC server');
                 console.log(myKey);
@@ -68,6 +72,10 @@ const WebRTC = () => {
                     roomId = message.body; // 룸 ID 저장
                     console.log(roomId);
                 });
+
+                stompClient.subscribe(`/topic/memberId/${myKey}`, (message) => {
+
+                })
 
                 // ICE 후보 구독
                 stompClient.subscribe(`/topic/peer/iceCandidate/${myKey}/${roomId}`, candidate => {
@@ -233,6 +241,14 @@ const WebRTC = () => {
     const handleButtonClick = async () => {
         await handleEnterRoom();
     };
+
+    // const handlePostFeedback = async () => {
+    //     try {
+    //         const response = await axios.post(process.env["REACT_APP_API_URL "] + roomId + "/" + )
+    //     } catch (error) {
+    //         alert("피드백 생성에 실패 했습니다.")
+    //     }
+
 
     return (
         <div className="container">

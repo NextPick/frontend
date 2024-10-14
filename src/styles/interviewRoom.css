@@ -1,0 +1,68 @@
+/*.container {*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
+/*    margin-top: 5vh;*/
+/*    align-items: center;*/
+/*    height: 100vh;*/
+/*    background-color: #FFF;*/
+/*}*/
+
+/*.title-container {*/
+/*    margin-bottom: -10px;*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    justify-content: flex-start; !* Aligns content to the start of the flex container *!*/
+/*    width: 900px; !* Matches the width of the divider for alignment *!*/
+/*    margin-left: 20px; !* Adds some space from the left edge *!*/
+/*}*/
+
+/*.main-title {*/
+/*    font-weight: bold;*/
+/*    font-size: 26px; !* Updated font size *!*/
+/*}*/
+
+/*.sub-title {*/
+/*    font-size: 18px; !* Updated font size *!*/
+/*    margin-top: 10px;*/
+/*}*/
+
+/*.divider {*/
+/*    border-top: 2px solid #A0A0A0;*/
+/*    margin-bottom: 40px;*/
+/*}*/
+
+/*.container-style {*/
+/*    display: flex;*/
+/*    gap: 60px;*/
+/*    justify-content: center;*/
+/*    align-items: center;*/
+/*    margin-bottom: 30px;*/
+/*}*/
+
+/*.button-style {*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
+/*    align-items: center;*/
+/*    cursor: pointer;*/
+/*}*/
+
+/*.image-style {*/
+/*    width: 400px; !* Adjust the size as needed *!*/
+/*    height: 400px;*/
+/*    border-radius: 20px;*/
+/*    transition: transform 0.3s ease;*/
+/*    margin-bottom: 10px;*/
+/*}*/
+
+/*.label-style {*/
+/*    margin-top: 15px;*/
+/*    font-size: 16px;*/
+/*}*/
+
+/*.next-button-style {*/
+/*    padding: 10px 20px;*/
+/*    border-radius: 20px;*/
+/*    border: 1px solid #ccc;*/
+/*    font-size: 16px;*/
+/*    cursor: pointer;*/
+/*}*/
