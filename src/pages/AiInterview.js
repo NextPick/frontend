@@ -36,7 +36,7 @@ const AiInterview = () => {
             let formData = new FormData();
             formData.append('uploadFile', wavBlob, 'audio.wav');
 
-            const res = await axios.post('http://localhost:8080/fileUpload', formData);
+            const res = await axios.post(process.env.REACT_APP_API_URL + 'fileUpload', formData);
             alert('녹음 파일 업로드 성공');
             setResp(res.data.text);
         } catch (error) {
@@ -189,7 +189,7 @@ const AiInterview = () => {
     }, [setHeaderMode]);
 
     useEffect(() => {
-        axios.get('http://localhost:8080/questions', {
+        axios.get(process.env.REACT_APP_API_URL + 'questions', {
             params: {
                 size: 1,
                 page: 1,

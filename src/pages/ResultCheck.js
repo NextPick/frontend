@@ -28,7 +28,7 @@ const ResultCheck = () => {
     useEffect(() => {
         if (questionListId) {
             // API 요청으로 정답과 정답률 가져오기
-            axios.get(`http://localhost:8080/questions/${questionListId}`)
+            axios.get(process.env.REACT_APP_API_URL + `questions/${questionListId}`)
                 .then(response => {
                     const data = response.data.data;
                     setCorrectAnswer(data.answer || '정답을 불러올 수 없습니다.');
