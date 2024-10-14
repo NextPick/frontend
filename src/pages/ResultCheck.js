@@ -13,23 +13,17 @@ const ResultCheck = () => {
     const { setHeaderMode } = useHeaderMode();
     const navigate = useNavigate();
     const location = useLocation();
-    const { questionListId, userResponse } = location.state || {};
+    const { questionListId, userResponse, selectedSubcategory } = location.state || {};
     const [correctAnswer, setCorrectAnswer] = useState('정답을 불러오고 있습니다...');
     const [correctRate, setCorrectRate] = useState('N/L');
 
     // 기본 카테고리 BE와 하위 카테고리 초기화
-    const [selectedCategory, setSelectedCategory] = useState('BE'); // 선택된 상위 카테고리 상태 (기본값 BE)
-    const [selectedSubcategory, setSelectedSubcategory] = useState(null); // 선택된 하위 카테고리 상태
+    const [selectedCategory, setSelectedCategory] = useState(''); // 선택된 상위 카테고리 상태 (기본값 BE)
     // const [userResponse, setUserResponse] = useState(''); // 사용자의 대답 상태
 
     useEffect(() => {
         setHeaderMode('main');
     }, [setHeaderMode]);
-
-    useEffect(() => {
-        // 초기화 시 하위 카테고리 기본 선택 메시지 설정
-        setSelectedSubcategory(null); // 하위 카테고리는 초기화
-    }, []); // 컴포넌트가 마운트될 때만 실행
 
     useEffect(() => {
         if (questionListId) {
@@ -47,23 +41,11 @@ const ResultCheck = () => {
                 });
         }
     }, [questionListId]);
-
-    const handleCategoryClick = (categoryName) => {
-        if (selectedCategory === categoryName) {
-            setSelectedCategory(null); // 이미 선택된 카테고리를 다시 클릭하면 하위 카테고리 숨기기
-            setSelectedSubcategory(null); // 하위 카테고리 선택 초기화
-        } else {
-            setSelectedCategory(categoryName); // 다른 카테고리를 클릭하면 선택된 카테고리 변경
-            setSelectedSubcategory(null); // 하위 카테고리 선택 초기화
-        }
+    
+    const handleStartInterviewClick = () => {
+        // 선택된 카테고리 및 하위 카테고리를 state로 전달하며 페이지 이동
+        navigate('/aiInterview', { state: { selectedCategory, selectedSubcategory } });
     };
-
-    const handleSubcategoryClick = (subcategory) => {
-        setSelectedSubcategory(subcategory); // 선택된 하위 카테고리 상태 업데이트
-    };
-
-    // 예시 질문과 답변 처리 (실제 로직에 맞게 수정 필요)
-    const exampleQuestion = "오늘 기분이 어떠신가요?";
 
     // 인풋 변화 처리
     // const handleInputChange = (event) => {
@@ -160,6 +142,7 @@ const ResultCheck = () => {
                         marginleft="40vw"
                         color="#f4fdff"
                         style={{ marginLeft: '10px' }} // 버튼과 마이크 간의 간격
+                        onClick={handleStartInterviewClick} // 클릭 핸들러 추가
                     >
                         다음문제풀기
                     </Button>
@@ -194,48 +177,58 @@ const Container = styled.div`
 `;
 
 const QuestionBubble = styled.div`
-    background-color: #ffffff; /* 말풍선 배경 색상 */
+    background-color: #ffffff;
     border-radius: 15px;
-    padding: 10px 15px; /* 패딩 조정 */
-    width: 32vw; /* 말풍선 최대 너비 */
+    padding: 10px 15px;
+    width: 32vw;
     height: 20vh;
     max-width: 40vw;
     margin-bottom: 15px;
     margin-left: -30px;
-    position: relative; /* 자식 요소의 위치 설정을 위한 */
-
+    position: relative;
+    overflow-y: auto; /* 스크롤 가능하도록 설정 */
+    overflow-x: hidden;
+    
     &::after {
         content: '';
         position: absolute;
-        top: 50%; /* 말풍선 중앙에 위치 */
-        left: -16px; /* 왼쪽에 위치하도록 설정 */
-        border-right: 16px solid #ffffff; /* 말풍선 배경 색상 */
-        border-top: 10px solid transparent; /* 투명한 부분 */
-        border-bottom: 10px solid transparent; /* 투명한 부분 */
-        transform: translateY(-50%); /* 수직 중앙 정렬 */
+        top: 50%;
+        left: -16px;
+        border-right: 16px solid #ffffff;
+        border-top: 10px solid transparent;
+        border-bottom: 10px solid transparent;
+        transform: translateY(-50%);
     }
+
+    /* 내부 텍스트 크기 조정 */
+    font-size: 16px;
 `;
 
 const ResponseBubble = styled.div`
-    background-color: #ffffff; /* 말풍선 배경 색상 */
+    background-color: #ffffff;
     border-radius: 15px;
-    padding: 10px 15px; /* 패딩 조정 */
-    width: 32vw; /* 말풍선 최대 너비 */
+    padding: 10px 15px;
+    width: 32vw;
     height: 20vh;
     margin-bottom: 20px;
     margin-left: -5px;
-    position: relative; /* 자식 요소의 위치 설정을 위한 */
-
+    position: relative;
+    overflow-y: auto; /* 스크롤 가능하도록 설정 */
+    overflow-x: hidden;
+    
     &::after {
-        content:'';
-        position:absolute;
-        top:50%;
-        right:-16px;
-        border-left:16px solid #FFFFFF;
-        border-top:10px solid transparent;
-        border-bottom:10px solid transparent;
-        transform:translateY(-50%);
+        content: '';
+        position: absolute;
+        top: 50%;
+        right: -16px;
+        border-left: 16px solid #FFFFFF;
+        border-top: 10px solid transparent;
+        border-bottom: 10px solid transparent;
+        transform: translateY(-50%);
     }
+
+    /* 내부 텍스트 크기 조정 */
+    font-size: 16px;
 `;
 
 // 인풋 필드를 위한 styled-component 정의

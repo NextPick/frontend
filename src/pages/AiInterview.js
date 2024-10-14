@@ -24,6 +24,8 @@ const AiInterview = () => {
 
     // 녹음된 파일을 WAV로 변환하여 업로드
     const uploadRecordedAudio = async () => {
+        console.log(selectedSubcategory)
+        console.log(changeSubcategoryToCategoryId(selectedSubcategory))
         if (!mediaBlobUrl) {
             alert('녹음된 파일이 없습니다.');
             return;
@@ -43,6 +45,9 @@ const AiInterview = () => {
     };
 
     const changeSubcategoryToCategoryId = (e) => {
+        if(e >= 1 && e <= 29){
+            return e;
+        }
         switch(e){
             case 'Java': 
                 return 1;
@@ -223,7 +228,8 @@ const AiInterview = () => {
         navigate('/resultcheck', {
             state: {
                 questionListId: questionListId,
-                userResponse: userResponse
+                userResponse: userResponse,
+                selectedSubcategory: selectedSubcategory
             }
         });
     };
