@@ -10,7 +10,7 @@ const Administration = () => {
   const [page, setPage] = useState(1);
 
   useEffect(() => {
-    axios.get(`http://localhost:8080/members/mentor?page=${page}&size=20`)
+    axios.get(process.env.REACT_APP_API_URL + `members/mentor?page=${page}&size=20`)
       .then(response => {
         const data = response.data.data;
         setMentorData(data);
@@ -23,7 +23,7 @@ const Administration = () => {
   const handleAccept = (memberId) => {
     const accessToken = localStorage.getItem('accessToken');
     axios.patch(
-      `http://localhost:8080/members/admin/${memberId}`,
+      process.env.REACT_APP_API_URL + `members/admin/${memberId}`,
       {
         status: "ACTIVE",
         guiltyScore: -6
@@ -44,7 +44,7 @@ const Administration = () => {
 
   const handleReject = (memberId) => {
     const accessToken = localStorage.getItem('accessToken');
-    axios.delete(`http://localhost:8080/members/admin/${memberId}`, {
+    axios.delete(process.env.REACT_APP_API_URL + `members/admin/${memberId}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`
       }

@@ -57,7 +57,7 @@ const InterviewFeedback = () => {
 
     const handleMentorFeedback = async () => {
         try {
-            const response = await axios.post(`http://localhost:8080/mentee/feedback/${roomId}/${mentorId}`,
+            const response = await axios.post(process.env.REACT_APP_API_URL + `mentee/feedback/${roomId}/${mentorId}`,
                 {
                     content: feedback,
                     starRating: userScore,

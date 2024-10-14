@@ -24,6 +24,8 @@ const AiInterview = () => {
 
     // 녹음된 파일을 WAV로 변환하여 업로드
     const uploadRecordedAudio = async () => {
+        console.log(selectedSubcategory)
+        console.log(changeSubcategoryToCategoryId(selectedSubcategory))
         if (!mediaBlobUrl) {
             alert('녹음된 파일이 없습니다.');
             return;
@@ -34,7 +36,7 @@ const AiInterview = () => {
             let formData = new FormData();
             formData.append('uploadFile', wavBlob, 'audio.wav');
 
-            const res = await axios.post('http://localhost:8080/fileUpload', formData);
+            const res = await axios.post(process.env.REACT_APP_API_URL + 'fileUpload', formData);
             alert('녹음 파일 업로드 성공');
             setResp(res.data.text);
         } catch (error) {
@@ -43,6 +45,9 @@ const AiInterview = () => {
     };
 
     const changeSubcategoryToCategoryId = (e) => {
+        if(e >= 1 && e <= 29){
+            return e;
+        }
         switch(e){
             case 'Java': 
                 return 1;
@@ -184,7 +189,7 @@ const AiInterview = () => {
     }, [setHeaderMode]);
 
     useEffect(() => {
-        axios.get('http://localhost:8080/questions', {
+        axios.get(process.env.REACT_APP_API_URL + 'questions', {
             params: {
                 size: 1,
                 page: 1,
@@ -223,7 +228,8 @@ const AiInterview = () => {
         navigate('/resultcheck', {
             state: {
                 questionListId: questionListId,
-                userResponse: userResponse
+                userResponse: userResponse,
+                selectedSubcategory: selectedSubcategory
             }
         });
     };
