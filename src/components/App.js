@@ -13,7 +13,7 @@ import SignupSuccess from '../pages/SignupSuccess.js';
 import Mypage from '../pages/Mypage.jsx';
 import { ProfileProvider } from '../hooks/ProfileContext.js';
 import { MemberManager } from '../hooks/MemberManager.js';
-import MyNote from '../pages/MyNote.js';
+import MyNote from '../pages/MyNote.jsx';
 import Cash from '../pages/Cash.js';
 import AudioRecorder from '../pages/AudioRecorder.jsx'; // 추가한 페이지 임포트
 import FeedbackT from '../pages/FeedbackT.js';
