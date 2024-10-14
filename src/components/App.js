@@ -10,10 +10,10 @@ import Agree from '../pages/Agree.jsx';
 // import Signup from '../pages/Signup.js';
 import Signup from '../pages/Signup.jsx';
 import SignupSuccess from '../pages/SignupSuccess.js';
-import Mypage from '../pages/Mypage.js';
+import Mypage from '../pages/Mypage.jsx';
 import { ProfileProvider } from '../hooks/ProfileContext.js';
 import { MemberManager } from '../hooks/MemberManager.js';
-import MyNote from '../pages/MyNote.js';
+import MyNote from '../pages/MyNote.jsx';
 import Cash from '../pages/Cash.js';
 import AudioRecorder from '../pages/AudioRecorder.jsx'; // 추가한 페이지 임포트
 import FeedbackT from '../pages/FeedbackT.js';
@@ -60,10 +60,12 @@ function App() {
               <Route path='/adminpageQx' element={<AdminPageQx/>} />
               <Route path='/adminpage-service' element={<AdminPage/>} />
               <Route path='/administration' element={<Administration/>} />
-              <Route path='/administrationx' element={<AdministrationX/>} />
               <Route path='/choice' element={<Choice/>} />
               <Route path='/interviewfeedback' element={<InterviewFeedback/>} />
               <Route path='/aihome' element={<AiHome/>} />
+              <Route path='/administrationx' element={<AdministrationX/>} />
+              <Route path='/resultcheck' element={<ResultCheck/>} />
+              <Route path='/resultpage' element={<ResultPage/>} />
               <Route path='/aiInterview' element={<AiInterview/>} />
               <Route path='/audio-recorder' element={<AudioRecorder />} />
               <Route path='/board/question' element={<QuestionBoard/>} />

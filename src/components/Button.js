@@ -4,8 +4,9 @@ import styled from 'styled-components';
 
 const StyledButton = styled.button`
 // 2. 커스텀하고 싶은 부분을 아래 형식 처럼 변경
-    background-color: ${(props) => props.color};
-    width: ${(props) => props.width};
+background-color: ${(props) => (props.active ? '#137df696' : props.color || 'transparent')};
+transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;    
+width: ${(props) => props.width};
   color: ${(props) => props.textcolor}; /* 텍스트 색상 */
   margin-top: ${(props) => props.margintop};
   margin-bottom: ${(props) => props.margintbottom};
@@ -17,7 +18,6 @@ const StyledButton = styled.button`
   font-size: ${(props) => props.fontsize || '0.9rem'}; /* 폰트 크기 */
   font-family: ${(props) => props.fontfamily || '"Pretendard"'};
   cursor: pointer; /* 커서 모양 변경 */
-  transition: background-color 0.3s, transform 0.3s;; /* 배경색 변화 효과 */
   align-items: ${(props) => props.align || 'center'}; /* 수직 정렬을 중앙으로 조정 */
     justify-content: ${(props) => props.justify || 'center'}; /* 수평 정렬을 중앙으로 조정 */
     margin-left: ${(props) => props.left};
@@ -26,18 +26,21 @@ const StyledButton = styled.button`
     display: ${(props) => props.display};
 
   &:hover {
-    background-color: ${(props) => props.hoverColor || '#2980b9'}; /* 호버 시 어두운 파란색 */
-    transform: scale(${(props) => props.scale || 1.1}); /* 호버 시 크기 조절 (기본값: 1.1) */
+    background-color: ${(props) => props.hoverColor || '#0077ff96'};
+    color: ${(props) => props.hoverTextColor || '#ffffff'};
+    transform: scale(${(props) => props.scale || 1.1});
   }
 `;
 
 const Button = (props) => {
   // 1. props {} 안에 추가
-  const { color, width, children, textcolor, margintop, margintbottom, marginleft, marginright, height, right, radius, border, hoverColor, fontsize, fontfamily, onClick, align, justify, left, padding, display } = props;
+  const {    hoverTextColor, active, color, width, children, textcolor, margintop, margintbottom, marginleft, marginright, height, right, radius, border, hoverColor, fontsize, fontfamily, onClick, align, justify, left, padding, display } = props;
   return (
     // 3 아래 props 받을 수 있도록 추가
     <StyledButton
+    active={active}
       color={color}
+      hoverTextColor={hoverTextColor} 
       width={width}
       textcolor={textcolor}
       margintop={margintop}
