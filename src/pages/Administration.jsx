@@ -178,7 +178,7 @@ const MenuItem = styled.p`
   padding: 10px;
   cursor: pointer;
   transition: background-color 0.3s ease, color 0.3s ease;
-  background-color: ${({ active }) => (active ? '#0372f396' : 'transparent')};
+  background-color: ${({ active }) => (active ? '#137df696' : 'transparent')};
   color: ${({ active }) => (active ? '#ffffff' : '#000')};
 
   &:hover {

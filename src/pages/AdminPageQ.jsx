@@ -2,17 +2,42 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 import Line from '../components/Line';
-import { useMember } from '../hooks/MemberManager'; // 회원 정보를 관리하는 훅
-import plusbutton from '../assets/plusbutton.png'
+import { useMember } from '../hooks/MemberManager';
+import plusbutton from '../assets/plusbutton.png';
+import searchIcon from '../assets/search.png'; // 돋보기 아이콘 이미지 경로
 
 const Administration = () => {
   const [questionData, setQuestionData] = useState([]);
+  const [categories, setCategories] = useState([]);
   const { profileUrl, setProfileUrl, nickname, email } = useMember();
   const [page, setPage] = useState(1);
   const [type, setType] = useState("none");
   const [sort, setSort] = useState("recent");
   const [category, setCategory] = useState(-1);
   const [keyword, setKeyword] = useState("");
+
+  const handleSearchChange = (e) => {
+    setKeyword(e.target.value);
+  };
+
+  const handleCategoryChange = (e) => {
+    setCategory(e.target.value);
+  };
+
+  const handleSortChange = (e) => {
+    setSort(e.target.value);
+  };
+
+  const handleSearchClick = () => {
+    axios.get(`http://localhost:8080/questions?size=20&page=${page}&type=${type}&sort=${sort}&category=${category}&keyword=${keyword}`)
+      .then(response => {
+        const data = response.data.data;
+        setQuestionData(data);
+      })
+      .catch(error => {
+        console.error('검색 요청 오류:', error);
+      });
+  };
 
   useEffect(() => {
     axios.get(`http://localhost:8080/questions?size=20&page=${page}&type=${type}&sort=${sort}&category=${category}&keyword=${keyword}`)
@@ -21,46 +46,19 @@ const Administration = () => {
         setQuestionData(data);
       })
       .catch(error => {
-        console.error('Error fetching data:', error);
+        console.error('데이터 가져오기 오류:', error);
       });
-  }, [page]);
+  }, [page, sort, category, keyword]);
 
-  const handleAccept = (memberId) => {
-    const accessToken = localStorage.getItem('accessToken');
-    axios.patch(
-      `http://localhost:8080/members/admin/${memberId}`,
-      {
-        status: "ACTIVE",
-        guiltyScore: -6
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        }
-      }
-    )
-    .then(() => {
-      setQuestionData(prevData => prevData.filter(user => user.memberId !== memberId));
-    })
-    .catch(error => {
-      console.error('Error accepting mentor request:', error);
-    });
-  };
-
-  const handleReject = (memberId) => {
-    const accessToken = localStorage.getItem('accessToken');
-    axios.delete(`http://localhost:8080/members/admin/${memberId}`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      }
-    })
-    .then(() => {
-      setQuestionData(prevData => prevData.filter(user => user.memberId !== memberId));
-    })
-    .catch(error => {
-      console.error('Error rejecting mentor request:', error);
-    });
-  };
+  useEffect(() => {
+    axios.get('http://localhost:8080/question/category')
+      .then(response => {
+        setCategories(response.data); 
+      })
+      .catch(error => {
+        console.error('카테고리 가져오기 오류:', error);
+      });
+  }, []);
 
   return (
     <Container>
@@ -82,10 +80,39 @@ const Administration = () => {
       </Sidebar>
       <MainContent>
         <Title>면접질문 관리
-            <img src={plusbutton} alt="plusbotton" style={{ width: '25px', height: '25px', marginLeft: '10px'}} />
+          <img src={plusbutton} alt="plusbutton" style={{ width: '25px', height: '25px', marginLeft: '10px' }} />
         </Title>
+        <SearchContainer>
+          <SearchInput
+            type="text"
+            placeholder="검색"
+            value={keyword}
+            onChange={handleSearchChange}
+          />
+          <SearchButton onClick={handleSearchClick}>
+            <img src={searchIcon} alt="Search Icon" />
+          </SearchButton>
+          <SortDropdown value={sort} onChange={handleSortChange}>
+            <option value="recent">최신순</option>
+            <option value="popularity">인기순</option>
+            <option value="difficulty">난이도순</option>
+          </SortDropdown>
+          <SortDropdown value={category} onChange={handleCategoryChange}>
+            <option value={-1}>전체</option>
+            {categories.map((cat) => (
+              <option key={cat.questionCategoryId} value={cat.questionCategoryId}>
+                {cat.categoryName}
+              </option>
+            ))}
+          </SortDropdown>
+        </SearchContainer>
         <TableContainer>
           <Table>
+            <colgroup>
+              <col style={{ width: '14%' }} /> {/* 2:14% */}
+              <col style={{ width: '71%' }} /> {/* 10:71% */}
+              <col style={{ width: '15%' }} /> {/* 1:15% */}
+            </colgroup>
             <thead>
               <tr>
                 <TableHeader>카테고리</TableHeader>
@@ -118,7 +145,7 @@ const Administration = () => {
   );
 };
 
-// Styled Components with hover animations
+// Styled Components
 const Container = styled.div`
   display: flex;
   justify-content: center;
@@ -178,7 +205,7 @@ const MenuItem = styled.p`
   padding: 10px;
   cursor: pointer;
   transition: background-color 0.3s ease, color 0.3s ease;
-  background-color: ${({ active }) => (active ? '#0372f396' : 'transparent')};
+  background-color: ${({ active }) => (active ? '#137df696' : 'transparent')};
   color: ${({ active }) => (active ? '#ffffff' : '#000')};
 
   &:hover {
@@ -213,6 +240,44 @@ const Title = styled.h2`
   text-align: left;
 `;
 
+const SearchContainer = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+`;
+
+const SearchInput = styled.input`
+  flex: 1;
+  padding: 8px 35px 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  position: relative;
+`;
+
+const SearchButton = styled.button`
+  position: absolute;
+  right: 15px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  
+  img {
+    width: 18px;
+    height: 18px;
+  }
+`;
+
+const SortDropdown = styled.select`
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: #fff;
+  margin-left: 10px;
+`;
+
 const TableContainer = styled.div`
   border: 1px solid #eee;
   border-radius: 10px;
@@ -241,14 +306,6 @@ const TableData = styled.td`
   padding: 5px;
   font-size: 14px;
   text-align: center;
-`;
-
-const ActionButton = styled.button`
-  padding: 5px 10px;
-  margin-right: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  cursor: pointer;
 `;
 
 const Pagination = styled.div`
