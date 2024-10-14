@@ -35,6 +35,7 @@ import ResultCheck from '../pages/ResultCheck.js';
 import ResultPage from '../pages/ResultPage.js';
 import WebRTC from "../pages/WebRTC";
 import InterviewRoom from "../pages/InterviewRoom"
+import ReviewBoardPost from "../pages/ReviewBoardPost.jsx"
 
 
 // App 컴포넌트를 정의하는 함수형 컴포넌트
@@ -71,9 +72,10 @@ function App() {
               <Route path='/aiInterview' element={<AiInterview/>} />
               <Route path='/audio-recorder' element={<AudioRecorder />} />
               <Route path='/board/question' element={<QuestionBoard/>} />
-              <Route path='/board/question/:boardId' element={<QuestionBoardDetails/>} />
+              <Route path='/board/:boardId' element={<QuestionBoardDetails/>} />
               <Route path='/board/question/post' element={<QuestionBoardPost/>} />
-              <Route path='/board/review/' element={<ReviewBoard/>} />
+              <Route path='/board/review/post' element={<ReviewBoardPost/>} />
+              <Route path='/board/review' element={<ReviewBoard/>} />
               <Route path='/webrtc' element={<WebRTC/>} />
               <Route path='/interviewRoom' element={<InterviewRoom/>} />
             </Routes>

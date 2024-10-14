@@ -35,38 +35,29 @@ const QuestionBoardPost = () => {
     setImages(images.filter((_, i) => i !== index));
   };
 
- // Handle submit post
- const handleSubmitPost = () => {
-  const formData = new FormData();
-  formData.append("category", category);
+  // Handle submit post
+  const handleSubmitPost = () => {
+    const formData = new FormData();
+    formData.append("category", category);
+    images.forEach((image) => formData.append("images", image.file));
 
-  images.forEach((image) => {
-    // 파일명 인코딩 처리
-    const encodedFileName = encodeURIComponent(image.file.name);
-    formData.append("images", new File([image.file], encodedFileName));
-  });
+    // Add other post data (title, content, etc.)
+    formData.append("title", title);
+    formData.append("content", content);
 
-  formData.append("title", title);
-  formData.append("content", content);
-
-  fetch("http://localhost:8080/boards/R", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-    },
-    body: formData,
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      Swal.fire("게시글이 성공적으로 등록되었습니다!");
-      // Redirect or refresh page logic
+    fetch("http://localhost:8080/boards/R", {
+      method: "POST",
+      body: formData,
     })
-    .catch((error) => {
-      Swal.fire("오류 발생", "게시글 등록 중 오류가 발생했습니다.", "error");
-    });
-};
-
-
+      .then((response) => response.json())
+      .then((data) => {
+        Swal.fire("게시글이 성공적으로 등록되었습니다!");
+        // Redirect or refresh page logic
+      })
+      .catch((error) => {
+        Swal.fire("오류 발생", "게시글 등록 중 오류가 발생했습니다.", "error");
+      });
+  };
 
   return (
     <div style={container}>
