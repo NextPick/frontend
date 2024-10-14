@@ -16,7 +16,7 @@ const WebRTC = () => {
     const location = useLocation();
     const roomOccupation = location.state;
     let camCount = 0;
-    let memberEmail = window.localStorage.getItem('email');
+    let memberEmail = localStorage.getItem('email');
 
     const [memo, setMemo] = useState('');
     const [tutor1, setTutor1] = useState('');

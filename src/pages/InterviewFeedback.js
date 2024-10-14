@@ -10,7 +10,7 @@ import ReviewForm from '../components/ReviewForm ';
 import axios from "axios";
 
 const InterviewFeedback = () => {
-    let accessToken = window.localStorage.getItem('accessToken');
+    const accessToken = localStorage.getItem('accessToken');
     const { headerMode, setHeaderMode } = useHeaderMode();
     const navigate = useNavigate();
     const [userScore, setUserScore] = useState(0); // 사용자의 별점
@@ -41,7 +41,7 @@ const InterviewFeedback = () => {
 
     const handleGetMenteeFeedback = async () => {
         try {
-            const response = await  axios.get(process.env["REACT_APP_API_URL "] + roomId,
+            const response = await axios.get(process.env.REACT_APP_API_URL + roomId,
                 {
                     headers: {
                         'Content-Type': 'application/json',
@@ -55,10 +55,6 @@ const InterviewFeedback = () => {
             alert("멘티 피드백을 불러오는데 실패했습니다.")
         }
     }
-
-    useEffect(() => {
-        handleGetMenteeFeedback();
-    }, [accessToken])
 
     const handleMentorFeedback = async () => {
         try {
