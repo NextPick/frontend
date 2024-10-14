@@ -12,9 +12,10 @@ import Signup from '../pages/Signup.jsx';
 import SignupSuccess from '../pages/SignupSuccess.js';
 import Mypage from '../pages/Mypage.js';
 import { ProfileProvider } from '../hooks/ProfileContext.js';
-import {MemberManager} from '../hooks/MemberManager.js'
-import MyNote from '../pages/MyNote.js'
+import { MemberManager } from '../hooks/MemberManager.js';
+import MyNote from '../pages/MyNote.js';
 import Cash from '../pages/Cash.js';
+import AudioRecorder from '../pages/AudioRecorder.jsx'; // 추가한 페이지 임포트
 import FeedbackT from '../pages/FeedbackT.js';
 import FeedbackS from '../pages/FeedbackS.js';
 import AdminPage from '../pages/AdminPage.js'
@@ -60,6 +61,7 @@ function App() {
           <Route path='/interviewfeedback' element={<InterviewFeedback/>} />
           <Route path='/aihome' element={<AiHome/>} />
           <Route path='/aiInterview' element={<AiInterview/>} />
+          <Route path='/audio-recorder' element={<AudioRecorder />} />
           <Route path='/resultcheck' element={<ResultCheck/>} />
           <Route path='/resultpage' element={<ResultPage/>} />
           <Route path='/board/question' element={<QuestionBoard/>} />
@@ -75,4 +77,4 @@ function App() {
   );
 }
 
-export default App; // App 컴포넌트를 외부로 export
+export default App;
