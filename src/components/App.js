@@ -10,17 +10,19 @@ import Agree from '../pages/Agree.jsx';
 // import Signup from '../pages/Signup.js';
 import Signup from '../pages/Signup.jsx';
 import SignupSuccess from '../pages/SignupSuccess.js';
-import Mypage from '../pages/Mypage.js';
+import Mypage from '../pages/Mypage.jsx';
 import { ProfileProvider } from '../hooks/ProfileContext.js';
 import { MemberManager } from '../hooks/MemberManager.js';
-import MyNote from '../pages/MyNote.js';
+import MyNote from '../pages/MyNote.jsx';
 import Cash from '../pages/Cash.js';
 import AudioRecorder from '../pages/AudioRecorder.jsx'; // 추가한 페이지 임포트
 import FeedbackT from '../pages/FeedbackT.js';
 import FeedbackS from '../pages/FeedbackS.js';
 import AdminPage from '../pages/AdminPage.js'
 import AdminPageQ from '../pages/AdminPageQ.js';
+import AdminPageQx from '../pages/AdminPageQ.jsx';
 import Administration from '../pages/Administration.js';
+import AdministrationX from '../pages/Administration.jsx';
 import Choice from '../pages/Choice.js';
 import InterviewFeedback from '../pages/InterviewFeedback.js';
 import QuestionBoard from '../pages/QuestionBoard.jsx';
@@ -29,6 +31,8 @@ import QuestionBoardPost from '../pages/QuestionBoardPost.jsx'
 import ReviewBoard from '../pages/ReviewBoard.jsx';
 import AiHome from '../pages/AiHome.js';
 import AiInterview from '../pages/AiInterview.js';
+import ResultCheck from '../pages/ResultCheck.js';
+import ResultPage from '../pages/ResultPage.js';
 import WebRTC from "../pages/WebRTC";
 import InterviewRoom from "../pages/InterviewRoom"
 
@@ -55,11 +59,15 @@ function App() {
               <Route path='/cash' element={<Cash/>} />
               <Route path='/mynote' element={<MyNote/>} />
               <Route path='/adminpageQ' element={<AdminPageQ/>} />
+              <Route path='/adminpageQx' element={<AdminPageQx/>} />
               <Route path='/adminpage-service' element={<AdminPage/>} />
               <Route path='/administration' element={<Administration/>} />
               <Route path='/choice' element={<Choice/>} />
               <Route path='/interviewfeedback' element={<InterviewFeedback/>} />
               <Route path='/aihome' element={<AiHome/>} />
+              <Route path='/administrationx' element={<AdministrationX/>} />
+              <Route path='/resultcheck' element={<ResultCheck/>} />
+              <Route path='/resultpage' element={<ResultPage/>} />
               <Route path='/aiInterview' element={<AiInterview/>} />
               <Route path='/audio-recorder' element={<AudioRecorder />} />
               <Route path='/board/question' element={<QuestionBoard/>} />

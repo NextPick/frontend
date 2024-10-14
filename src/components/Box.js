@@ -12,6 +12,7 @@ background-color: ${(props) => props.color || '#579ef03a'} ;
     /* 좌우 패딩 추가 (선택 사항) */
     display: flex;
     /* Flexbox 사용 */
+    flex: ${(props) => props.flex};
     align-items: ${(props) => props.alignitem ||'center'};
     /* 세로 중앙 정렬 */
     justify-content: ${(props) => props.justify || 'center'};
@@ -23,6 +24,8 @@ background-color: ${(props) => props.color || '#579ef03a'} ;
     margin-top: ${(props) => props.top || '30px'};
     margin-bottom: ${(props) => props.bottom};
     margin-left: ${(props) => props.left};
+    text-align:${(props) => props.textalign};
+    max-width:${(props) => props.maxwidth};
     border-radius: ${(props) => props.radius|| '10px'};
     border: ${(props) => props.border || '0.2px solid rgb(80, 80, 80)'} ;
     overflow: ${(props) => props.overflow || 'visible'}; /* 필요시 overflow 추가 */
@@ -30,15 +33,18 @@ background-color: ${(props) => props.color || '#579ef03a'} ;
 `;
 
 const Box = (props) => {
-    const {color, padding, alignitem, justify, direction, height, width, top, bottom, left, radius, border, overflow} = props;
+    const {color, padding, alignitem, flex, justify, direction, maxwidth,  height, width, top, textalign,  bottom, left, radius, border, overflow} = props;
     return (
         <StyledBox
         color={color}
         padding={padding}
+        flex={flex}
+        maxwidth={maxwidth}
         alignitem={alignitem}
         justify={justify}
         direction={direction}
         height={height}
+        textalign={textalign}
         width={width}
         top={top}
         bottom={bottom}
