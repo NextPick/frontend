@@ -159,7 +159,7 @@ const MyNote = () => {
 
 
     const handleSearchClick = () => {
-        axios.get(`http://localhost:8080/questions?size=20&page=${page}&type=${type}&sort=${sort}&category=${category}&keyword=${keyword}`)
+        axios.get(process.env.REACT_APP_API_URL + `questions?size=20&page=${page}&type=${type}&sort=${sort}&category=${category}&keyword=${keyword}`)
             .then(response => {
                 const data = response.data.data;
                 setQuestionData(data);
@@ -172,7 +172,7 @@ const MyNote = () => {
 
 
     useEffect(() => {
-        axios.get(`http://localhost:8080/questions?size=20&page=${page}&type=${type}&sort=${sort}&category=${category}&keyword=${keyword}`)
+        axios.get(process.env.REACT_APP_API_URL + `questions?size=20&page=${page}&type=${type}&sort=${sort}&category=${category}&keyword=${keyword}`)
             .then(response => {
                 const data = response.data.data;
                 setQuestionData(data);
@@ -183,7 +183,7 @@ const MyNote = () => {
     }, [page, sort, category, keyword]);
 
     useEffect(() => {
-        axios.get('http://localhost:8080/question/category')
+        axios.get(process.env.REACT_APP_API_URL + 'question/category')
             .then(response => {
                 setCategories(response.data);
             })
