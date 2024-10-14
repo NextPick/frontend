@@ -6,7 +6,7 @@ import Box from '../components/Box';
 import Font from '../components/Font';
 import styled from 'styled-components';
 import Button from '../components/Button';
-import Ai코치 from '../assets/Ai코치.png';
+import AiCoach from '../assets/AiCoach.png';
 import mic from '../assets/mic.png';
 import { ReactMediaRecorder } from 'react-media-recorder';
 
@@ -22,20 +22,26 @@ const AiInterview = () => {
     const [mediaBlobUrl, setMediaBlobUrl] = useState(null);
     const [resp, setResp] = useState('');
 
-    // 녹음된 파일을 WAV로 변환하여 업로드
+    // 녹음된 파일을 WebM 형식으로 직접 업로드
     const uploadRecordedAudio = async () => {
         if (!mediaBlobUrl) {
             alert('녹음된 파일이 없습니다.');
             return;
         }
         try {
-            const wavBlob = await convertWebmToWav(mediaBlobUrl);
+            const response = await fetch(mediaBlobUrl);
+            const webmBlob = await response.blob();
             let formData = new FormData();
-            formData.append('uploadFile', wavBlob, 'audio.wav');
-            const res = await axios.post(process.env.REACT_APP_API_URL + 'fileUpload', formData);
+            formData.append('uploadFile', webmBlob, 'audio.webm');
+            const res = await axios.post(`${process.env.REACT_APP_API_URL}fileUpload`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
             alert('녹음 파일 업로드 성공');
-            setResp(res.data.text);
+            setUserResponse(res.data); // 서버 응답을 userResponse에 설정
         } catch (error) {
+            console.error('업로드 오류:', error);
             alert('에러가 발생했습니다: ' + error.message);
         }
     };
@@ -108,64 +114,6 @@ const AiInterview = () => {
         }
     }
 
-    const convertWebmToWav = (url) => {
-        return new Promise((resolve, reject) => {
-            fetch(url)
-                .then(response => response.arrayBuffer())
-                .then(arrayBuffer => {
-                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                    audioContext.decodeAudioData(arrayBuffer, (audioBuffer) => {
-                        const wavBlob = audioBufferToWavBlob(audioBuffer);
-                        resolve(wavBlob);
-                    });
-                })
-                .catch(error => reject(error));
-        });
-    };
-
-    const audioBufferToWavBlob = (audioBuffer) => {
-        const numberOfChannels = audioBuffer.numberOfChannels;
-        const sampleRate = audioBuffer.sampleRate;
-        const format = 1; // PCM
-        const bitDepth = 16;
-
-        let length = audioBuffer.length * numberOfChannels * 2 + 44;
-        let buffer = new ArrayBuffer(length);
-        let view = new DataView(buffer);
-
-        writeString(view, 0, 'RIFF');
-        view.setUint32(4, 36 + audioBuffer.length * numberOfChannels * 2, true);
-        writeString(view, 8, 'WAVE');
-        writeString(view, 12, 'fmt ');
-        view.setUint32(16, 16, true); // Subchunk1Size (16 for PCM)
-        view.setUint16(20, format, true); // AudioFormat (1 for PCM)
-        view.setUint16(22, numberOfChannels, true); // NumChannels
-        view.setUint32(24, sampleRate, true); // SampleRate
-        view.setUint32(28, sampleRate * numberOfChannels * bitDepth / 8, true); // ByteRate
-        view.setUint16(32, numberOfChannels * bitDepth / 8, true); // BlockAlign
-        view.setUint16(34, bitDepth, true); // BitsPerSample
-        writeString(view, 36, 'data');
-        view.setUint32(40, audioBuffer.length * numberOfChannels * 2, true); // Subchunk2Size
-
-        let offset = 44;
-        for (let i = 0; i < audioBuffer.length; i++) {
-            for (let channel = 0; channel < numberOfChannels; channel++) {
-                let sample = audioBuffer.getChannelData(channel)[i];
-                sample = Math.max(-1, Math.min(1, sample));
-                view.setInt16(offset, sample * 0x7FFF, true);
-                offset += 2;
-            }
-        }
-
-        return new Blob([view], { type: 'audio/wav' });
-    };
-
-    const writeString = (view, offset, string) => {
-        for (let i = 0; i < string.length; i++) {
-            view.setUint8(offset + i, string.charCodeAt(i));
-        }
-    };
-
     useEffect(() => {
         if (mediaBlobUrl) {
             uploadRecordedAudio();
@@ -177,7 +125,7 @@ const AiInterview = () => {
     }, [setHeaderMode]);
 
     useEffect(() => {
-        axios.get(process.env.REACT_APP_API_URL + 'questions', {
+        axios.get(`${process.env.REACT_APP_API_URL}questions`, {
             params: {
                 size: 1,
                 page: 1,
@@ -197,7 +145,7 @@ const AiInterview = () => {
         .catch(error => {
             console.error('예시 질문 가져오기 오류:', error);
         });
-    }, []);
+    }, [selectedSubcategory]);
 
     const toggleRecording = (startRecording, stopRecording) => {
         if (isRecording) {
@@ -224,15 +172,19 @@ const AiInterview = () => {
                     },
                 }
             );
-
-            const correct = response.data.correct;
+            let correct = '';
+            if (response.status === 200) {
+                correct = true;
+            } else if(response.status === 201){
+                correct = false;
+            }
 
             navigate('/resultcheck', {
                 state: {
                     questionListId: questionListId,
                     userResponse: userResponse,
                     selectedSubcategory: selectedSubcategory,
-                    correct: correct === false ? false : undefined,
+                    correct: correct,
                 },
             });
         } catch (error) {
@@ -249,7 +201,7 @@ const AiInterview = () => {
                 </Font>
 
                 <Container>
-                    <img src={Ai코치} alt="Ai" style={{ width: '360px', height: '400px', marginLeft: "20px" }} />
+                    <img src={AiCoach} alt="Ai" style={{ width: '360px', height: '400px', marginLeft: "20px" }} />
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', marginLeft: '10px' }}>
                         <QuestionBubble>
                             <Font font="PretendardM" size="18px" color="#000000">
@@ -257,11 +209,10 @@ const AiInterview = () => {
                             </Font>
                         </QuestionBubble>
                         <ResponseBubble>
-                            <InputField 
-                                type="text" 
+                            <TextareaField 
                                 value={userResponse} 
                                 onChange={handleInputChange}
-                                placeholder={resp || "대답을 입력하세요..."}
+                                placeholder={"대답을 입력하세요..."}
                             />
                         </ResponseBubble>
                     </div>
@@ -358,7 +309,8 @@ const ResponseBubble = styled.div`
     }
 `;
 
-const InputField = styled.input`
+// 기존 InputField를 대체할 TextareaField 정의
+const TextareaField = styled.textarea`
     width: 100%;
     height: 100%;
     border: none;
@@ -367,6 +319,10 @@ const InputField = styled.input`
     font-size: 18px;
     padding: 10px;
     border-radius: 15px;
+    resize: none; /* 사용자가 크기 조절을 하지 못하도록 설정 */
+    overflow-y: auto; /* 내용이 많아지면 세로 스크롤 */
+    word-wrap: break-word; /* 긴 단어가 있을 경우 줄바꿈 */
+    white-space: pre-wrap; /* 줄바꿈과 공백을 유지하며 자동 줄바꿈 */
 `;
 
 export default AiInterview;

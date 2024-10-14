@@ -35,7 +35,10 @@ const Login = () => {
           confirmButtonText: '확인'
         });
         const accessToken = response.headers['authorization'];
+        const Type = response.headers['type'];
+        console.log(Type);
         localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('type', Type);
         localStorage.setItem('email', username);
         navigate("/")
       } else if (response.status === 401) {
