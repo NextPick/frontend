@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useHeaderMode } from '../hooks/HeaderManager';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Box from '../components/Box';
 import Font from '../components/Font';
 import styled from 'styled-components';
@@ -12,11 +12,12 @@ import { ReactMediaRecorder } from 'react-media-recorder';
 
 const AiInterview = () => {
     const { setHeaderMode } = useHeaderMode();
+    const location = useLocation();
+    const { selectedCategory, selectedSubcategory } = location.state || {};
     const navigate = useNavigate();
-    const [selectedCategory, setSelectedCategory] = useState('BE');
-    const [selectedSubcategory, setSelectedSubcategory] = useState(null);
     const [userResponse, setUserResponse] = useState('');
     const [exampleQuestion, setExampleQuestion] = useState('질문을 고르고 있습니다... 잠시만 기다려주세요');
+    const [questionListId, setQuestionListId] = useState(null); // 질문 ID 상태 추가
     const [isRecording, setIsRecording] = useState(false);
     const [mediaBlobUrl, setMediaBlobUrl] = useState(null);
     const [resp, setResp] = useState('');
@@ -40,6 +41,71 @@ const AiInterview = () => {
             alert('에러가 발생했습니다: ' + error.message);
         }
     };
+
+    const changeSubcategoryToCategoryId = (e) => {
+        switch(e){
+            case 'Java': 
+                return 1;
+            case 'Spring': 
+                return 2;
+            case 'Node.js': 
+                return 3;
+            case 'Express.js': 
+                return 4;
+            case 'Django': 
+                return 5;
+            case 'Flask': 
+                return 6;
+            case 'Ruby': 
+                return 7;
+            case 'PHP': 
+                return 8;
+            case 'GraphQL': 
+                return 9;
+            case 'MySQL':
+                return 10;
+            case 'Networking': 
+                return 11;
+            case 'OS': 
+                return 12;
+            case 'Data Structure': 
+                return 13;
+            case 'Algorithms': 
+                return 14;
+            case 'Software Engineering': 
+                return 15;
+            case 'Design Patterns': 
+                return 16;
+            case 'Computer Architecture': 
+                return 17;
+            case 'Cybersecurity': 
+                return 18;
+            case 'Artificial Intelligence':
+                return 19;
+            case 'React': 
+                return 20;
+            case 'Vue': 
+                return 21;
+            case 'Angular': 
+                return 22;
+            case 'HTML5': 
+                return 23;
+            case 'CSS3': 
+                return 24;
+            case 'JavaScript (ES6+)': 
+                return 25;
+            case 'TypeScript': 
+                return 26;
+            case 'SASS/SCSS': 
+                return 27;
+            case 'Webpack': 
+                return 28;
+            case 'Responsive Web Design':
+                return 29;
+            default:
+                return -1;
+        }
+    }
 
     // 녹음된 WebM 파일을 WAV로 변환
     const convertWebmToWav = (url) => {
@@ -101,14 +167,12 @@ const AiInterview = () => {
         return new Blob([view], { type: 'audio/wav' });
     };
 
-    // DataView에 문자열 쓰기
     const writeString = (view, offset, string) => {
         for (let i = 0; i < string.length; i++) {
             view.setUint8(offset + i, string.charCodeAt(i));
         }
     };
 
-    // mediaBlobUrl이 변경될 때 업로드 수행
     useEffect(() => {
         if (mediaBlobUrl) {
             uploadRecordedAudio();
@@ -120,17 +184,13 @@ const AiInterview = () => {
     }, [setHeaderMode]);
 
     useEffect(() => {
-        setSelectedSubcategory(null);
-    }, []);
-
-    useEffect(() => {
         axios.get('http://localhost:8080/questions', {
             params: {
                 size: 1,
                 page: 1,
                 type: 'rand',
                 sort: 'recent',
-                category: 3,
+                category: changeSubcategoryToCategoryId(selectedSubcategory),
                 keyword: ''
             }
         })
@@ -138,6 +198,7 @@ const AiInterview = () => {
             const questionData = response.data.data;
             if (questionData && questionData.length > 0) {
                 setExampleQuestion(questionData[0].question);
+                setQuestionListId(questionData[0].questionListId); // 질문 ID 상태 설정
             }
         })
         .catch(error => {
@@ -156,6 +217,15 @@ const AiInterview = () => {
 
     const handleInputChange = (event) => {
         setUserResponse(event.target.value);
+    };
+
+    const handleSubmit = () => {
+        navigate('/resultcheck', {
+            state: {
+                questionListId: questionListId,
+                userResponse: userResponse
+            }
+        });
     };
 
     return (
@@ -178,17 +248,16 @@ const AiInterview = () => {
                                 type="text" 
                                 value={userResponse} 
                                 onChange={handleInputChange}
-                                placeholder="대답을 입력하세요..." 
+                                placeholder={resp || "대답을 입력하세요..."}
                             />
                         </ResponseBubble>
                     </div>
                 </Container>
 
-                {/* ReactMediaRecorder 컴포넌트를 통해 녹음 상태를 제어 */}
                 <ReactMediaRecorder
                     audio
                     onStop={(blobUrl) => {
-                        setMediaBlobUrl(blobUrl); // 녹음 멈출 때 mediaBlobUrl 설정
+                        setMediaBlobUrl(blobUrl);
                     }}
                     render={({ startRecording, stopRecording }) => (
                         <MicrophoneContainer>
@@ -209,6 +278,7 @@ const AiInterview = () => {
                     radius="15px"
                     color="#f4fdff"
                     style={{ marginLeft: '10px' }}
+                    onClick={handleSubmit} // 제출하기 버튼 클릭 시 handleSubmit 실행
                 >
                     제출하기
                 </Button>
