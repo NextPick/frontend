@@ -114,6 +114,7 @@ const container = {
   alignItems: 'center',
   height: '100vh',
   backgroundColor: '#FFF',
+  fontFamily:"Pretendard"
 };
 
 const wrap = {
@@ -178,6 +179,7 @@ const loginButton = {
   marginTop: '65px',
   width: '50%',
   cursor: 'pointer',
+  color: '#000000', // 글자색 추가
 };
 
 const footerLinks = {

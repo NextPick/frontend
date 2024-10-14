@@ -185,7 +185,7 @@ const MyNote = () => {
     useEffect(() => {
         axios.get('http://localhost:8080/question/category')
             .then(response => {
-                setCategories(response.data);
+                setCategories(response.data.data);
             })
             .catch(error => {
                 console.error('카테고리 가져오기 오류:', error);
@@ -197,25 +197,6 @@ const MyNote = () => {
     // 탭을 전환하는 함수
     const switchTab = (tab) => {
         setActiveTab(tab);
-    };
-    // 옵션 정의
-    const firstOptions = [
-        { value: '', label: 'FE/BE/CS' },
-        { value: 'high', label: 'FE' },
-        { value: 'low', label: 'BE' },
-        { value: 'new', label: 'CS' },
-    ];
-
-    const secondOptions = {
-        high: [{ value: 'subHigh1', label: 'FE 옵션 1-1' },
-        { value: 'subHigh1', label: 'FE 옵션 1-2' }
-        ],
-        low: [{ value: 'subLow1', label: 'BE 옵션 2-1' },
-        { value: 'subLow1', label: 'BE 옵션 2-2' },
-        ],
-        new: [{ value: 'subNew1', label: 'CS 옵션 3-1' },
-        { value: 'subNew1', label: 'CS 옵션 3-2' },
-        ],
     };
 
     // 탭에 따라 표시할 콘텐츠를 정의
@@ -374,6 +355,7 @@ const MyNote = () => {
                             top="none"
                             color="#0372f396"
                             margintbottom="0px"
+                            margintop="0px"
                             onClick={() => switchTab('answer')}
                         >
                             <Font
@@ -399,6 +381,7 @@ const MyNote = () => {
                             top="none"
                             color="#0372f396"
                             margintbottom="0px"
+                             margintop="0px"
                             onClick={() => switchTab('wrong')}
                         >
                             <Font

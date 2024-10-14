@@ -1,4 +1,4 @@
-import React, { useRef }  from 'react';
+import React, { useEffect, useRef, useState }  from 'react';
 import '../styles/global.css';
 import Line from './Line';
 import Button from './Button';
@@ -7,11 +7,14 @@ import styled from 'styled-components';
 import Box from './Box'
 import defaultProfile from '../assets/img-non-login.png';
 import { useMember } from '../hooks/MemberManager'; // 회원 정보를 관리하는 훅
+import axios from 'axios';
+import Swal from 'sweetalert2';
+
 
 
 const ProfileImgArea = styled.div`
 justify-content: center;
-margin-top: 10px;
+margin-top: 20px;
 padding: 3px;
 display: flex; // 플렉스 박스 설정
     align-items: flex-start; // 이미지가 박스 시작 부분에 정렬되도록 설정
@@ -19,12 +22,12 @@ display: flex; // 플렉스 박스 설정
 
 
 const ProfileImage = styled.img`
-    width: 70px; // 원하는 너비
-    height: 70px; // 원하는 높이
+    width: 65px; // 원하는 너비
+    height: 68px; // 원하는 높이
     object-fit: cover; // 이미지 크기를 유지하며 잘림
     border-radius: 50%; // 원하는 경우 둥글게 만들기
     cursor: pointer; // 커서를 포인터로 변경
-    margin: 0 auto;
+    margin: 10 auto;
 `;
 
 
@@ -48,6 +51,11 @@ const LogoutButton = styled.button`
   color: #333;
   cursor: pointer;
   margin-top: 20px;
+
+  &:hover {
+    background-color: #0077ff96;
+    color: #ffffff;
+  }
 `;
 
 const Menu = styled.div`
@@ -62,8 +70,39 @@ const Menu = styled.div`
 
 
 const MypageSide = () => {
-    const { profileUrl, setProfileUrl, nickname, email } = useMember();
+    const { profileUrl, setProfileUrl, nickname,  setNickname,  email,  setEmail } = useMember();
     const fileInputRef = useRef(null); // 파일 입력을 참조할 ref 생성
+    const [activeMenu, setActiveMenu] = useState('마이페이지'); // 활성화된 메뉴 상태
+
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const response = await axios.get('http://localhost:8080/members', {
+                    headers: {
+                        Authorization: localStorage.getItem('accessToken'), // 토큰을 헤더에 추가
+                    },
+                });
+                if (response.status === 200) {
+                    const { email, nickname } = response.data.data; // 이메일과 닉네임 가져오기
+                    setEmail(email); // 이메일 상태 업데이트
+                    setNickname(nickname); // 닉네임 상태 업데이트
+                } else {
+                    console.error('사용자 정보를 가져오는 데 실패했습니다.');
+                }
+            } catch (error) {
+                console.error('네트워크 오류:', error);
+                Swal.fire({
+                    text: `네트워크 오류가 발생했습니다. 인터넷 연결을 확인해 주세요.`,
+                    icon: 'error',
+                    confirmButtonText: '확인'
+                });
+            }
+        };
+  
+        fetchUserData(); // 사용자 정보 가져오기 호출
+    }, []); // 빈 배열을 전달하여 컴포넌트 마운트 시 한 번만 실행
+  
 
    // 프로필 이미지를 변경하는 함수
    const changeProfileImg = (event) => {
@@ -85,16 +124,25 @@ const handleImageClick = () => {
 };
 
 
+    // 메뉴 항목 클릭 시 활성화 상태 변경
+    const handleMenuClick = (menuName) => {
+        setActiveMenu(menuName); // 클릭한 메뉴 이름을 활성화 상태로 설정
+    };
+
+
 
 
   return (
     <Box
-                 color="#e7f0f9"
-                height="70vh"
-                width="16vw"
-                border="none"
-                alignItems="flex-start"
-                justify="flex-start"
+    height="100%"
+    width="250px"
+    padding="20px"
+    border="none"
+    alignItems="flex-start"
+    justify="flex-start"
+    textalign="center"
+    color="#e7f0f9"
+    radius="15px"
             >
                 <ProfileImgArea>
                     <ProfileImage
@@ -110,16 +158,16 @@ const handleImageClick = () => {
                         style={{ display: 'none' }} // 파일 입력 숨기기
                     />
                 </ProfileImgArea>
-                <Font font="PretendardL" size="20px" color="#000000" marginbottom="1px">{nickname || '닉네임'}</Font>
-                <Font font="PretendardL" size="185x" color="#A4A5A6" marginbottom="3px">{email || '이메일'}</Font>
+                <Font font="Pretendard" size="20px" color="#000000" marginbottom="1px">{nickname || '닉네임'}</Font>
+                <Font font="Pretendard" size="185x" color="#A4A5A6" marginbottom="3px">{email || '이메일'}</Font>
                 <Line
                     margintop="10px"
                 ></Line>
                 <Menu>
-                    <MenuItem>마이페이지</MenuItem>
-                    <MenuItem active>정답/오답노트</MenuItem>
-                    <MenuItem>받은 피드백</MenuItem>
-                    <MenuItem>결제관리</MenuItem>
+                <MenuItem active={activeMenu === '마이페이지'} onClick={() => handleMenuClick('마이페이지')}>마이페이지</MenuItem>
+                <MenuItem active={activeMenu === '정답/오답노트'} onClick={() => handleMenuClick('정답/오답노트')}>정답/오답노트</MenuItem>
+                <MenuItem active={activeMenu === '받은 피드백'} onClick={() => handleMenuClick('받은 피드백')}>받은 피드백</MenuItem>
+                <MenuItem active={activeMenu === '결제관리'} onClick={() => handleMenuClick('결제관리')}>결제관리</MenuItem>
                 </Menu>
                 <Line
                     marginbottom="10px"

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Font from '../components/Font';
 
 const AgreementBoxes = () => {
   const navigate = useNavigate();
@@ -102,7 +103,12 @@ const AgreementBoxes = () => {
         style={{ ...nextButtonStyle, backgroundColor: allChecked ? '#E0EBF5' : '#FFF' }}
         disabled={!allChecked}
       >
+        <Font
+        font="Pretendard"
+        size="20px"
+        >
         다음
+        </Font>
       </button>
     </div>
   );
@@ -178,13 +184,15 @@ const contentBox = {
 const checkboxLabel = {
   display: 'flex',
   alignItems: 'center',
-  marginTop: '10px',
+  marginTop: '20px',
   fontSize: '14px',
-  marginLeft: '10px',
+  width:"100%"
 };
 
 const checkbox = {
   marginRight: '5px',
+  marginBottom: '0px',
+  width:"5%"
 };
 
 const nextButtonStyle = {

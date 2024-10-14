@@ -53,7 +53,7 @@ const Administration = () => {
   useEffect(() => {
     axios.get('http://localhost:8080/question/category')
       .then(response => {
-        setCategories(response.data.data);
+        setCategories(response.data);
       })
       .catch(error => {
         console.error('카테고리 가져오기 오류:', error);
