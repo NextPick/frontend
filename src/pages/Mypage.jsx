@@ -13,8 +13,8 @@ import Line from '../components/Line';
 import one from '../assets/one.png';
 import two from '../assets/two.png';
 import three from '../assets/three.png';
-
-
+import axios from 'axios';
+import Swal from 'sweetalert2';
 
 
 // Styled Components
@@ -77,7 +77,7 @@ const Menu = styled.div`
 `;
 
 const Mypage = () => {
-    const { profileUrl, setProfileUrl, nickname, email } = useMember();
+    const { profileUrl, setProfileUrl, nickname,  setNickname,  email,  setEmail } = useMember();
     const { headerMode, setHeaderMode } = useHeaderMode();
     const navigate = useNavigate();
     const location = useLocation();
@@ -87,8 +87,34 @@ const Mypage = () => {
 
     useEffect(() => {
         setHeaderMode('main');
+        fetchUserData(); // 컴포넌트가 마운트될 때 사용자 정보 가져오기
     }, [setHeaderMode]);
 
+
+    const fetchUserData = async () => {
+        try {
+            const response = await axios.get('http://localhost:8080/members', {
+                headers: {
+                    Authorization: localStorage.getItem('accessToken'), // 토큰을 헤더에 추가
+                },
+            });
+            if (response.status === 200) {
+                const { email } = response.data; // 이메일만 가져오기
+                setEmail(email);
+            } else {
+                console.error('사용자 정보를 가져오는 데 실패했습니다.');
+            }
+        } catch (error) {
+            console.error('네트워크 오류:', error);
+            Swal.fire({
+                text: `네트워크 오류가 발생했습니다. 인터넷 연결을 확인해 주세요.`,
+                icon: 'error',
+                confirmButtonText: '확인'
+            });
+        }
+    };
+
+    
     // 프로필 이미지를 변경하는 함수
     const changeProfileImg = (event) => {
         const file = event.target.files && event.target.files[0]; // 안전하게 접근
@@ -107,6 +133,8 @@ const Mypage = () => {
             fileInputRef.current.click(); // 클릭 시 파일 입력 트리거
         }
     };
+
+    
 
     return (
         <Container>
