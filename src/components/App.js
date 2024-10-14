@@ -29,6 +29,8 @@ import QuestionBoardPost from '../pages/QuestionBoardPost.jsx'
 import ReviewBoard from '../pages/ReviewBoard.jsx';
 import AiHome from '../pages/AiHome.js';
 import AiInterview from '../pages/AiInterview.js';
+import WebRTC from "../pages/WebRTC";
+import InterviewRoom from "../pages/InterviewRoom"
 
 
 // App 컴포넌트를 정의하는 함수형 컴포넌트
@@ -64,6 +66,8 @@ function App() {
               <Route path='/board/question/:boardId' element={<QuestionBoardDetails/>} />
               <Route path='/board/question/post' element={<QuestionBoardPost/>} />
               <Route path='/board/review/' element={<ReviewBoard/>} />
+              <Route path='/webrtc' element={<WebRTC/>} />
+              <Route path='/interviewRoom' element={<InterviewRoom/>} />
             </Routes>
           </HeaderManager>
           </div>
