@@ -156,6 +156,13 @@ const WebRTC = () => {
             pc.addEventListener('track', (event) => {
                 onTrack(event, otherKey);
             });
+            // 사용자 연결 종료 시 처리
+            pc.addEventListener('iceconnectionstatechange', () => {
+                if (pc.iceConnectionState === 'disconnected' || pc.iceConnectionState === 'closed') {
+                    removeRemoteVideo(otherKey); // 사용자 화면 제거
+                }
+            });
+
             if (localStream) {
                 localStream.getTracks().forEach(track => {
                     pc.addTrack(track, localStream);
@@ -166,6 +173,15 @@ const WebRTC = () => {
             console.error('PeerConnection failed: ', error);
         }
         return pc;
+    };
+
+    const removeRemoteVideo = (otherKey) => {
+        const videoElement = document.getElementById(otherKey);
+        if (videoElement) {
+            videoElement.srcObject = null; // 비디오 스트림 제거
+            videoElement.parentNode.removeChild(videoElement); // DOM에서 비디오 요소 제거
+            console.log(`Removed video for ${otherKey}`);
+        }
     };
 
     const onIceCandidate = (event, otherKey) => {
@@ -244,7 +260,7 @@ const WebRTC = () => {
 
     // const handlePostFeedback = async () => {
     //     try {
-    //         const response = await axios.post(process.env["REACT_APP_API_URL "] + roomId + "/" + )
+    //         const response = await axios.post( "https://server.nextpick.site/" + `${roomId}/`)
     //     } catch (error) {
     //         alert("피드백 생성에 실패 했습니다.")
     //     }

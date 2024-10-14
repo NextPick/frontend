@@ -24,7 +24,7 @@ const Choice = () => {
     const [roomTitle, setRoomTitle] = useState('');
     const [roomOccupation, setRoomOccupation] = useState('');
     const [showAddModal, setShowAddModal] = useState(false);
-    let accessToken = window.localStorage.getItem('accessToken');
+    let accessToken = localStorage.getItem('accessToken');
     const navigate = useNavigate();
 
     const handleShowAddModal = () => {
@@ -69,9 +69,10 @@ const Choice = () => {
                 icon: 'success',
                 title: '방이 성공적으로 생성되었습니다.',
                 confirmButtonText: '확인'
-            });
-            setShowAddModal(false); // 모달 닫기
-            navigate('/interviewRoom', { state: roomOccupation });
+            }).then(() => {
+                setShowAddModal(false); // 모달 닫기
+                navigate('/webrtc', { state: roomOccupation });
+            })
         } catch (error) {
             alert("방 만드는 중 오류가 발생했습니다. 다시 시도해주세요.");
         }

@@ -1,9 +1,10 @@
 .container {
+    justify-content: space-between;
     display: flex;
 }
 
 .video-section {
-    width: 50%;
+    width: 100%;
     padding: 1rem;
     border: 1px solid #ccc;
     border-radius: 0.25rem;

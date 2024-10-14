@@ -21,8 +21,7 @@ const InterviewFeedback = () => {
     const [feedback, setFeedback] = useState('');
     const [mentorNickname, setMentorNickname] = useState('');
     const [content, setContent] = useState('');
-
-
+    const [isTrue, setIsTrue] = useState(false);
     useEffect(() => {
         setHeaderMode('main');
     }, [setHeaderMode]);
@@ -75,6 +74,10 @@ const InterviewFeedback = () => {
             alert("멘토 피드백 작성에 실패했습니다. 다시 시도해 주세요");
         }
     };
+
+    useEffect(() => {
+        handleGetMenteeFeedback()
+    }, [])
 
     return (
         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-start' }}>
