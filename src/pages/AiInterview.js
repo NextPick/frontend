@@ -17,25 +17,21 @@ const AiInterview = () => {
     const navigate = useNavigate();
     const [userResponse, setUserResponse] = useState('');
     const [exampleQuestion, setExampleQuestion] = useState('질문을 고르고 있습니다... 잠시만 기다려주세요');
-    const [questionListId, setQuestionListId] = useState(null); // 질문 ID 상태 추가
+    const [questionListId, setQuestionListId] = useState(null);
     const [isRecording, setIsRecording] = useState(false);
     const [mediaBlobUrl, setMediaBlobUrl] = useState(null);
     const [resp, setResp] = useState('');
 
     // 녹음된 파일을 WAV로 변환하여 업로드
     const uploadRecordedAudio = async () => {
-        console.log(selectedSubcategory)
-        console.log(changeSubcategoryToCategoryId(selectedSubcategory))
         if (!mediaBlobUrl) {
             alert('녹음된 파일이 없습니다.');
             return;
         }
         try {
             const wavBlob = await convertWebmToWav(mediaBlobUrl);
-
             let formData = new FormData();
             formData.append('uploadFile', wavBlob, 'audio.wav');
-
             const res = await axios.post(process.env.REACT_APP_API_URL + 'fileUpload', formData);
             alert('녹음 파일 업로드 성공');
             setResp(res.data.text);
@@ -112,7 +108,6 @@ const AiInterview = () => {
         }
     }
 
-    // 녹음된 WebM 파일을 WAV로 변환
     const convertWebmToWav = (url) => {
         return new Promise((resolve, reject) => {
             fetch(url)
@@ -128,7 +123,6 @@ const AiInterview = () => {
         });
     };
 
-    // AudioBuffer를 WAV Blob으로 변환
     const audioBufferToWavBlob = (audioBuffer) => {
         const numberOfChannels = audioBuffer.numberOfChannels;
         const sampleRate = audioBuffer.sampleRate;
@@ -139,12 +133,9 @@ const AiInterview = () => {
         let buffer = new ArrayBuffer(length);
         let view = new DataView(buffer);
 
-        // RIFF chunk descriptor
         writeString(view, 0, 'RIFF');
         view.setUint32(4, 36 + audioBuffer.length * numberOfChannels * 2, true);
         writeString(view, 8, 'WAVE');
-
-        // FMT sub-chunk
         writeString(view, 12, 'fmt ');
         view.setUint32(16, 16, true); // Subchunk1Size (16 for PCM)
         view.setUint16(20, format, true); // AudioFormat (1 for PCM)
@@ -153,12 +144,9 @@ const AiInterview = () => {
         view.setUint32(28, sampleRate * numberOfChannels * bitDepth / 8, true); // ByteRate
         view.setUint16(32, numberOfChannels * bitDepth / 8, true); // BlockAlign
         view.setUint16(34, bitDepth, true); // BitsPerSample
-
-        // Data sub-chunk
         writeString(view, 36, 'data');
         view.setUint32(40, audioBuffer.length * numberOfChannels * 2, true); // Subchunk2Size
 
-        // Write PCM samples
         let offset = 44;
         for (let i = 0; i < audioBuffer.length; i++) {
             for (let channel = 0; channel < numberOfChannels; channel++) {
@@ -203,7 +191,7 @@ const AiInterview = () => {
             const questionData = response.data.data;
             if (questionData && questionData.length > 0) {
                 setExampleQuestion(questionData[0].question);
-                setQuestionListId(questionData[0].questionListId); // 질문 ID 상태 설정
+                setQuestionListId(questionData[0].questionListId);
             }
         })
         .catch(error => {
@@ -224,14 +212,33 @@ const AiInterview = () => {
         setUserResponse(event.target.value);
     };
 
-    const handleSubmit = () => {
-        navigate('/resultcheck', {
-            state: {
-                questionListId: questionListId,
-                userResponse: userResponse,
-                selectedSubcategory: selectedSubcategory
-            }
-        });
+    const handleSubmit = async () => {
+        const accessToken = localStorage.getItem('accessToken');
+        try {
+            const response = await axios.post(
+                `${process.env.REACT_APP_API_URL}questions/${questionListId}/score`,
+                { answer: userResponse },
+                {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                }
+            );
+
+            const correct = response.data.correct;
+
+            navigate('/resultcheck', {
+                state: {
+                    questionListId: questionListId,
+                    userResponse: userResponse,
+                    selectedSubcategory: selectedSubcategory,
+                    correct: correct === false ? false : undefined,
+                },
+            });
+        } catch (error) {
+            console.error('답변 제출 오류:', error);
+            alert('답변 제출 중 오류가 발생했습니다.');
+        }
     };
 
     return (
@@ -284,7 +291,7 @@ const AiInterview = () => {
                     radius="15px"
                     color="#f4fdff"
                     style={{ marginLeft: '10px' }}
-                    onClick={handleSubmit} // 제출하기 버튼 클릭 시 handleSubmit 실행
+                    onClick={handleSubmit}
                 >
                     제출하기
                 </Button>
