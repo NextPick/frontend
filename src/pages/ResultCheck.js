@@ -6,9 +6,9 @@ import Font from '../components/Font';
 import styled from 'styled-components';
 import Button from '../components/Button';
 import Ai코치 from '../assets/Ai코치.png'; // 이미지 파일 import
-import mic from '../assets/mic.png'; // 이미지 파일 import
+import 정답확인캐릭터 from '../assets/정답확인캐릭터.png'; // 이미지 파일 import
 
-const AiInterview = () => {
+const ResultCheck = () => {
     const { setHeaderMode } = useHeaderMode();
     const navigate = useNavigate();
 
@@ -67,17 +67,55 @@ const AiInterview = () => {
                     paddingtop="5px"
                     marginbottom="8px"
                 >
-                    AI코치가 묻는 질문에 마이크를 켜고 대답해주세요
+                   정답확인
                 </Font>
 
                 <Container>
-                    <img src={Ai코치} alt="Ai" style={{ width: '360px', height: '400px', marginLeft: "20px" }} />
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', marginLeft: '10px' }}>
+                    <img src={정답확인캐릭터} alt="Ai" style={{ width: '330px', height: '430px', marginLeft: "-80px" }} />
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', marginLeft: '10px', marginTop:'-10px' }}>
+                     <Font
+                        font="PretendardL"
+                        size="20px"
+                        color="#000000"
+                        margintop="5px"
+                        spacing="2px"
+                        paddingleft="0px"
+                        paddingtop="5px"
+                        marginbottom="8px"
+                     >
+                     내가 대답한 답
+                     </Font>
                         <QuestionBubble>
                             <Font font="PretendardM" size="18px" color="#000000">
                                 {exampleQuestion}
                             </Font>
                         </QuestionBubble>
+                        <AnswerContainer>
+                            <Font
+                                font="PretendardL"
+                                size="24px"
+                                color="#000000"
+                                margintop="5px"
+                                spacing="2px"
+                                paddingleft="0px"
+                                paddingtop="5px"
+                                marginbottom="8px"
+                            >
+                                정답
+                            </Font>
+                            <Font
+                                font="PretendardL"
+                                size="22px"
+                                color="#000000"
+                                margintop="5px"
+                                spacing="2px"
+                                paddingleft="0px"
+                                paddingtop="5px"
+                                marginbottom="8px"
+                            >
+                                정답률
+                            </Font>
+                        </AnswerContainer>
                         <ResponseBubble>
                             {/* 인풋 필드 추가 */}
                             <InputField 
@@ -93,32 +131,26 @@ const AiInterview = () => {
                 {/* 버튼과 마이크 이미지를 수평으로 정렬하기 위한 컨테이너 추가 */}
                 <MicrophoneContainer>
                     <Button
-                        color="#FFFFFF"
-                    >
-                        <img src={mic} alt="Mic" style={{ width: '35px', height: '40px' }} />
-                    </Button>
-                    <Font
-                        font="PretendardM"
-                        size="15px"
-                        color="#000000"
-                        margintop="5px"
-                        spacing="2px"
-                        paddingleft="13px"
-                        paddingtop="5px"
-                        marginbottom="8px"
-                    >
-                        마이크를 눌러 대답을 시작하세요
-                    </Font>
-                    <Button
-                        width="130px"
+                        width="170px"
                         height="50px"
-                        fontsize="27px"
+                        fontsize="22px"
                         radius="15px"
-                        marginleft="33vw"
+                        marginleft="40vw"
                         color="#f4fdff"
                         style={{ marginLeft: '10px' }} // 버튼과 마이크 간의 간격
                     >
-                        제출하기
+                        다음문제풀기
+                    </Button>
+                    <Button
+                        width="170px"
+                        height="50px"
+                        fontsize="22px"
+                        radius="15px"
+                        marginleft="1vw"
+                        color="#f4fdff"
+                        style={{ marginLeft: '10px' }} // 버튼과 마이크 간의 간격
+                    >
+                        그만풀기
                     </Button>
                 </MicrophoneContainer>
             </Box>
@@ -130,7 +162,7 @@ const AiInterview = () => {
 const MicrophoneContainer = styled.div`
     display: flex;
     align-items: center;  /* 수직 정렬을 가운데로 설정 */
-    margin-top: 70px;  /* 필요 시 여백 조정 */
+    margin-top: 45px;  /* 필요 시 여백 조정 */
 `;
 
 const Container = styled.div`
@@ -146,8 +178,8 @@ const QuestionBubble = styled.div`
     width: 32vw; /* 말풍선 최대 너비 */
     height: 20vh;
     max-width: 40vw;
-    margin-bottom: 20px;
-    margin-left: -90px;
+    margin-bottom: 15px;
+    margin-left: -30px;
     position: relative; /* 자식 요소의 위치 설정을 위한 */
 
     &::after {
@@ -169,7 +201,7 @@ const ResponseBubble = styled.div`
     width: 32vw; /* 말풍선 최대 너비 */
     height: 20vh;
     margin-bottom: 20px;
-    margin-left: -40px;
+    margin-left: -5px;
     position: relative; /* 자식 요소의 위치 설정을 위한 */
 
     &::after {
@@ -196,4 +228,12 @@ const InputField = styled.input`
     border-radius: 15px; /* 둥근 모서리 */
 `;
 
-export default AiInterview;
+// 정답과 정답률을 수평으로 정렬하기 위한 styled-component
+const AnswerContainer = styled.div`
+    display: flex;
+    justify-content: space-between; /* 자식 요소 사이의 간격을 동일하게 */
+    width: 100%; /* 부모 요소의 전체 너비 사용 */
+    margin-top: 10px; /* 필요 시 여백 조정 */
+`;
+
+export default ResultCheck;

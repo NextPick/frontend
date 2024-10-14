@@ -31,6 +31,8 @@ import QuestionBoardPost from '../pages/QuestionBoardPost.jsx'
 import ReviewBoard from '../pages/ReviewBoard.jsx';
 import AiHome from '../pages/AiHome.js';
 import AiInterview from '../pages/AiInterview.js';
+import ResultCheck from '../pages/ResultCheck.js';
+import ResultPage from '../pages/ResultPage.js';
 
 
 // App 컴포넌트를 정의하는 함수형 컴포넌트
