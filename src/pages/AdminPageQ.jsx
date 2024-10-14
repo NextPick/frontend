@@ -53,7 +53,7 @@ const Administration = () => {
   useEffect(() => {
     axios.get('http://localhost:8080/question/category')
       .then(response => {
-        setCategories(response.data); 
+        setCategories(response.data);
       })
       .catch(error => {
         console.error('카테고리 가져오기 오류:', error);
@@ -68,14 +68,12 @@ const Administration = () => {
           <Username>{nickname || '닉네임'}</Username>
           <Email>{email || '이메일'}</Email>
         </Profile>
-        <StyledLine />
         <Menu>
           <MenuItem>서비스 이용비율</MenuItem>
           <MenuItem active>면접질문 관리</MenuItem>
           <MenuItem>멘토가입 신청관리</MenuItem>
           <MenuItem>사용자 신고목록 관리</MenuItem>
         </Menu>
-        <StyledLine />
         <LogoutButton>로그아웃</LogoutButton>
       </Sidebar>
       <MainContent>
@@ -188,15 +186,10 @@ const Email = styled.p`
   color: #666;
 `;
 
-const StyledLine = styled(Line)`
-  border-bottom: 1px solid #aaa;
-  margin-top: 10px;
-  width: 100%;
-`;
 
 const Menu = styled.div`
   margin-top: 20px;
-  text-align: left;
+  text-align: center;
   margin-bottom: 20px;
   font-size: 16px;
 `;
@@ -209,7 +202,7 @@ const MenuItem = styled.p`
   color: ${({ active }) => (active ? '#ffffff' : '#000')};
 
   &:hover {
-    background-color: #0372f396;
+    background-color: #0077ff96;
     color: #ffffff;
   }
 `;

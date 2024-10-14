@@ -10,7 +10,7 @@ import Agree from '../pages/Agree.jsx';
 // import Signup from '../pages/Signup.js';
 import Signup from '../pages/Signup.jsx';
 import SignupSuccess from '../pages/SignupSuccess.js';
-import Mypage from '../pages/Mypage.js';
+import Mypage from '../pages/Mypage.jsx';
 import { ProfileProvider } from '../hooks/ProfileContext.js';
 import { MemberManager } from '../hooks/MemberManager.js';
 import MyNote from '../pages/MyNote.js';
