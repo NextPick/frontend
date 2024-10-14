@@ -1,329 +1,249 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
-const Board = () => {
-    const [sortOption, setSortOption] = useState("정렬");
-    const [isDropdownOpen, setDropdownOpen] = useState(false);
+const QuestionBoard = () => {
+  const [boards, setBoards] = useState([]);  // 빈 배열로 초기화
+  const [page, setPage] = useState(1);
+  const [size, setSize] = useState(10); // default page size
+  const [sort, setSort] = useState('recent'); // default sort by recent
+  const [keyword, setKeyword] = useState('');
+  const [totalPages, setTotalPages] = useState(1);
+
+  // API에서 데이터를 가져오는 useEffect
+  useEffect(() => {
+    axios.get('http://localhost:8080/boards/Q', {
+        params: {
+          page,
+          size,
+          sort,
+          keyword
+        },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        }
+      })
+      .then(response => {
+        const boardData = response.data.content;
+        if (boardData && boardData.length > 0) {
+          setBoards(boardData); // Set the fetched boards
+          setTotalPages(response.data.totalPages || 1); // Set total pages
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching question boards:', error);
+      });
+  }, [page, size, sort, keyword]);
   
-    const handleSortOptionClick = (option) => {
-      setSortOption(option);
-      setDropdownOpen(false);
-      // 여기에 정렬 기능을 추가할 수 있습니다.
-    };
   
-    const toggleDropdown = () => {
-      setDropdownOpen(!isDropdownOpen);
-    };
-  // 더미 데이터 생성
-  const posts = [
-    {
-      post_id: 1,
-      title: "면접 준비 팁",
-      member_nickname: "작성자1",
-      view: "74071",
-      like_count: 28,
-      created_at: "10-04",
-    },
-    {
-      post_id: 2,
-      title: "자기소개서 작성법",
-      member_nickname: "작성자2",
-      view: "125132114",
-      like_count: 25,
-      created_at: "10-04",
-    },
-    {
-      post_id: 3,
-      title: "제목이 너무 길면 상단 제목 길이에 맞춰 줄임표 사용하기",
-      member_nickname: "작성자3",
-      view: "43120",
-      like_count: 124,
-      created_at: "09-05",
-    },
-    {
-      post_id: 4,
-      title: "제목이 너무 길면 상단 제목 길이에 맞춰 줄임표 사용하기",
-      member_nickname: "작성자4",
-      view: "2151",
-      like_count: 1,
-      created_at: "10-02",
-    },
-    {
-      post_id: 5,
-      title: "아래처럼 이렇게 말줄임표가 나옵니다 와라라라라라라라라라라라라라라라라라",
-      member_nickname: "작성자3",
-      view: "43120",
-      like_count: 124,
-      created_at: "09-05",
-    },
-    {
-      post_id: 6,
-      title: "요를레히요를레리요를레히요를레릴호호오료를리레리요를레히요를레릴호호오료를리레리",
-      member_nickname: "작성자4",
-      view: "2151",
-      like_count: 1,
-      created_at: "10-02",
-    },
-    {
-      post_id: 7,
-      title: "아래처럼 이렇게 말줄임표가 나옵니다 와라라라라라라라라라라라라라라라라라",
-      member_nickname: "작성자3",
-      view: "43120",
-      like_count: 124,
-      created_at: "09-05",
-    },
-    {
-      post_id: 8,
-      title: "요를레히요를레리요를레히요를레릴호호오료를리레리요를레히요를레릴호호오료를리레리",
-      member_nickname: "작성자4",
-      view: "2151",
-      like_count: 1,
-      created_at: "10-02",
-    },
-    {
-      post_id: 9,
-      title: "아래처럼 이렇게 말줄임표가 나옵니다 와라라라라라라라라라라라라라라라라라",
-      member_nickname: "작성자3",
-      view: "43120",
-      like_count: 124,
-      created_at: "09-05",
-    },
-    {
-      post_id: 10,
-      title: "요를레히요를레리요를레히요를레릴호호오료를리레리요를레히요를레릴호호오료를리레리",
-      member_nickname: "작성자4",
-      view: "2151",
-      like_count: 1,
-      created_at: "10-02",
-    },
-  ];
+
+  // React 상태가 변경될 때마다 로그 출력
+  useEffect(() => {
+    console.log('Boards:', boards);
+    console.log('Total Pages:', totalPages);
+  }, [boards, totalPages]);
+
+  // 검색어 변경 핸들러
+  const handleSearch = (e) => {
+    setKeyword(e.target.value);
+    setPage(1); // 검색어가 변경되면 첫 페이지로 이동
+  };
+
+  // 페이지 변경 핸들러
+  const handlePageChange = (newPage) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      setPage(newPage);
+    }
+  };
+
+  // 좋아요 토글 핸들러
+  const handleLikeToggle = async (boardId) => {
+    try {
+      await axios.post(`http://localhost:8080/boards/${boardId}/likes`, null, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        }
+      });
+      // 좋아요 후 데이터를 다시 불러오기
+      const response = await axios.get('http://localhost:8080/boards/Q', {
+        params: { page, size, sort, keyword },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        }
+      });
+      setBoards(response.data.content || []);
+    } catch (error) {
+      console.error('Error toggling like:', error);
+    }
+  };
 
   return (
-    <div style={container}>
-      <h2 style={titleContainer}>
-        <span style={mainTitle}>면접 질문 게시판</span>
-        <span style={{ margin: '0 5px -6px', fontSize: '18px'}}>|</span>
-        <span style={subTitle}>게시판 목록</span>
-      </h2>
-      <hr style={{ ...divider, width: '900px' }} />
-      <div style={contentContainer}>
-        {/* 검색 바 및 정렬 버튼 */}
-        <div style={searchSortContainer}>
-          <div style={searchContainer}>
-            <input type="text" placeholder="검색..." style={searchInput} />
-            <button style={searchButton}>🔍</button>
-          </div>
-          <div style={dropdownContainer}>
-            <button onClick={toggleDropdown} style={sortButton}>
-              {sortOption} ▼
-            </button>
-            {isDropdownOpen && (
-              <div style={dropdownMenu}>
-                <div onClick={() => handleSortOptionClick("최신순")} style={dropdownItem}>최신순</div>
-                <div onClick={() => handleSortOptionClick("좋아요순")} style={dropdownItem}>좋아요순</div>
-                <div onClick={() => handleSortOptionClick("조회순")} style={dropdownItem}>조회순</div>
-              </div>
-            )}
-          </div>
-        </div>
+    <div style={styles.questionBoard}>
+      <h1 style={styles.title}>Question Boards</h1>
 
-        {/* 게시글 리스트 컨테이너 */}
-        <div style={listContainer}>
-          <div style={tableHeader}>
-            <span style={titleColumn}>제목</span>
-            <span style={authorColumn}>글쓴이</span>
-            <span style={dateColumn}>등록일</span>
-            <span style={viewColumn}>조회수</span>
-            <span style={likeColumn}>추천수</span>
-          </div>
+      <div style={styles.controls}>
+        <input
+          type="text"
+          value={keyword}
+          onChange={handleSearch}
+          placeholder="Search by keyword..."
+          style={styles.searchInput}
+        />
+        <select onChange={(e) => setSort(e.target.value)} value={sort} style={styles.select}>
+          <option value="recent">Recent</option>
+          <option value="likes">Most Liked</option>
+          <option value="views">Most Viewed</option>
+        </select>
+        <select onChange={(e) => setSize(e.target.value)} value={size} style={styles.select}>
+          <option value={5}>5 per page</option>
+          <option value={10}>10 per page</option>
+          <option value={20}>20 per page</option>
+        </select>
+      </div>
 
-          {posts.map((post) => (
-            <div key={post.post_id} style={row}>
-              <span style={titleColumn} title={post.title}>{post.title}</span>
-              <span style={authorColumn}>{post.member_nickname}</span>
-              <span style={dateColumn}>{post.created_at}</span>
-              <span style={viewColumn}>{post.view}</span>
-              <span style={likeColumn}>{post.like_count}</span>
-            </div>
-          ))}
-        </div>
+      <table style={styles.table}>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Likes</th>
+            <th>Comments</th>
+            <th>Views</th>
+            <th>Date</th>
+            <th>Like</th>
+          </tr>
+        </thead>
+        <tbody>
+          {boards.length === 0 ? (
+            <tr>
+              <td colSpan="7">No data available</td>
+            </tr>
+          ) : (
+            boards.map((board) => (
+              <tr key={board.boardId}>
+                <td>{board.title}</td>
+                <td>{board.author}</td>
+                <td>{board.likesCount}</td>
+                <td>{board.commentCount}</td>
+                <td>{board.viewCount}</td>
+                <td>{new Date(board.createdAt).toLocaleDateString()}</td>
+                <td>
+                  <button
+                    style={{
+                      ...styles.likeButton,
+                      ...(board.likedByCurrentUser ? styles.likedButton : {}),
+                    }}
+                    onClick={() => handleLikeToggle(board.boardId)}
+                  >
+                    {board.likedByCurrentUser ? 'Unlike' : 'Like'}
+                  </button>
+                </td>
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
 
-        {/* 페이지네이션 */}
-        <div style={pagination}>
-          <span>1</span>
-          <span>2</span>
-          <span>3</span>
-          <span>4</span>
-        </div>
+      <div style={styles.pagination}>
+        <button
+          onClick={() => handlePageChange(page - 1)}
+          disabled={page === 1}
+          style={{ ...styles.paginationButton, ...(page === 1 && styles.disabledButton) }}
+        >
+          Previous
+        </button>
+        <span style={styles.paginationInfo}>Page {page} of {totalPages}</span>
+        <button
+          onClick={() => handlePageChange(page + 1)}
+          disabled={page === totalPages}
+          style={{ ...styles.paginationButton, ...(page === totalPages && styles.disabledButton) }}
+        >
+          Next
+        </button>
       </div>
     </div>
   );
 };
 
-const titleContainer = {
-  marginBottom: '-10px',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'flex-start', // Aligns content to the start of the flex container
-  width: '900px', // Matches the width of the divider for alignment
-  marginLeft: '20px', // Adds some space from the left edge
+// CSS 스타일
+const styles = {
+  questionBoard: {
+    maxWidth: '1200px',
+    margin: '50px auto',
+    padding: '20px',
+    backgroundColor: '#f9f9f9',
+    borderRadius: '10px',
+    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+  },
+  title: {
+    textAlign: 'center',
+    fontSize: '2rem',
+    marginBottom: '20px',
+    color: '#333',
+  },
+  controls: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    marginBottom: '20px',
+  },
+  searchInput: {
+    padding: '10px',
+    fontSize: '1rem',
+    border: '1px solid #ccc',
+    borderRadius: '5px',
+    outline: 'none',
+    width: '30%',
+  },
+  select: {
+    padding: '10px',
+    fontSize: '1rem',
+    border: '1px solid #ccc',
+    borderRadius: '5px',
+    outline: 'none',
+    width: '30%',
+  },
+  table: {
+    width: '100%',
+    borderCollapse: 'collapse',
+    textAlign: 'center',
+  },
+  likeButton: {
+    padding: '8px 12px',
+    fontSize: '0.9rem',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer',
+    color: '#fff',
+    backgroundColor: '#007bff',
+    transition: 'background-color 0.3s ease',
+  },
+  likedButton: {
+    backgroundColor: '#28a745',
+  },
+  pagination: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: '20px',
+  },
+  paginationButton: {
+    padding: '10px 20px',
+    margin: '0 10px',
+    border: 'none',
+    borderRadius: '5px',
+    backgroundColor: '#007bff',
+    color: '#fff',
+    cursor: 'pointer',
+    fontSize: '1rem',
+    transition: 'background-color 0.3s ease',
+  },
+  disabledButton: {
+    backgroundColor: '#ccc',
+    cursor: 'not-allowed',
+  },
+  paginationInfo: {
+    fontSize: '1rem',
+    color: '#555',
+  },
 };
 
-const mainTitle = {
-  fontWeight: 'Bold',
-  fontSize: '26px', // Updated font size
-};
-
-const subTitle = {
-  fontSize: '18px', // Updated font size
-  marginTop: '10px',
-};
-
-const divider = {
-  borderTop: '2px solid #A0A0A0',
-  marginBottom: '40px',
-};
-const container = {
-  display: 'flex',
-  flexDirection: 'column',
-  marginTop: '5vh',
-  alignItems: 'center',
-  height: '90vh',
-  backgroundColor: '#FFF',
-};
-
-const contentContainer ={
-  justifyContent: 'center',
-  flexDirection: 'column',
-  backgroundColor: '#E0EBF5',
-  alignItems: 'center',
-  width: '800px',
-  padding: '20px',
-  boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
-  borderRadius: '20px',
-}
-
-const searchSortContainer = {
-  display: 'flex',
-  width: '100%',
-  maxWidth: '800px',
-  marginBottom: '20px',
-  gap: '10px',
-};
-
-const searchContainer = {
-  position: 'relative',
-  flex: 1,
-};
-
-const searchInput = {
-  width: '100%',
-  padding: '8px 30px 8px 10px',
-  borderRadius: '4px',
-  border: '1px solid #ccc',
-  fontSize: '12px',
-};
-
-const searchButton = {
-  position: 'absolute',
-  right: '5px',
-  top: '50%',
-  transform: 'translateY(-50%)',
-  border: 'none',
-  backgroundColor: 'transparent',
-  cursor: 'pointer',
-  fontSize: '16px',
-};
-
-const dropdownContainer = {
-  position: 'relative',
-};
-
-const sortButton = {
-  padding: '8px',
-  width: '100px',
-  border: '1px solid #ccc',
-  backgroundColor: '#fff',
-  borderRadius: '20px',
-  cursor: 'pointer',
-  fontSize: '12px',
-};
-
-const dropdownMenu = {
-  position: 'absolute',
-  top: '35px',
-  left: 0,
-  backgroundColor: '#fff',
-  border: '1px solid #ccc',
-  borderRadius: '4px',
-  width: '100px',
-  zIndex: 1,
-};
-
-const dropdownItem = {
-  padding: '8px',
-  cursor: 'pointer',
-  fontSize: '12px',
-};
-
-const listContainer = {
-  width: '100%',
-  maxWidth: '800px',
-  backgroundColor: '#fff',
-  borderRadius: '8px',
-  border: '1px solid #ccc',
-  padding: '10px',
-  marginTop: '40px',
-};
-
-const tableHeader = {
-  display: 'flex',
-  fontWeight: 'bold',
-  borderBottom: '2px solid #ddd',
-  padding: '8px 0',
-  fontSize: '14px',
-};
-
-const row = {
-  display: 'flex',
-  padding: '8px 0',
-  borderBottom: '1px solid #ddd',
-  alignItems: 'center',
-  fontSize: '12px',
-};
-
-const titleColumn = {
-  flex: 4,
-  whiteSpace: 'nowrap',
-  overflow: 'hidden',
-  textOverflow: 'ellipsis',
-  paddingRight: '8px',
-};
-
-const authorColumn = {
-  flex: 1,
-  textAlign: 'center',
-};
-
-const dateColumn = {
-  flex: 1,
-  textAlign: 'center',
-};
-
-const viewColumn = {
-  flex: 1,
-  textAlign: 'center',
-};
-
-const likeColumn = {
-  flex: 1,
-  textAlign: 'center',
-};
-
-const pagination = {
-  marginTop: '15px',
-  display: 'flex',
-  gap: '6px',
-  fontSize: '12px',
-};
-  
-  export default Board;
+export default QuestionBoard;
