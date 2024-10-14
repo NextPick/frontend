@@ -29,6 +29,7 @@ import ReviewBoard from '../pages/ReviewBoard.jsx';
 import AiHome from '../pages/AiHome.js';
 import AiInterview from '../pages/AiInterview.js';
 import ResultCheck from '../pages/ResultCheck.js';
+import ResultPage from '../pages/ResultPage.js';
 
 
 // App 컴포넌트를 정의하는 함수형 컴포넌트
@@ -60,6 +61,7 @@ function App() {
           <Route path='/aihome' element={<AiHome/>} />
           <Route path='/aiInterview' element={<AiInterview/>} />
           <Route path='/resultcheck' element={<ResultCheck/>} />
+          <Route path='/resultpage' element={<ResultPage/>} />
           <Route path='/board/question' element={<QuestionBoard/>} />
           <Route path='/board/question/:boardId' element={<QuestionBoardDetails/>} />
           <Route path='/board/question/post' element={<QuestionBoardPost/>} />
