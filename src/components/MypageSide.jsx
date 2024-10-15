@@ -72,7 +72,7 @@ const Menu = styled.div`
 
 
 const MypageSide = () => {
-    const { profileUrl, setProfileUrl, nickname,  setNickname,  email,  setEmail } = useMember();
+    const { profileUrl, setProfileUrl, nickname,  setNickname,  email,  setEmail, type, setType } = useMember();
     const fileInputRef = useRef(null); // 파일 입력을 참조할 ref 생성
     const [activeMenu, setActiveMenu] = useState('마이페이지'); // 활성화된 메뉴 상태
 
@@ -89,6 +89,7 @@ const MypageSide = () => {
                     const { email, nickname } = response.data.data; // 이메일과 닉네임 가져오기
                     setEmail(email); // 이메일 상태 업데이트
                     setNickname(nickname); // 닉네임 상태 업데이트
+                    setType(type )
                 } else {
                     console.error('사용자 정보를 가져오는 데 실패했습니다.');
                 }
