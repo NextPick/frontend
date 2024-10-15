@@ -9,18 +9,31 @@ const WebRTC = () => {
     const localStreamElement = useRef(null);
     const [myKey] = useState(Math.random().toString(36).substring(2, 11));
     let pcListMap = new Map(); // 피어 연결 저장
-    let roomId;
+    let roomUuid;
     let otherKeyList = [];
     let localStream = undefined;
     let stompClient;
     const location = useLocation();
-    const roomOccupation = location.state;
+    const {roomTitle, roomOccupation} = location.state || {};
+    console.log(roomOccupation)
     let camCount = 0;
+    let memberId;
+    let memberType = localStorage.getItem('type')
+    let accessToken = localStorage.getItem('accessToken');
+    let otherMemberIdList = [];
+    let roomId;
     let memberEmail = localStorage.getItem('email');
+
+    const otherMembers = {
+        otherMember1: null,
+        otherMember2: null,
+        otherMember3: null,
+    };
 
     const [memo, setMemo] = useState('');
     const [tutor1, setTutor1] = useState('');
     const [tutor2, setTutor2] = useState('');
+    const [tutor3, setTutor3] = useState('');
 
     const startCam = async () => {
         if (navigator.mediaDevices !== undefined) {
@@ -54,9 +67,10 @@ const WebRTC = () => {
     // };
 
     const connectSocket = async () => {
-        const socket = new SockJS('https://server.nextpick.site/signaling');
+        const socket = new SockJS(process.env.REACT_APP_API_URL + 'signaling');
         stompClient = Stomp.over(socket);
         stompClient.debug = null;
+        console.log(memberEmail);
 
         stompClient.connect(
             {
@@ -68,17 +82,18 @@ const WebRTC = () => {
                 console.log(myKey);
 
                 // 방 ID 구독
-                stompClient.subscribe(`/topic/roomId/${myKey}`, (message) => {
-                    roomId = message.body; // 룸 ID 저장
-                    console.log(roomId);
+                stompClient.subscribe(`/topic/roomUuid/${myKey}`, (message) => {
+                    roomUuid = message.body; // 룸 ID 저장
+                    console.log(roomUuid);
                 });
 
+                // 회원 순번 받기
                 stompClient.subscribe(`/topic/memberId/${myKey}`, (message) => {
-
+                    memberId = message.body;
                 })
 
                 // ICE 후보 구독
-                stompClient.subscribe(`/topic/peer/iceCandidate/${myKey}/${roomId}`, candidate => {
+                stompClient.subscribe(`/topic/peer/iceCandidate/${myKey}/${roomUuid}`, candidate => {
                     const key = JSON.parse(candidate.body).key;
                     const message = JSON.parse(candidate.body).body;
 
@@ -93,7 +108,7 @@ const WebRTC = () => {
                 });
 
                 // Offer 구독
-                stompClient.subscribe(`/topic/peer/offer/${myKey}/${roomId}`, offer => {
+                stompClient.subscribe(`/topic/peer/offer/${myKey}/${roomUuid}`, offer => {
                     const key = JSON.parse(offer.body).key;
                     const message = JSON.parse(offer.body).body;
 
@@ -116,7 +131,7 @@ const WebRTC = () => {
                 });
 
                 // Answer 구독
-                stompClient.subscribe(`/topic/peer/answer/${myKey}/${roomId}`, answer => {
+                stompClient.subscribe(`/topic/peer/answer/${myKey}/${roomUuid}`, answer => {
                     const key = JSON.parse(answer.body).key;
                     const message = JSON.parse(answer.body).body;
 
@@ -156,6 +171,14 @@ const WebRTC = () => {
             pc.addEventListener('track', (event) => {
                 onTrack(event, otherKey);
             });
+
+            // 사용자 연결 종료 시 처리
+            pc.addEventListener('iceconnectionstatechange', () => {
+                if (pc.iceConnectionState === 'disconnected' || pc.iceConnectionState === 'closed') {
+                    removeRemoteVideo(otherKey); // 사용자 화면 제거
+                }
+            });
+
             if (localStream) {
                 localStream.getTracks().forEach(track => {
                     pc.addTrack(track, localStream);
@@ -168,9 +191,18 @@ const WebRTC = () => {
         return pc;
     };
 
+    const removeRemoteVideo = (otherKey) => {
+        const videoElement = document.getElementById(otherKey);
+        if (videoElement) {
+            videoElement.srcObject = null; // 비디오 스트림 제거
+            videoElement.parentNode.removeChild(videoElement); // DOM에서 비디오 요소 제거
+            console.log(`Removed video for ${otherKey}`);
+        }
+    };
+
     const onIceCandidate = (event, otherKey) => {
         if (event.candidate) {
-            stompClient.send(`/app/peer/iceCandidate/${otherKey}/${roomId}`, {}, JSON.stringify({
+            stompClient.send(`/app/peer/iceCandidate/${otherKey}/${roomUuid}`, {}, JSON.stringify({
                 key: myKey,
                 body: event.candidate
             }));
@@ -180,7 +212,7 @@ const WebRTC = () => {
     const sendOffer = (pc, otherKey) => {
         pc.createOffer().then(offer => {
             setLocalAndSendMessage(pc, offer);
-            stompClient.send(`/app/peer/offer/${otherKey}/${roomId}`, {}, JSON.stringify({
+            stompClient.send(`/app/peer/offer/${otherKey}/${roomUuid}`, {}, JSON.stringify({
                 key: myKey,
                 body: offer
             }));
@@ -191,7 +223,7 @@ const WebRTC = () => {
     const sendAnswer = (pc, otherKey) => {
         pc.createAnswer().then(answer => {
             setLocalAndSendMessage(pc, answer);
-            stompClient.send(`/app/peer/answer/${otherKey}/${roomId}`, {}, JSON.stringify({
+            stompClient.send(`/app/peer/answer/${otherKey}/${roomUuid}`, {}, JSON.stringify({
                 key: myKey,
                 body: answer
             }));
@@ -214,6 +246,8 @@ const WebRTC = () => {
             video.srcObject = event.streams[0];
             camCount = camCount + 1;
             console.log(camCount);
+
+            handleGetParticipants(otherKey);
 
             document.getElementById('remoteStreamDiv' + camCount).appendChild(video);
         }
@@ -238,17 +272,52 @@ const WebRTC = () => {
         }, 1000);
     };
 
-    const handleButtonClick = async () => {
+    const handleEnterButtonClick = async () => {
         await handleEnterRoom();
     };
 
-    // const handlePostFeedback = async () => {
+    // const handlePostFeedback = async (value) => {
     //     try {
-    //         const response = await axios.post(process.env["REACT_APP_API_URL "] + roomId + "/" + )
+    //         const response = await axios.post(process.env.REACT_APP_API_URL + `${roomId}/` + value,
+    //             {
+    //             content:
+    //         })
     //     } catch (error) {
     //         alert("피드백 생성에 실패 했습니다.")
     //     }
+    // }
 
+    const handleGetParticipants = async (key) => {
+        try {
+            const response = await axios.get(process.env.REACT_APP_API_URL + "rooms/" + `${roomUuid}/` + "participants/" + key, {
+               headers: {
+                   'Content-Type': 'application/json',
+                   Authorization: `Bearer ${accessToken}`
+               }
+            });
+            let data = response.data.data;
+            roomId = data.roomId;
+            if (!otherMemberIdList.includes(data.memberId)) {
+                otherMemberIdList.push(data.memberId);
+            }
+        } catch (error) {
+            alert("member를 찾을 수 없습니다.")
+        }
+    }
+
+    const test = async () => {
+        otherMemberIdList.forEach((memberId, index) => {
+             if (index < 3) {
+                 otherMembers[`otherMember${index + 1}`] = memberId;
+             }
+        });
+
+        console.log(otherMembers);
+    }
+
+    const handlePostButtonClick = async () => {
+
+    }
 
     return (
         <div className="container">
@@ -268,30 +337,45 @@ const WebRTC = () => {
                         <div id="remoteStreamDiv3"></div>
                     </div>
                 </div>
-                <button onClick={handleButtonClick}>입장하기</button> {/* 버튼 추가 */}
+                <button onClick={handleEnterButtonClick}>입장하기</button>
             </div>
 
             <div className="input-section">
-                <h2>나의 메모장</h2>
-                <textarea
-                    value={memo}
-                    onChange={(e) => setMemo(e.target.value)}
-                    placeholder="여기에 메모를 입력하세요..."
-                />
-                <div>
-                    <h3>튜터 피드백</h3>
-                    <input
-                        placeholder="1번 튜터"
-                        value={tutor1}
-                        onChange={(e) => setTutor1(e.target.value)}
-                    />
-                    <input
-                        placeholder="2번 튜터"
-                        value={tutor2}
-                        onChange={(e) => setTutor2(e.target.value)}
+                <div className="memo-area">
+                    <h2>나의 메모장</h2>
+                    <textarea
+                        value={memo}
+                        onChange={(e) => setMemo(e.target.value)}
+                        placeholder="여기에 메모를 입력하세요..."
                     />
                 </div>
-                <button>제출</button>
+                <div className="tutor-feedback">
+                    <h3>튜터 피드백</h3>
+                    <div className="tutor-input">
+                        <input
+                            placeholder="1번 튜터"
+                            value={tutor1}
+                            onChange={(e) => setTutor1(e.target.value)}
+                        />
+                        <button>제출</button>
+                    </div>
+                    <div className="tutor-input">
+                        <input
+                            placeholder="2번 튜터"
+                            value={tutor2}
+                            onChange={(e) => setTutor2(e.target.value)}
+                        />
+                        <button>제출</button>
+                    </div>
+                    <div className="tutor-input">
+                        <input
+                            placeholder="3번 튜터"
+                            value={tutor3}
+                            onChange={(e) => setTutor3(e.target.value)}
+                        />
+                        <button>제출</button>
+                    </div>
+                </div>
             </div>
         </div>
     );
