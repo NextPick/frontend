@@ -1,28 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';  // useNavigate 사용
+import { useNavigate } from 'react-router-dom';
 
 const QuestionBoard = () => {
-  const [boards, setBoards] = useState([]);  // 게시판 데이터를 저장하는 상태
-  const [page, setPage] = useState(1);  // 현재 페이지
-  const [size, setSize] = useState(10);  // 한 페이지당 보여줄 게시물 수
-  const [sortOption, setSortOption] = useState('최신순');  // 정렬 기준 (기본값: 최신순)
-  const [keyword, setKeyword] = useState('');  // 검색어
-  const [searchKeyword, setSearchKeyword] = useState('');  // 실제 검색에 사용되는 검색어
-  const [totalPages, setTotalPages] = useState(1);  // 전체 페이지 수
+  const [boards, setBoards] = useState([]);
+  const [page, setPage] = useState(1);
+  const [size, setSize] = useState(10);
+  const [sortOption, setSortOption] = useState('최신순');
+  const [keyword, setKeyword] = useState('');
+  const [searchKeyword, setSearchKeyword] = useState('');
+  const [totalPages, setTotalPages] = useState(1);
   const [isDropdownOpen, setDropdownOpen] = useState(false);
-  const [isNavigating, setIsNavigating] = useState(false);  // 페이지 전환 여부를 저장
-  const navigate = useNavigate();  // 페이지 이동을 위한 useNavigate 훅
+  const [isNavigating, setIsNavigating] = useState(false);
+  const navigate = useNavigate();
 
-  // 백엔드에서 데이터를 가져오는 useEffect
   useEffect(() => {
-    // 페이지 전환 중이라면 데이터 요청을 하지 않도록 설정
     if (isNavigating) return;
 
     const fetchBoards = async () => {
       try {
         const params = {
-          page,  
+          page,
           size,
           sort: sortOption === '최신순' ? 'recent' : sortOption === '좋아요순' ? 'likes' : 'views',
         };
@@ -35,18 +33,15 @@ const QuestionBoard = () => {
           params,
           headers: {
             Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-          }
+          },
         });
 
         const boardData = response.data;
-        if (boardData && boardData.content && boardData.content.length > 0) {
-          setBoards(boardData.content);  // 게시판 데이터를 상태에 저장
-          setTotalPages(boardData.totalPages);  // 전체 페이지 수 설정
-        } else if (boardData && boardData.length > 0) {
-          setBoards(boardData);  // 게시판 데이터를 상태에 저장
-          setTotalPages(Math.ceil(boardData.length / size));  // 페이지 수 설정 (데이터 직접 계산)
+        if (boardData && boardData.content) {
+          setBoards(boardData.content);
+          setTotalPages(boardData.totalPages);
         } else {
-          setBoards([]);  // 게시판 데이터가 없을 경우 빈 배열로 초기화
+          setBoards([]);
         }
       } catch (error) {
         console.error('질문 게시판 데이터 가져오기 오류:', error);
@@ -54,38 +49,15 @@ const QuestionBoard = () => {
     };
 
     fetchBoards();
-  }, [page, size, sortOption, searchKeyword, isNavigating]);  // isNavigating 추가
+  }, [page, size, sortOption, searchKeyword, isNavigating]);
 
-  // 검색어 상태 업데이트
-  const handleSearch = (e) => {
-    setKeyword(e.target.value);
-  };
-
-  // 검색 버튼 클릭 시 실행되는 함수
-  const executeSearch = () => {
-    setSearchKeyword(keyword);  // 실제 검색어를 상태로 저장
-    setPage(1);  // 검색 후 첫 페이지로 이동
-  };
-
-  const handleSortOptionClick = (option) => {
-    setSortOption(option);
-    setDropdownOpen(false);
-  };
-
-  const toggleDropdown = () => {
-    setDropdownOpen(!isDropdownOpen);
-  };
-
-  const handlePageChange = (newPage) => {
-    if (newPage >= 1 && newPage <= totalPages) {
-      setPage(newPage);
-    }
-  };
-
-  // 게시물 클릭 시 게시물 상세 페이지로 이동
   const handlePostClick = (boardId) => {
-    setIsNavigating(true);  // 페이지 전환 중임을 표시
+    setIsNavigating(true);
     navigate(`/board/${boardId}`);
+  };
+
+  const handleCreatePost = () => {
+    navigate('/board/question/post');  // Navigate to the post creation page for QuestionBoard
   };
 
   return (
@@ -95,36 +67,32 @@ const QuestionBoard = () => {
           <input
             type="text"
             value={keyword}
-            onChange={handleSearch}
+            onChange={(e) => setKeyword(e.target.value)}
             placeholder="검색어 입력..."
             style={styles.searchInput}
           />
-          <button onClick={executeSearch} style={styles.searchButton}>🔍</button>  {/* 검색 버튼 클릭 시 실행 */}
+          <button onClick={() => setSearchKeyword(keyword)} style={styles.searchButton}>🔍</button>
         </div>
         <div style={styles.dropdownContainer}>
-          <button onClick={toggleDropdown} style={styles.sortButton}>
+          <button onClick={() => setDropdownOpen(!isDropdownOpen)} style={styles.sortButton}>
             {sortOption} ▼
           </button>
           {isDropdownOpen && (
             <div style={styles.dropdownMenu}>
-              <div onClick={() => handleSortOptionClick('최신순')} style={styles.dropdownItem}>최신순</div>
-              <div onClick={() => handleSortOptionClick('좋아요순')} style={styles.dropdownItem}>좋아요순</div>
-              <div onClick={() => handleSortOptionClick('조회순')} style={styles.dropdownItem}>조회순</div>
+              <div onClick={() => setSortOption('최신순')} style={styles.dropdownItem}>최신순</div>
+              <div onClick={() => setSortOption('좋아요순')} style={styles.dropdownItem}>좋아요순</div>
+              <div onClick={() => setSortOption('조회순')} style={styles.dropdownItem}>조회순</div>
             </div>
           )}
         </div>
       </div>
 
-      <div style={styles.listContainer}>
-        <div style={styles.tableHeader}>
-          <span style={styles.titleColumn}>제목</span>
-          <span style={styles.authorColumn}>작성자</span>
-          <span style={styles.dateColumn}>작성일</span>
-          <span style={styles.viewColumn}>조회수</span>
-          <span style={styles.likeColumn}>좋아요</span>
-          <span style={styles.commentCount}>댓글수</span>
-        </div>
+      {/* Add Create Post Button */}
+      <button onClick={handleCreatePost} style={styles.createPostButton}>
+        게시글 작성
+      </button>
 
+      <div style={styles.listContainer}>
         {boards.length === 0 ? (
           <div>데이터가 없습니다</div>
         ) : (
@@ -132,9 +100,9 @@ const QuestionBoard = () => {
             <div
               key={board.boardId}
               style={styles.row}
-              onClick={() => handlePostClick(board.boardId)}  // 게시물 클릭 시 상세 페이지로 이동
+              onClick={() => handlePostClick(board.boardId)}
             >
-              <span style={styles.titleColumn} title={board.title}>{board.title}</span>
+              <span style={styles.titleColumn}>{board.title}</span>
               <span style={styles.authorColumn}>{board.author}</span>
               <span style={styles.dateColumn}>{new Date(board.createdAt).toLocaleDateString()}</span>
               <span style={styles.viewColumn}>{board.viewCount}</span>
@@ -146,17 +114,17 @@ const QuestionBoard = () => {
       </div>
 
       <div style={styles.pagination}>
-        <button onClick={() => handlePageChange(page - 1)} disabled={page === 1}>이전</button>
+        <button onClick={() => setPage(page - 1)} disabled={page === 1}>이전</button>
         {Array.from({ length: totalPages }, (_, index) => (
           <button
-            key={index + 1}
-            onClick={() => handlePageChange(index + 1)}
+            key={index}
+            onClick={() => setPage(index + 1)}
             style={index + 1 === page ? styles.activePage : {}}
           >
             {index + 1}
           </button>
         ))}
-        <button onClick={() => handlePageChange(page + 1)} disabled={page === totalPages}>다음</button>
+        <button onClick={() => setPage(page + 1)} disabled={page === totalPages}>다음</button>
       </div>
     </div>
   );

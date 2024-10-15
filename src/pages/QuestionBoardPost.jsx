@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // useHistory 대신 useNavigate 사용
 import Swal from 'sweetalert2';
 
 const QuestionBoardPost = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [category, setCategory] = useState('');
-  const [images, setImages] = useState([]); // Defined images state
+  const [images, setImages] = useState([]); 
   const maxFileSize = 5 * 1024 * 1024; // 5MB
+  const navigate = useNavigate(); // useHistory 대신 useNavigate 사용
 
-  // Handle image add
+  // 이미지 추가
   const handleImageAdd = (event) => {
     const selectedFiles = Array.from(event.target.files);
-
     const oversizedFiles = selectedFiles.filter((file) => file.size > maxFileSize);
+    
     if (oversizedFiles.length > 0) {
       alert("파일의 크기가 5MB를 넘었습니다.");
     }
@@ -29,56 +31,59 @@ const QuestionBoardPost = () => {
     setImages([...images, ...newImages]);
   };
 
-  // Handle image remove
+  // 이미지 제거
   const handleImageRemove = (index) => {
     URL.revokeObjectURL(images[index].url); // URL 해제
     setImages(images.filter((_, i) => i !== index));
   };
 
- // Handle submit post
- const handleSubmitPost = () => {
-  const formData = new FormData();
-  formData.append("category", category);
+  // 게시글 작성
+  const handleSubmitPost = () => {
+    const formData = new FormData();
+    formData.append("category", category);
+    
+    images.forEach((image) => {
+      formData.append("images", image.file);
+    });
+  
+    formData.append("title", title);
+    formData.append("content", content);
 
-  images.forEach((image) => {
-    // 파일명 인코딩 처리
-    const encodedFileName = encodeURIComponent(image.file.name);
-    formData.append("images", new File([image.file], encodedFileName));
-  });
-
-  formData.append("title", title);
-  formData.append("content", content);
-
-  fetch("http://localhost:8080/boards/R", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-    },
-    body: formData,
-  })
+    fetch("http://localhost:8080/boards/R", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      },
+      body: formData,
+    })
     .then((response) => response.json())
     .then((data) => {
-      Swal.fire("게시글이 성공적으로 등록되었습니다!");
-      // Redirect or refresh page logic
+      console.log("응답 데이터:", data); // 응답 데이터를 확인
+      if (data.boardId) {
+        Swal.fire("게시글이 성공적으로 등록되었습니다!");
+        navigate(`/board/${data.boardId}`); // boardId를 이용해 상세 페이지로 리다이렉트
+      } else {
+        Swal.fire("오류 발생", "boardId를 찾을 수 없습니다.", "error");
+      }
     })
     .catch((error) => {
-      Swal.fire("오류 발생", "게시글 등록 중 오류가 발생했습니다.", "error");
+      console.error("API 요청 실패:", error);
     });
-};
-
-
+    
+    
+  };
 
   return (
     <div style={container}>
       <h2 style={titleContainer}>
-        <span style={mainTitle}>면접 질문 게시판</span>
+        <span style={mainTitle}>면접 후기 게시판</span>
         <span style={{ margin: '0 5px -6px', fontSize: '18px'}}>|</span>
         <span style={subTitle}>게시글 작성</span>
       </h2>
       <hr style={{ ...divider, width: '900px' }} />
       <div style={contentContainer}>
         <div style={boardContainer}>
-          {/* Category Selection */}
+          {/* 카테고리 선택 */}
           <select value={category} onChange={(e) => setCategory(e.target.value)} style={titleInput}>
             <option value="">카테고리 선택</option>
             <option value="BE">백엔드</option>
@@ -148,7 +153,7 @@ const QuestionBoardPost = () => {
   );
 };
 
-// Styles
+// 스타일 정의
 const container = {
   display: 'flex',
   flexDirection: 'column',
