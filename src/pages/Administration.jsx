@@ -3,6 +3,9 @@ import axios from 'axios';
 import styled from 'styled-components';
 import Line from '../components/Line';
 import { useMember } from '../hooks/MemberManager'; // 회원 정보를 관리하는 훅
+import AdminpageSide from '../components/AdminpageSide';
+
+
 
 const Administration = () => {
   const [mentorData, setMentorData] = useState([]);
@@ -59,22 +62,7 @@ const Administration = () => {
 
   return (
     <Container>
-      <Sidebar>
-        <Profile>
-          <Avatar></Avatar>
-          <Username>{nickname || '닉네임'}</Username>
-          <Email>{email || '이메일'}</Email>
-        </Profile>
-        <StyledLine />
-        <Menu>
-          <MenuItem>서비스 이용비율</MenuItem>
-          <MenuItem>면접질문 관리</MenuItem>
-          <MenuItem active>멘토가입 신청관리</MenuItem>
-          <MenuItem>사용자 신고목록 관리</MenuItem>
-        </Menu>
-        <StyledLine />
-        <LogoutButton>로그아웃</LogoutButton>
-      </Sidebar>
+       <AdminpageSide/>
       <MainContent>
         <Title>멘토가입 신청관리</Title>
         <TableContainer>

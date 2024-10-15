@@ -62,7 +62,6 @@ function App() {
               <Route path='/mynote' element={<MyNote/>} />
               <Route path='/adminpageQx' element={<AdminPageQx/>} />
               <Route path='/adminpage-service' element={<AdminPage/>} />
-              <Route path='/administration' element={<Administration/>} />
               <Route path='/choice' element={<Choice/>} />
               <Route path='/interviewfeedback' element={<InterviewFeedback/>} />
               <Route path='/aihome' element={<AiHome/>} />

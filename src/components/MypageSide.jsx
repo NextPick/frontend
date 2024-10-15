@@ -8,7 +8,7 @@ import Box from './Box'
 import defaultProfile from '../assets/img-non-login.png';
 import { useMember } from '../hooks/MemberManager'; // 회원 정보를 관리하는 훅
 import axios from 'axios';
-import Swal from 'sweetalert2';
+// import Swal from 'sweetalert2';
 
 
 
@@ -93,12 +93,12 @@ const MypageSide = () => {
                     console.error('사용자 정보를 가져오는 데 실패했습니다.');
                 }
             } catch (error) {
-                console.error('네트워크 오류:', error);
-                Swal.fire({
-                    text: `네트워크 오류가 발생했습니다. 인터넷 연결을 확인해 주세요.`,
-                    icon: 'error',
-                    confirmButtonText: '확인'
-                });
+                // console.error('네트워크 오류:', error);
+                // Swal.fire({
+                //     text: `네트워크 오류가 발생했습니다. 인터넷 연결을 확인해 주세요.`,
+                //     icon: 'error',
+                //     confirmButtonText: '확인'
+                // });
             }
         };
   
