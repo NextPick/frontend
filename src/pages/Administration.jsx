@@ -117,64 +117,6 @@ const Container = styled.div`
   font-family: Arial, sans-serif;
 `;
 
-const Sidebar = styled.aside`
-  width: 250px;
-  padding: 20px;
-  height: 100%;
-  background-color: #e7f0f9;
-  border-radius: 15px;
-  text-align: center;
-`;
-
-const Profile = styled.div`
-  margin-bottom: 20px;
-`;
-
-const Avatar = styled.div`
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  background-color: #ccc;
-  margin: 0 auto;
-`;
-
-const Username = styled.h3`
-  font-size: 18px;
-  font-weight: bold;
-  margin: 10px 0;
-`;
-
-const Email = styled.p`
-  font-size: 14px;
-  color: #666;
-`;
-
-const StyledLine = styled(Line)`
-  border-bottom: 1px solid #aaa;
-  margin-top: 10px;
-  width: 100%;
-`;
-
-const Menu = styled.div`
-  margin-top: 20px;
-  text-align: left;
-  margin-bottom: 20px;
-  font-size: 16px;
-`;
-
-const MenuItem = styled.p`
-  padding: 10px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease;
-  background-color: ${({ active }) => (active ? '#137df696' : 'transparent')};
-  color: ${({ active }) => (active ? '#ffffff' : '#000')};
-
-  &:hover {
-    background-color: #0372f396;
-    color: #ffffff;
-  }
-`;
-
 const LogoutButton = styled.button`
   border: none;
   background-color: transparent;

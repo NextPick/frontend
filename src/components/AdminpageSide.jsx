@@ -8,8 +8,8 @@ import Box from './Box';
 import defaultProfile from '../assets/img-non-login.png';
 import { useMember } from '../hooks/MemberManager'; // 회원 정보를 관리하는 훅
 import axios from 'axios';
-import Swal from 'sweetalert2';
-import { useNavigate } from 'react-router-dom'; // React Router의 useNavigate 훅 추가
+import { useNavigate } from 'react-router-dom';
+
 
 const ProfileImgArea = styled.div`
   justify-content: center;
@@ -68,7 +68,9 @@ const AdminpageSide = () => {
   const { profileUrl, setProfileUrl, nickname, setNickname, email, setEmail } = useMember();
   const fileInputRef = useRef(null); // 파일 입력을 참조할 ref 생성
   const [activeMenu, setActiveMenu] = useState('마이페이지'); // 활성화된 메뉴 상태
-  const navigate = useNavigate(); // useNavigate 훅 초기화
+  const navigate = useNavigate(); // useNavigate 훅 초기화    const navigate = useNavigate(); // navigate 정의
+  const [roles, setRoles] = useState([]); // 역할 상태 추가
+
 
   useEffect(() => {
     console.log(activeMenu);
@@ -83,6 +85,7 @@ const AdminpageSide = () => {
           const { email, nickname } = response.data.data; // 이메일과 닉네임 가져오기
           setEmail(email); // 이메일 상태 업데이트
           setNickname(nickname); // 닉네임 상태 업데이트
+          setRoles(roles); // 역할 상태 업데이트
         } else {
           console.error('사용자 정보를 가져오는 데 실패했습니다.');
         }
