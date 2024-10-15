@@ -47,7 +47,7 @@ const InterviewFeedback = () => {
                         Authorization: `Bearer ${accessToken}`,
                     },
                 });
-            const data = response.data.data;
+            let data = response.data.data;
             setContent(data.content);
             setMentorNickname(data.mentorNickname);
         } catch (error) {

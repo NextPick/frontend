@@ -27,9 +27,15 @@ const Choice = () => {
     let accessToken = localStorage.getItem('accessToken');
     const navigate = useNavigate();
 
-    const handleShowAddModal = () => {
+    const handleShowAddModalFE = () => {
         setShowAddModal(true);
+        setRoomOccupation("FE");
     };
+
+    const handleShowAddModalBE = () => {
+        setShowAddModal(true);
+        setRoomOccupation("BE");
+    }
 
     const handleCloseAddModal = () => {
         setShowAddModal(false);
@@ -52,7 +58,7 @@ const Choice = () => {
         navigate('/WebRTC');
 
         try {
-            const response = await axios.post('https://server.nextpick.site/rooms',
+            const response = await axios.post(process.env.REACT_APP_API_URL + 'rooms',
                 {
                     title: roomTitle,
                     occupation: roomOccupation,
@@ -85,10 +91,10 @@ const Choice = () => {
     return (
         <div className='wrap' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '90vh', gap: "10px", width: "100%" }}>
             {/* 버튼 클릭 시 모달 열기 */}
-            <Button color="transparent" radius="5px" hoverColor="#FFFFFF" onClick={handleShowAddModal}>
+            <Button color="transparent" radius="5px" hoverColor="#FFFFFF" onClick={handleShowAddModalFE}>
                 <img src={choicefe} alt="fe" style={{ width: '350px', height: '340px' }} />
             </Button>
-            <Button color="transparent" radius="5px" hoverColor="#FFFFFF" onClick={handleShowAddModal}>
+            <Button color="transparent" radius="5px" hoverColor="#FFFFFF" onClick={handleShowAddModalBE}>
                 <img src={choicebe} alt="be" style={{ width: '350px', height: '340px' }} />
             </Button>
 
@@ -104,16 +110,6 @@ const Choice = () => {
                             value={roomTitle}
                             onChange={(e) => setRoomTitle(e.target.value)}
                         />
-                        <select
-                            value={roomOccupation}
-                            onChange={(e) => setRoomOccupation(e.target.value)}
-                            style={{ marginTop: '10px', padding: '10px', borderRadius: '5px' }}
-                        >
-                            <option value="" disabled>방 직군 선택</option>
-                            <option value="BE">백앤드</option>
-                            <option value="FE">프론트앤드</option>
-                            {/* 필요한 경우 추가 직군 옵션을 여기에 추가하세요 */}
-                        </select>
                     </ModalContent>
                 </Modal.Body>
                 <Modal.Footer>

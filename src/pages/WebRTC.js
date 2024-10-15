@@ -9,7 +9,7 @@ const WebRTC = () => {
     const localStreamElement = useRef(null);
     const [myKey] = useState(Math.random().toString(36).substring(2, 11));
     let pcListMap = new Map(); // 피어 연결 저장
-    let roomId;
+    let roomUuid;
     let otherKeyList = [];
     let localStream = undefined;
     let stompClient;
@@ -17,10 +17,14 @@ const WebRTC = () => {
     const roomOccupation = location.state;
     let camCount = 0;
     let memberEmail = localStorage.getItem('email');
+    let memberId;
+    let memberType;
+    let accessToken = localStorage.getItem('accessToken');
 
     const [memo, setMemo] = useState('');
     const [tutor1, setTutor1] = useState('');
     const [tutor2, setTutor2] = useState('');
+    const [tutor3, setTutor3] = useState('');
 
     const startCam = async () => {
         if (navigator.mediaDevices !== undefined) {
@@ -54,9 +58,10 @@ const WebRTC = () => {
     // };
 
     const connectSocket = async () => {
-        const socket = new SockJS('https://server.nextpick.site/signaling');
+        const socket = new SockJS(process.env.REACT_APP_API_URL + 'signaling');
         stompClient = Stomp.over(socket);
         stompClient.debug = null;
+        console.log(memberEmail);
 
         stompClient.connect(
             {
@@ -68,17 +73,23 @@ const WebRTC = () => {
                 console.log(myKey);
 
                 // 방 ID 구독
-                stompClient.subscribe(`/topic/roomId/${myKey}`, (message) => {
-                    roomId = message.body; // 룸 ID 저장
-                    console.log(roomId);
+                stompClient.subscribe(`/topic/roomUuid/${myKey}`, (message) => {
+                    roomUuid = message.body; // 룸 ID 저장
+                    console.log(roomUuid);
                 });
 
+                // 회원 순번 받기
                 stompClient.subscribe(`/topic/memberId/${myKey}`, (message) => {
+                    memberId = message.body;
+                })
 
+                // 회원 타입 받기
+                stompClient.subscribe(`/topic/memberType/${myKey}`, (message) => {
+                    memberType = message.body;
                 })
 
                 // ICE 후보 구독
-                stompClient.subscribe(`/topic/peer/iceCandidate/${myKey}/${roomId}`, candidate => {
+                stompClient.subscribe(`/topic/peer/iceCandidate/${myKey}/${roomUuid}`, candidate => {
                     const key = JSON.parse(candidate.body).key;
                     const message = JSON.parse(candidate.body).body;
 
@@ -93,7 +104,7 @@ const WebRTC = () => {
                 });
 
                 // Offer 구독
-                stompClient.subscribe(`/topic/peer/offer/${myKey}/${roomId}`, offer => {
+                stompClient.subscribe(`/topic/peer/offer/${myKey}/${roomUuid}`, offer => {
                     const key = JSON.parse(offer.body).key;
                     const message = JSON.parse(offer.body).body;
 
@@ -116,7 +127,7 @@ const WebRTC = () => {
                 });
 
                 // Answer 구독
-                stompClient.subscribe(`/topic/peer/answer/${myKey}/${roomId}`, answer => {
+                stompClient.subscribe(`/topic/peer/answer/${myKey}/${roomUuid}`, answer => {
                     const key = JSON.parse(answer.body).key;
                     const message = JSON.parse(answer.body).body;
 
@@ -186,7 +197,7 @@ const WebRTC = () => {
 
     const onIceCandidate = (event, otherKey) => {
         if (event.candidate) {
-            stompClient.send(`/app/peer/iceCandidate/${otherKey}/${roomId}`, {}, JSON.stringify({
+            stompClient.send(`/app/peer/iceCandidate/${otherKey}/${roomUuid}`, {}, JSON.stringify({
                 key: myKey,
                 body: event.candidate
             }));
@@ -196,7 +207,7 @@ const WebRTC = () => {
     const sendOffer = (pc, otherKey) => {
         pc.createOffer().then(offer => {
             setLocalAndSendMessage(pc, offer);
-            stompClient.send(`/app/peer/offer/${otherKey}/${roomId}`, {}, JSON.stringify({
+            stompClient.send(`/app/peer/offer/${otherKey}/${roomUuid}`, {}, JSON.stringify({
                 key: myKey,
                 body: offer
             }));
@@ -207,7 +218,7 @@ const WebRTC = () => {
     const sendAnswer = (pc, otherKey) => {
         pc.createAnswer().then(answer => {
             setLocalAndSendMessage(pc, answer);
-            stompClient.send(`/app/peer/answer/${otherKey}/${roomId}`, {}, JSON.stringify({
+            stompClient.send(`/app/peer/answer/${otherKey}/${roomUuid}`, {}, JSON.stringify({
                 key: myKey,
                 body: answer
             }));
@@ -265,6 +276,21 @@ const WebRTC = () => {
     //         alert("피드백 생성에 실패 했습니다.")
     //     }
 
+    const handleGetParticipants = async () => {
+        try {
+            const resposne = await axios.get(process.env.REACT_APP_API_URL + "rooms/" + `${roomUuid}/` + "participants", {
+               headers: {
+                   'Content-Type': 'application/json',
+                   Authorization: `Bearer ${accessToken}`
+               }
+            });
+            let data = resposne.data.data;
+            
+        } catch (error) {
+
+        }
+    }
+
 
     return (
         <div className="container">
@@ -284,30 +310,45 @@ const WebRTC = () => {
                         <div id="remoteStreamDiv3"></div>
                     </div>
                 </div>
-                <button onClick={handleButtonClick}>입장하기</button> {/* 버튼 추가 */}
+                <button onClick={handleButtonClick}>입장하기</button>
             </div>
 
             <div className="input-section">
-                <h2>나의 메모장</h2>
-                <textarea
-                    value={memo}
-                    onChange={(e) => setMemo(e.target.value)}
-                    placeholder="여기에 메모를 입력하세요..."
-                />
-                <div>
-                    <h3>튜터 피드백</h3>
-                    <input
-                        placeholder="1번 튜터"
-                        value={tutor1}
-                        onChange={(e) => setTutor1(e.target.value)}
-                    />
-                    <input
-                        placeholder="2번 튜터"
-                        value={tutor2}
-                        onChange={(e) => setTutor2(e.target.value)}
+                <div className="memo-area">
+                    <h2>나의 메모장</h2>
+                    <textarea
+                        value={memo}
+                        onChange={(e) => setMemo(e.target.value)}
+                        placeholder="여기에 메모를 입력하세요..."
                     />
                 </div>
-                <button>제출</button>
+                <div className="tutor-feedback">
+                    <h3>튜터 피드백</h3>
+                    <div className="tutor-input">
+                        <input
+                            placeholder="1번 튜터"
+                            value={tutor1}
+                            onChange={(e) => setTutor1(e.target.value)}
+                        />
+                        <button>제출</button>
+                    </div>
+                    <div className="tutor-input">
+                        <input
+                            placeholder="2번 튜터"
+                            value={tutor2}
+                            onChange={(e) => setTutor2(e.target.value)}
+                        />
+                        <button>제출</button>
+                    </div>
+                    <div className="tutor-input">
+                        <input
+                            placeholder="3번 튜터"
+                            value={tutor3}
+                            onChange={(e) => setTutor3(e.target.value)}
+                        />
+                        <button>제출</button>
+                    </div>
+                </div>
             </div>
         </div>
     );
