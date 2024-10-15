@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import tuty from './../assets/tuty_sq.png'; // Replace with the actual path to your image
 import tuter from './../assets/tuter_sq.png'; // Replace with the actual path to your image
+import Font from '../components/Font';
 
 const ImageButtons = () => {
   const navigate = useNavigate();
@@ -58,7 +59,13 @@ const ImageButtons = () => {
         style={{ ...nextButtonStyle, backgroundColor: selected ? '#E0EBF5' : '#FFF' }}
         disabled={!selected}
       >
+        <Font
+        font="Pretendard"
+        size="20px"
+        marginbottom="0px"
+        >
         다음
+        </Font>
       </button>
     </div>
   );

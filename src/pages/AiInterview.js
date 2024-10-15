@@ -172,12 +172,19 @@ const AiInterview = () => {
                     },
                 }
             );
-            let correct = '';
-            if (response.status === 200) {
+            console.log('data : ' + response.data.data.solvesId)
+            console.log('data : ' + response.data.data.result)
+            console.log('data : ' + response.data)
+            let correct = ''
+            if (response.data.data.result === true) {
                 correct = true;
-            } else if(response.status === 201){
+            } else {
                 correct = false;
             }
+            if(localStorage.getItem('solveQuestion') === null)
+                localStorage.setItem('solveQuestion', response.data.data.solvesId);
+            else
+                localStorage.setItem('solveQuestion', localStorage.getItem('solveQuestion') + '/' + response.data.data.solvesId);
 
             navigate('/resultcheck', {
                 state: {
@@ -255,7 +262,7 @@ const AiInterview = () => {
 const MicrophoneContainer = styled.div`
     display: flex;
     align-items: center;
-    margin-top: 70px;
+    margin-top: 30px;
 `;
 
 const Container = styled.div`

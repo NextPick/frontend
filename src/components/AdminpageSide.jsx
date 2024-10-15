@@ -71,7 +71,7 @@ const Menu = styled.div`
 
 
 
-const MypageSide = () => {
+const AdminpageSide = () => {
     const { profileUrl, setProfileUrl, nickname,  setNickname,  email,  setEmail } = useMember();
     const fileInputRef = useRef(null); // 파일 입력을 참조할 ref 생성
     const [activeMenu, setActiveMenu] = useState('마이페이지'); // 활성화된 메뉴 상태
@@ -145,6 +145,7 @@ const handleImageClick = () => {
     textalign="center"
     color="#e7f0f9"
     radius="15px"
+    top="0px"
             >
                 <ProfileImgArea>
                     <ProfileImage
@@ -166,10 +167,10 @@ const handleImageClick = () => {
                     margintop="10px"
                 ></Line>
                 <Menu>
-                <MenuItem active={activeMenu === '마이페이지'} onClick={() => handleMenuClick('마이페이지')}>마이페이지</MenuItem>
-                <MenuItem active={activeMenu === '정답/오답노트'} onClick={() => handleMenuClick('정답/오답노트')}>정답/오답노트</MenuItem>
-                <MenuItem active={activeMenu === '받은 피드백'} onClick={() => handleMenuClick('받은 피드백')}>받은 피드백</MenuItem>
-                <MenuItem active={activeMenu === '결제관리'} onClick={() => handleMenuClick('결제관리')}>결제관리</MenuItem>
+                <MenuItem active={activeMenu === '서비스 이용비율'} onClick={() => handleMenuClick('마이페이지')}>마이페이지</MenuItem>
+                <MenuItem active={activeMenu === '면접질문 관리'} onClick={() => handleMenuClick('정답/오답노트')}>정답/오답노트</MenuItem>
+                <MenuItem active={activeMenu === '멘토가입 신청관리'} onClick={() => handleMenuClick('받은 피드백')}>받은 피드백</MenuItem>
+                <MenuItem active={activeMenu === '사용자 신고목록 관리'} onClick={() => handleMenuClick('결제관리')}>결제관리</MenuItem>
                 </Menu>
                 <Line
                     marginbottom="10px"
@@ -179,4 +180,4 @@ const handleImageClick = () => {
   );
 }
 
-export default MypageSide;
+export default AdminpageSide;

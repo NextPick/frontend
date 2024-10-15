@@ -5,11 +5,11 @@ import Line from '../components/Line';
 import { useMember } from '../hooks/MemberManager';
 import plusbutton from '../assets/plusbutton.png';
 import searchIcon from '../assets/search.png'; // 돋보기 아이콘 이미지 경로
+import AdminpageSide from '../components/AdminpageSide';
 
 const Administration = () => {
   const [questionData, setQuestionData] = useState([]);
   const [categories, setCategories] = useState([]);
-  const { profileUrl, setProfileUrl, nickname, email } = useMember();
   const [page, setPage] = useState(1);
   const [type, setType] = useState("none");
   const [sort, setSort] = useState("recent");
@@ -62,20 +62,7 @@ const Administration = () => {
 
   return (
     <Container>
-      <Sidebar>
-        <Profile>
-          <Avatar></Avatar>
-          <Username>{nickname || '닉네임'}</Username>
-          <Email>{email || '이메일'}</Email>
-        </Profile>
-        <Menu>
-          <MenuItem>서비스 이용비율</MenuItem>
-          <MenuItem active>면접질문 관리</MenuItem>
-          <MenuItem>멘토가입 신청관리</MenuItem>
-          <MenuItem>사용자 신고목록 관리</MenuItem>
-        </Menu>
-        <LogoutButton>로그아웃</LogoutButton>
-      </Sidebar>
+     <AdminpageSide/>
       <MainContent>
         <Title>면접질문 관리
           <img src={plusbutton} alt="plusbutton" style={{ width: '25px', height: '25px', marginLeft: '10px' }} />
@@ -154,72 +141,11 @@ const Container = styled.div`
   font-family: Arial, sans-serif;
 `;
 
-const Sidebar = styled.aside`
-  width: 250px;
-  padding: 20px;
-  height: 100%;
-  background-color: #e7f0f9;
-  border-radius: 15px;
-  text-align: center;
-`;
-
-const Profile = styled.div`
-  margin-bottom: 20px;
-`;
-
-const Avatar = styled.div`
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  background-color: #ccc;
-  margin: 0 auto;
-`;
-
-const Username = styled.h3`
-  font-size: 18px;
-  font-weight: bold;
-  margin: 10px 0;
-`;
-
-const Email = styled.p`
-  font-size: 14px;
-  color: #666;
-`;
-
-
-const Menu = styled.div`
-  margin-top: 20px;
-  text-align: center;
-  margin-bottom: 20px;
-  font-size: 16px;
-`;
-
-const MenuItem = styled.p`
-  padding: 10px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease;
-  background-color: ${({ active }) => (active ? '#137df696' : 'transparent')};
-  color: ${({ active }) => (active ? '#ffffff' : '#000')};
-
-  &:hover {
-    background-color: #0077ff96;
-    color: #ffffff;
-  }
-`;
-
-const LogoutButton = styled.button`
-  border: none;
-  background-color: transparent;
-  color: #333;
-  cursor: pointer;
-  margin-top: 20px;
-`;
-
 const MainContent = styled.main`
   flex: 1;
   padding: 20px;
   max-width: 800px;
-  height: 100%;
+  height: 74.5vh;
   background-color: #f1f7fd;
   border-radius: 15px;
   margin-left: 20px;
@@ -228,8 +154,8 @@ const MainContent = styled.main`
 
 const Title = styled.h2`
   font-size: 24px;
-  margin-top: 10px;
-  margin-bottom: 40px;
+  margin-top: 0px;
+  margin-bottom: 10px;
   text-align: left;
 `;
 
@@ -241,11 +167,12 @@ const SearchContainer = styled.div`
 
 const SearchInput = styled.input`
   flex: 1;
-  padding: 8px 35px 8px 10px;
+  padding: 5px 35px 8px 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 14px;
   position: relative;
+  margin-bottom: 0px;
 `;
 
 const SearchButton = styled.button`
@@ -277,6 +204,7 @@ const TableContainer = styled.div`
   padding: 10px;
   height: 80%;
   background-color: #fff;
+  overflow-y: auto;
 `;
 
 const Table = styled.table`
