@@ -1,27 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';  // useNavigate 사용
 
 const QuestionBoard = () => {
-  let [boards, setBoards] = useState([]);  // 게시판 데이터를 저장하는 상태
-  let [page, setPage] = useState(1);  // 현재 페이지
-  let [size, setSize] = useState(10);  // 한 페이지당 보여줄 게시물 수
-  let [sort, setSort] = useState('recent');  // 정렬 기준 (기본값: 최근순)
-  let [keyword, setKeyword] = useState('');  // 검색어
-  let [totalPages, setTotalPages] = useState(1);  // 전체 페이지 수
+  const [boards, setBoards] = useState([]);  // 게시판 데이터를 저장하는 상태
+  const [page, setPage] = useState(1);  // 현재 페이지
+  const [size, setSize] = useState(10);  // 한 페이지당 보여줄 게시물 수
+  const [sortOption, setSortOption] = useState('최신순');  // 정렬 기준 (기본값: 최신순)
+  const [keyword, setKeyword] = useState('');  // 검색어
+  const [searchKeyword, setSearchKeyword] = useState('');  // 실제 검색에 사용되는 검색어
+  const [totalPages, setTotalPages] = useState(1);  // 전체 페이지 수
+  const [isDropdownOpen, setDropdownOpen] = useState(false);
+  const [isNavigating, setIsNavigating] = useState(false);  // 페이지 전환 여부를 저장
+  const navigate = useNavigate();  // 페이지 이동을 위한 useNavigate 훅
 
   // 백엔드에서 데이터를 가져오는 useEffect
   useEffect(() => {
+    // 페이지 전환 중이라면 데이터 요청을 하지 않도록 설정
+    if (isNavigating) return;
+
     const fetchBoards = async () => {
       try {
         const params = {
-          page,
+          page,  
           size,
-          sort,
+          sort: sortOption === '최신순' ? 'recent' : sortOption === '좋아요순' ? 'likes' : 'views',
         };
 
-        // 검색어가 있을 경우에만 keyword 파라미터 추가
-        if (keyword.trim()) {
-          params.keyword = keyword;
+        if (searchKeyword.trim()) {
+          params.keyword = searchKeyword;
         }
 
         const response = await axios.get(process.env.REACT_APP_API_URL + 'boards/Q', {
@@ -31,11 +38,13 @@ const QuestionBoard = () => {
           }
         });
 
-        // 응답에서 데이터 처리
         const boardData = response.data;
-        if (boardData && boardData.length > 0) {
+        if (boardData && boardData.content && boardData.content.length > 0) {
+          setBoards(boardData.content);  // 게시판 데이터를 상태에 저장
+          setTotalPages(boardData.totalPages);  // 전체 페이지 수 설정
+        } else if (boardData && boardData.length > 0) {
           setBoards(boardData);  // 게시판 데이터를 상태에 저장
-          setTotalPages(Math.ceil(boardData.length / size));  // 전체 페이지 수 설정
+          setTotalPages(Math.ceil(boardData.length / size));  // 페이지 수 설정 (데이터 직접 계산)
         } else {
           setBoards([]);  // 게시판 데이터가 없을 경우 빈 배열로 초기화
         }
@@ -45,180 +54,244 @@ const QuestionBoard = () => {
     };
 
     fetchBoards();
-  }, [page, size, sort, keyword]);
+  }, [page, size, sortOption, searchKeyword, isNavigating]);  // isNavigating 추가
 
-  // 검색어 변경 시 처리
+  // 검색어 상태 업데이트
   const handleSearch = (e) => {
     setKeyword(e.target.value);
-    setPage(1);  // 검색어가 변경되면 첫 페이지로 이동
   };
 
-  // 페이지 변경 시 처리
+  // 검색 버튼 클릭 시 실행되는 함수
+  const executeSearch = () => {
+    setSearchKeyword(keyword);  // 실제 검색어를 상태로 저장
+    setPage(1);  // 검색 후 첫 페이지로 이동
+  };
+
+  const handleSortOptionClick = (option) => {
+    setSortOption(option);
+    setDropdownOpen(false);
+  };
+
+  const toggleDropdown = () => {
+    setDropdownOpen(!isDropdownOpen);
+  };
+
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
       setPage(newPage);
     }
   };
 
-  return (
-    <div style={styles.questionBoard}>
-      <h1 style={styles.title}>질문 게시판</h1>
+  // 게시물 클릭 시 게시물 상세 페이지로 이동
+  const handlePostClick = (boardId) => {
+    setIsNavigating(true);  // 페이지 전환 중임을 표시
+    navigate(`/board/${boardId}`);
+  };
 
-      {/* 검색 및 정렬 컨트롤 */}
-      <div style={styles.controls}>
-        <input
-          type="text"
-          value={keyword}
-          onChange={handleSearch}
-          placeholder="검색어 입력..."
-          style={styles.searchInput}
-        />
-        <select onChange={(e) => setSort(e.target.value)} value={sort} style={styles.select}>
-          <option value="recent">최신순</option>
-          <option value="likes">좋아요순</option>
-          <option value="views">조회수순</option>
-        </select>
-        <select onChange={(e) => setSize(e.target.value)} value={size} style={styles.select}>
-          <option value={5}>5개씩 보기</option>
-          <option value={10}>10개씩 보기</option>
-          <option value={20}>20개씩 보기</option>
-        </select>
+  return (
+    <div style={styles.container}>
+      <div style={styles.searchSortContainer}>
+        <div style={styles.searchContainer}>
+          <input
+            type="text"
+            value={keyword}
+            onChange={handleSearch}
+            placeholder="검색어 입력..."
+            style={styles.searchInput}
+          />
+          <button onClick={executeSearch} style={styles.searchButton}>🔍</button>  {/* 검색 버튼 클릭 시 실행 */}
+        </div>
+        <div style={styles.dropdownContainer}>
+          <button onClick={toggleDropdown} style={styles.sortButton}>
+            {sortOption} ▼
+          </button>
+          {isDropdownOpen && (
+            <div style={styles.dropdownMenu}>
+              <div onClick={() => handleSortOptionClick('최신순')} style={styles.dropdownItem}>최신순</div>
+              <div onClick={() => handleSortOptionClick('좋아요순')} style={styles.dropdownItem}>좋아요순</div>
+              <div onClick={() => handleSortOptionClick('조회순')} style={styles.dropdownItem}>조회순</div>
+            </div>
+          )}
+        </div>
       </div>
 
-      {/* 게시판 데이터를 보여주는 테이블 */}
-      <table style={styles.table}>
-        <thead>
-          <tr>
-            <th>제목</th>
-            <th>작성자</th>
-            <th>좋아요</th>
-            <th>댓글 수</th>
-            <th>조회수</th>
-            <th>작성일</th>
-          </tr>
-        </thead>
-        <tbody>
-          {boards.length === 0 ? (
-            <tr>
-              <td colSpan="6">데이터가 없습니다</td>
-            </tr>
-          ) : (
-            boards.map((board) => (
-              <tr key={board.boardId}>
-                <td>{board.title}</td>
-                <td>{board.author}</td>
-                <td>{board.likesCount}</td> {/* 좋아요 수 표시 */}
-                <td>{board.commentCount}</td>
-                <td>{board.viewCount}</td>
-                <td>{new Date(board.createdAt).toLocaleDateString()}</td>
-              </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+      <div style={styles.listContainer}>
+        <div style={styles.tableHeader}>
+          <span style={styles.titleColumn}>제목</span>
+          <span style={styles.authorColumn}>작성자</span>
+          <span style={styles.dateColumn}>작성일</span>
+          <span style={styles.viewColumn}>조회수</span>
+          <span style={styles.likeColumn}>좋아요</span>
+          <span style={styles.commentCount}>댓글수</span>
+        </div>
 
-      {/* 페이지네이션 컨트롤 */}
+        {boards.length === 0 ? (
+          <div>데이터가 없습니다</div>
+        ) : (
+          boards.map((board) => (
+            <div
+              key={board.boardId}
+              style={styles.row}
+              onClick={() => handlePostClick(board.boardId)}  // 게시물 클릭 시 상세 페이지로 이동
+            >
+              <span style={styles.titleColumn} title={board.title}>{board.title}</span>
+              <span style={styles.authorColumn}>{board.author}</span>
+              <span style={styles.dateColumn}>{new Date(board.createdAt).toLocaleDateString()}</span>
+              <span style={styles.viewColumn}>{board.viewCount}</span>
+              <span style={styles.likeColumn}>{board.likesCount}</span>
+              <span style={styles.commentCount}>{board.commentCount}</span>
+            </div>
+          ))
+        )}
+      </div>
+
       <div style={styles.pagination}>
-        <button
-          onClick={() => handlePageChange(page - 1)}
-          disabled={page === 1}
-          style={{ ...styles.paginationButton, ...(page === 1 && styles.disabledButton) }}
-        >
-          이전
-        </button>
-        <span style={styles.paginationInfo}>페이지 {page} / {totalPages}</span>
-        <button
-          onClick={() => handlePageChange(page + 1)}
-          disabled={page === totalPages}
-          style={{ ...styles.paginationButton, ...(page === totalPages && styles.disabledButton) }}
-        >
-          다음
-        </button>
+        <button onClick={() => handlePageChange(page - 1)} disabled={page === 1}>이전</button>
+        {Array.from({ length: totalPages }, (_, index) => (
+          <button
+            key={index + 1}
+            onClick={() => handlePageChange(index + 1)}
+            style={index + 1 === page ? styles.activePage : {}}
+          >
+            {index + 1}
+          </button>
+        ))}
+        <button onClick={() => handlePageChange(page + 1)} disabled={page === totalPages}>다음</button>
       </div>
     </div>
   );
 };
 
-// CSS 스타일
+// 스타일을 업데이트하여 정렬을 맞춥니다.
 const styles = {
-  questionBoard: {
-    maxWidth: '1200px',
-    margin: '50px auto',
-    padding: '20px',
-    backgroundColor: '#f9f9f9',
-    borderRadius: '10px',
-    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-  },
-  title: {
-    textAlign: 'center',
-    fontSize: '2rem',
-    marginBottom: '20px',
-    color: '#333',
-  },
-  controls: {
+  container: {
     display: 'flex',
-    justifyContent: 'space-between',
+    flexDirection: 'column',
+    alignItems: 'center',
+    padding: '20px',
+    fontFamily: 'Arial, sans-serif',
+    backgroundColor: '#f7f7f7',
+    minHeight: '100vh',
+  },
+  searchSortContainer: {
+    display: 'flex',
+    width: '100%',
+    maxWidth: '800px',
     marginBottom: '20px',
+    gap: '10px',
+  },
+  searchContainer: {
+    position: 'relative',
+    flex: 1,
+    boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)', 
   },
   searchInput: {
-    padding: '10px',
-    fontSize: '1rem',
-    border: '1px solid #ccc',
-    borderRadius: '5px',
-    outline: 'none',
-    width: '30%',
-  },
-  select: {
-    padding: '10px',
-    fontSize: '1rem',
-    border: '1px solid #ccc',
-    borderRadius: '5px',
-    outline: 'none',
-    width: '30%',
-  },
-  table: {
     width: '100%',
-    borderCollapse: 'collapse',
+    padding: '8px 40px 8px 10px',  // 오른쪽 패딩을 키워서 돋보기가 들어갈 공간 확보
+    borderRadius: '4px',
+    border: '1px solid black',
+    fontSize: '12px',
+  },
+  searchButton: {
+    position: 'absolute',
+    right: '10px', 
+    top: '50%',
+    transform: 'translateY(-50%)',
+    border: 'none',
+    backgroundColor: 'transparent',
+    cursor: 'pointer',
+    fontSize: '16px',
+  },
+  dropdownContainer: {
+    position: 'relative',
+  },
+  sortButton: {
+    padding: '8px',
+    width: '100px',
+    border: '1px solid black',
+    backgroundColor: '#fff',
+    borderRadius: '20px',
+    cursor: 'pointer',
+    fontSize: '12px',
+  },
+  dropdownMenu: {
+    position: 'absolute',
+    top: '35px',
+    left: 0,
+    backgroundColor: '#fff',
+    border: '1px solid #ddd',
+    borderRadius: '4px',
+    width: '100px',
+    boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
+    zIndex: 1,
+  },
+  dropdownItem: {
+    padding: '8px',
+    cursor: 'pointer',
+    fontSize: '12px',
+  },
+  listContainer: {
+    width: '100%',
+    maxWidth: '800px',
+    backgroundColor: '#fff',
+    borderRadius: '8px',
+    border: '1px solid black', 
+    padding: '10px',
+    marginTop: '10px',
+    boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
+  },
+  tableHeader: {
+    display: 'flex',
+    fontWeight: 'bold',
+    borderBottom: '2px solid #ddd',
+    padding: '8px 0',
+    fontSize: '14px',
+  },
+  row: {
+    display: 'flex',
+    padding: '8px 0',
+    borderBottom: '1px solid #ddd',
+    alignItems: 'center',
+    fontSize: '12px',
+    cursor: 'pointer',  // 클릭 가능한 포인터 추가
+  },
+  titleColumn: {
+    flex: 3,  // 제목을 약간 더 넓게 설정
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    paddingRight: '8px',
+  },
+  authorColumn: {
+    flex: 1,
     textAlign: 'center',
   },
-  likeButton: {
-    padding: '8px 12px',
-    fontSize: '0.9rem',
-    border: 'none',
-    borderRadius: '5px',
-    cursor: 'pointer',
-    color: '#fff',
-    backgroundColor: '#007bff',
-    transition: 'background-color 0.3s ease',
+  dateColumn: {
+    flex: 1,
+    textAlign: 'center',
   },
-  likedButton: {
-    backgroundColor: '#28a745',
+  viewColumn: {
+    flex: 1,
+    textAlign: 'center',
+  },
+  likeColumn: {
+    flex: 1,
+    textAlign: 'center',
+  },
+  commentCount: {
+    flex: 1,
+    textAlign: 'center',
   },
   pagination: {
+    marginTop: '15px',
     display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: '20px',
+    gap: '6px',
+    fontSize: '12px',
   },
-  paginationButton: {
-    padding: '10px 20px',
-    margin: '0 10px',
-    border: 'none',
-    borderRadius: '5px',
-    backgroundColor: '#007bff',
-    color: '#fff',
-    cursor: 'pointer',
-    fontSize: '1rem',
-    transition: 'background-color 0.3s ease',
+  activePage: {
+    fontWeight: 'bold',
+    backgroundColor: '#ddd',
   },
-  disabledButton: {
-    backgroundColor: '#ccc',
-    cursor: 'not-allowed',
-  },
-  paginationInfo: {
-    fontSize: '1rem',
-    color: '#555',
-  },
-}; 
+};
 
 export default QuestionBoard;
