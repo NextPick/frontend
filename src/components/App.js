@@ -31,14 +31,10 @@ import AiInterview from '../pages/AiInterview.js';
 import ResultCheck from '../pages/ResultCheck.js';
 import ResultPage from '../pages/ResultPage.js';
 import WebRTC from "../pages/WebRTC";
-<<<<<<< HEAD
 import InterviewRoom from "../pages/InterviewRoom";
 import ReviewBoardPost from "../pages/ReviewBoardPost.jsx";
 import EditBoardPage from '../pages/EditBoardPage.jsx';  // 새로 추가된 수정 페이지 컴포넌트
-=======
-import InterviewRoom from "../pages/InterviewRoom"
 import '../styles/global.css';
->>>>>>> c18f4eb7b128e624863f2bc6306638525699d13e
 
 function App() {
   return (
