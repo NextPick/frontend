@@ -1,17 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useHeaderMode } from '../hooks/HeaderManager';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Box from '../components/Box';
 import '../styles/login.css';
 import Button from '../components/Button';
 import Font from '../components/Font';
 import styled from 'styled-components';
-import defaultProfile from '../assets/img-non-login.png';
-import { useProfile } from '../hooks/ProfileContext'; // 프로필 컨텍스트
-import { useMember } from '../hooks/MemberManager'; // 회원 정보를 관리하는 훅
-import Line from '../components/Line';
-import SearchBar from '../components/SearchBar';
-import SelectBox from '../components/SelectBox';
 import axios from 'axios';
 import searchIcon from '../assets/search.png'; // 돋보기 아이콘 이미지 경로
 import MypageSide from '../components/MypageSide';
@@ -34,8 +27,11 @@ const TableData = styled.td`
 
 const TableHeader = styled.th`
   font-weight: bold;
-  padding: 10px;
   border-bottom: 1px solid #eee;
+  position: sticky; /* 헤더를 고정 */
+  top: 0; /* 상단에 고정 */
+  background-color: #fff; /* 배경색을 설정하여 내용과 구분 */
+  z-index: 1; /* 다른 요소 위에 표시되도록 설정 */
 `;
 
 const TableRow = styled.tr`
@@ -46,17 +42,19 @@ const TableContainer = styled.div`
   border: 1px solid #eee;
   border-radius: 10px;
   padding: 10px;
-  height: 80%;
+  height: 47vh;
   background-color: #fff;
+  overflow-y: auto;
 `;
 
 const SearchInput = styled.input`
   flex: 1;
-  padding: 8px 35px 8px 10px;
+  padding: 5px 35px 8px 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 14px;
   position: relative;
+  margin-bottom: 0px;
 `;
 
 
@@ -64,31 +62,38 @@ const SearchContainer = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 20px;
+  
 `;
 
 const SearchButton = styled.button`
   position: absolute;
-  right: 15px;
   background: none;
+  margin-top: -0px;
   border: none;
   padding: 0;
   cursor: pointer;
+  position: relative;
+  
+  &:hover {
+    background-color:#a1cdff95;
+  }
   
   img {
-    width: 18px;
-    height: 18px;
+    width: 30px;
+    height: 35px;
   }
 `;
 
 const MainContent = styled.main`
   flex: 1;
   padding: 20px;
-  max-width: 800px;
-  height: 100%;
+  max-width: 100%;
   background-color: #f1f7fd;
   border-radius: 15px;
   margin-left: 20px;
   text-align: center;
+  overflow-y: auto;
+  
 `;
 
 const SortDropdown = styled.select`
@@ -185,7 +190,7 @@ const MyNote = () => {
     useEffect(() => {
         axios.get(process.env.REACT_APP_API_URL + 'question/category')
             .then(response => {
-                setCategories(response.data);
+                setCategories(response.data.data);
             })
             .catch(error => {
                 console.error('카테고리 가져오기 오류:', error);
@@ -197,25 +202,6 @@ const MyNote = () => {
     // 탭을 전환하는 함수
     const switchTab = (tab) => {
         setActiveTab(tab);
-    };
-    // 옵션 정의
-    const firstOptions = [
-        { value: '', label: 'FE/BE/CS' },
-        { value: 'high', label: 'FE' },
-        { value: 'low', label: 'BE' },
-        { value: 'new', label: 'CS' },
-    ];
-
-    const secondOptions = {
-        high: [{ value: 'subHigh1', label: 'FE 옵션 1-1' },
-        { value: 'subHigh1', label: 'FE 옵션 1-2' }
-        ],
-        low: [{ value: 'subLow1', label: 'BE 옵션 2-1' },
-        { value: 'subLow1', label: 'BE 옵션 2-2' },
-        ],
-        new: [{ value: 'subNew1', label: 'CS 옵션 3-1' },
-        { value: 'subNew1', label: 'CS 옵션 3-2' },
-        ],
     };
 
     // 탭에 따라 표시할 콘텐츠를 정의
@@ -250,9 +236,9 @@ const MyNote = () => {
                     <TableContainer>
           <Table>
             <colgroup>
-              <col style={{ width: '14%' }} /> {/* 2:14% */}
-              <col style={{ width: '71%' }} /> {/* 10:71% */}
-              <col style={{ width: '15%' }} /> {/* 1:15% */}
+              <col style={{ width: '16%' }} /> {/* 2:14% */}
+              <col style={{ width: '70%' }} /> {/* 10:71% */}
+              <col style={{ width: '14%' }} /> {/* 1:15% */}
             </colgroup>
             <thead>
               <tr>
@@ -357,13 +343,14 @@ const MyNote = () => {
             <SearchContainer>
                 <Box
                     padding="0px"
-                    height="50%"
+                    height="100%"
                     width="33vw"
                     border="none"
                     color="#f1f7fd"
                     justify="space-between"
                     radius="15px"
                     left="20px"
+                    overflow="hidden"
                 >
                     <div style={{ display: 'flex', flexDirection: 'row' }}>
                         <Button
@@ -374,6 +361,7 @@ const MyNote = () => {
                             top="none"
                             color="#0372f396"
                             margintbottom="0px"
+                            margintop="0px"
                             onClick={() => switchTab('answer')}
                         >
                             <Font
@@ -399,6 +387,7 @@ const MyNote = () => {
                             top="none"
                             color="#0372f396"
                             margintbottom="0px"
+                             margintop="0px"
                             onClick={() => switchTab('wrong')}
                         >
                             <Font

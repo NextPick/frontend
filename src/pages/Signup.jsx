@@ -4,6 +4,9 @@ import { useHeaderMode } from '../hooks/HeaderManager';
 import { useParams, useNavigate } from 'react-router-dom';
 import { emailValidation, nameValidation, nicknameValidation, passwordValidation, numberValidation } from '../utils/Validation.js';
 import Swal from 'sweetalert2'; 
+import '../styles/global.css';
+import Button from '../components/Button.js';
+
 
 const Signup = () => {
   const { type } = useParams();
@@ -63,7 +66,7 @@ const Signup = () => {
       } else if (type === '닉네임') {
         if (!nicknameValidation(formData.닉네임)) ValidationResult = false;
         else {
-          url = process.env.REACT_APP_API_URL + 'verify/nickname';
+          url = process.env.REACT_APP_API_URL + 'members/verify/nickname';
           body = { nickname: formData.닉네임 };
         }
       }
@@ -178,9 +181,18 @@ const Signup = () => {
                 onBlur={handleBlur}
                 style={input}
               />
-              <button type="button" style={inlineButton} onClick={() => handleVerify('이메일')}>
+              <Button
+              color="#FFFFFF"
+              margintop="0px"
+              width="60px"
+              height="40px"
+              fontcolor="black"
+              radius="4px"
+              border="0.5px solid #c9c9c9"
+              onClick={() => handleVerify('이메일')}
+              >
                 인증
-              </button>
+              </Button>
             </div>
           </div>
           <div style={inputGroup}>
@@ -255,9 +267,18 @@ const Signup = () => {
                   style={input}
                 />
                 {field === '닉네임' && (
-                  <button type="button" style={inlineButton} onClick={() => handleVerify('닉네임')}>
-                    중복체크
-                  </button>
+                      <Button
+                      color="#FFFFFF"
+                      width="64px"
+                      height="40px"
+                      fontcolor="black"
+                      radius="4px"
+                      border="0.5px solid #c9c9c9"
+                      padding="6px"
+                      onClick={() => handleVerify('닉네임')}
+                      >
+                        중복체크
+                      </Button>
                 )}
               </div>
             </div>
@@ -277,7 +298,19 @@ const Signup = () => {
         </div>
       </div>
 
-      <button type="submit" style={nextButtonStyle} onClick={handleSignup}>회원가입</button>
+      <Button
+                      color="#e0ebf5"
+                      width="10vw"
+                      height="3vw"
+                      fontcolor="black"
+                      fontsize="1.1rem"
+                      radius="4px"
+                      border="0.5px solid #c9c9c9"
+                      padding="6px"
+                      onClick={handleSignup}
+                      >
+                        회원가입
+                      </Button>
     </div>
   );
 };
@@ -287,7 +320,7 @@ const container = {
   flexDirection: 'column',
   alignItems: 'center',
   marginTop: '5vh',
-  height: '100vh',
+  height: '100%',
   backgroundColor: '#FFF',
 };
 
@@ -394,6 +427,7 @@ const inlineButton = {
   borderRadius: '0 5px 5px 0',
   cursor: 'pointer',
   backgroundColor: '#fffefe',
+  fontFamily: 'inherit', // 부모 요소의 폰트를 상속받도록 설정
 };
 
 const nextButtonStyle = {

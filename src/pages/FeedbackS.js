@@ -6,16 +6,27 @@ import '../styles/login.css';
 import Button from '../components/Button';
 import Font from '../components/Font';
 import styled from 'styled-components';
-import defaultProfile from '../assets/img-non-login.png';
-import { useProfile } from '../hooks/ProfileContext'; // 프로필 컨텍스트
 import { useMember } from '../hooks/MemberManager'; // 회원 정보를 관리하는 훅
-import Line from '../components/Line';
 import SearchBar from '../components/SearchBar';
 import search from '../assets/search.png'
 import { Modal, Button as ModalButton } from 'react-bootstrap'; // Modal 컴포넌트 추가
 import 'bootstrap/dist/css/bootstrap.min.css'; // Bootstrap 스타일 추가
+import MypageSide from '../components/MypageSide';
+import axios from 'axios';
+import Swal from 'sweetalert2';
 
 
+
+// Styled Components
+const Container = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 100px;
+  background-color: #FFF;
+  height: 100vh;
+  font-family: Arial, sans-serif;
+`;
 
 
 const ReviewContainer = styled.div`
@@ -64,42 +75,26 @@ const ModalContent = styled.div`
     font-family: PretendardL;
 `;
 
-const ProfileImgArea = styled.div`
-justify-content: center;
-margin-top: 18px;
-padding: 5px;
-display: flex; // 플렉스 박스 설정
-    align-items: flex-start; // 이미지가 박스 시작 부분에 정렬되도록 설정
-`;
-
-
-const ProfileImage = styled.img`
-    width: 90px; // 원하는 너비
-    height: 90px; // 원하는 높이
-    object-fit: cover; // 이미지 크기를 유지하며 잘림
-    border-radius: 50%; // 원하는 경우 둥글게 만들기
-    cursor: pointer; // 커서를 포인터로 변경
-`;
 
 
 
 const FeedbackS = () => {
-    const { profileUrl, setProfileUrl, nickname, email } = useMember();
+    const { type, setType } = useMember();
     const { headerMode, setHeaderMode } = useHeaderMode();
     const navigate = useNavigate();
     const location = useLocation();
-    const fileInputRef = useRef(null); // 파일 입력을 참조할 ref 생성
     const [reviews, setReviews] = useState([]); // 리뷰 데이터를 저장할 상태
     const [selectedReview, setSelectedReview] = useState(null); // 선택된 리뷰를 저장할 상태
     const [showModal, setShowModal] = useState(false); // 모달창 표시 상태
     const [searchTerm, setSearchTerm] = useState(''); // 검색어 상태 관리
     const [filteredReviews, setFilteredReviews] = useState([]); // 검색 결과를 저장할 상태
+    const [memberType, setMemberType] = useState();
 
-    
 
     const handleButtonClick = (path) => {
         navigate(path); // 이동할 페이지
     };
+
 
     useEffect(() => {
         setHeaderMode('main');
@@ -117,6 +112,40 @@ const FeedbackS = () => {
         setFilteredReviews(mockData); // 처음에는 모든 리뷰를 보여줌
     }, [setHeaderMode]);
 
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const response = await axios.get('http://localhost:8080/members', {
+                    headers: {
+                        Authorization: localStorage.getItem('accessToken'), // 토큰을 헤더에 추가
+                    },
+                });
+                if (response.status === 200) {
+                    const userType = response.data.data.type; // 사용자 타입 가져오기
+                    setMemberType(userType); // 멤버 타입 설정
+                    setType(userType); // 회원 정보 타입 설정
+
+                    // 멘토일 경우 피드백 페이지로 리다이렉션
+                    if (userType === 'MENTOR') {
+                        navigate('/feedbackT'); // 멘토 피드백 페이지로 이동
+                    }
+                } else {
+                    console.error('사용자 정보를 가져오는 데 실패했습니다.');
+                }
+            } catch (error) {
+                console.error('네트워크 오류:', error);
+                Swal.fire({
+                    text: `네트워크 오류가 발생했습니다. 인터넷 연결을 확인해 주세요.`,
+                    icon: 'error',
+                    confirmButtonText: '확인'
+                });
+            }
+        };
+
+        fetchUserData(); // 사용자 정보 가져오기 호출
+    }, [setHeaderMode, setType, navigate]); // 빈 배열을 전달하여 컴포넌트 마운트 시 한 번만 실행
+
     // 모달창을 여는 함수
     const handleReviewClick = (review) => {
         setSelectedReview(review);
@@ -127,258 +156,113 @@ const FeedbackS = () => {
     const handleCloseModal = () => setShowModal(false);
 
 
-  
 
-// 검색어에 따라 리뷰를 필터링하는 함수
-const handleSearch = (value) => {
-    setSearchTerm(value);
-    if (value === '') {
-        setFilteredReviews(reviews); // 검색어가 없으면 모든 리뷰를 보여줌
-    } else {
-        const filtered = reviews.filter(review =>
-            review.userComment.toLowerCase().includes(value.toLowerCase())
+
+    // 검색어에 따라 리뷰를 필터링하는 함수
+    const handleSearch = (value) => {
+        setSearchTerm(value);
+        if (value === '') {
+            setFilteredReviews(reviews); // 검색어가 없으면 모든 리뷰를 보여줌
+        } else {
+            const filtered = reviews.filter(review =>
+                review.userComment.toLowerCase().includes(value.toLowerCase())
+            );
+            setFilteredReviews(filtered);
+        }
+    };
+
+
+
+    // 멘티일 때만 피드백 S 페이지 내용 보여주기
+    if (memberType === 'MENTEE') {
+        return (
+            <Container>
+                <MypageSide />
+                <Box
+                    height="100%"
+                    width="35vw"
+                    border="none"
+                    left="20px"
+                    justify="flex-start"
+                    direction="column"
+                    alignitem="center"
+                    padding="0px"
+                    color="#e7f0f9"
+                    style={{ display: 'flex' }} // 자식 박스에서 정렬
+                >
+                    {/* SearchBar와 피드백 제목을 추가한 부분 */}
+                    <div style={{ marginBottom: '5px', width: '100%' }}>
+                        <Font
+                            font="PretendardL"
+                            size="25px"
+                            color="#000000"
+                            margintop="15px"
+                            spacing="2px"
+                            paddingleft="15px"
+                            paddingtop="5px"
+                            marginbottom="-5px"
+                        >
+                            받은 피드백
+                        </Font>
+                    </div>
+                    <SearchBar
+                        value={searchTerm} // 검색어 상태를 입력 필드에 바인딩
+                        onChange={(e) => handleSearch(e.target.value)} // 입력이 변경될 때 필터링 함수 호출
+                        left="9px"
+                        top="20px"
+                    >
+                    </SearchBar>
+
+
+                    <ReviewContainer>
+                        {filteredReviews.map((review, index) => (
+                            <ReviewCard key={index} onClick={() => handleReviewClick(review)}>
+                                <div style={{ padding: '10px' }}>
+                                    <Font font="PretendardB" size="15px" color="#3f8cec">
+                                        {review.userName}
+                                    </Font>
+                                    <Font font="PretendardL" size="15px" color="#A1A1A1" margintop="5px" spacing="2px">
+                                        점수: {review.score}
+                                    </Font>
+                                    <Font font="PretendardL" size="10px" color="#000000" margintop="5px" spacing="2px">
+                                        {review.userComment}
+                                    </Font>
+                                </div>
+                            </ReviewCard>
+                        ))}
+                    </ReviewContainer>
+
+                    {/* 모달 창 */}
+                    <Modal show={showModal} onHide={handleCloseModal}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>리뷰 상세보기</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <ModalContent>
+                                <Font font="PretendardB" size="20px" color="#3f8cec" marginbottom="5px" >
+                                    {selectedReview?.userName}
+                                </Font>
+                                <Font font="PretendardL" size="15px" color="#000000" margintop="0px" paddingbottom="10px">
+                                    점수: {selectedReview?.score}
+                                </Font>
+                                <Font font="PretendardL" size="20px" color="#000000" margintop="5px">
+                                    {selectedReview?.userComment}
+                                </Font>
+                            </ModalContent>
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <ModalButton variant="secondary" onClick={handleCloseModal}>
+                                닫기
+                            </ModalButton>
+                        </Modal.Footer>
+                    </Modal>
+                </Box>
+            </Container>
         );
-        setFilteredReviews(filtered);
     }
-};
 
-
-    // 프로필 이미지를 변경하는 함수
-    const changeProfileImg = (event) => {
-        const file = event.target.files && event.target.files[0]; // 안전하게 접근
-
-        if (file) {
-            const reader = new FileReader(); // FileReader를 사용하여 파일을 읽습니다.
-            reader.onloadend = () => {
-                setProfileUrl(reader.result); // 읽은 결과를 프로필 URL로 설정합니다.
-            };
-            reader.readAsDataURL(file); // 파일을 데이터 URL로 읽습니다.
-        }
-    };
-
-    const handleImageClick = () => {
-        if (fileInputRef.current) {
-            fileInputRef.current.click(); // 클릭 시 파일 입력 트리거
-        }
-    };
-
-
-
-    return (
-        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-start' }}>
-              <Box
-                height="70vh"
-                width="16vw"
-                border="none"
-                alignItems="flex-start"
-                justify="flex-start"
-            >
-                <ProfileImgArea>
-                    <ProfileImage
-                        src={profileUrl ? profileUrl : defaultProfile}
-                        alt="Profile"
-                        onClick={handleImageClick}
-                    />
-                    <input
-                        type="file"
-                        accept="image/*"
-                        onChange={changeProfileImg}
-                        ref={fileInputRef} // ref 설정
-                        style={{ display: 'none' }} // 파일 입력 숨기기
-                    />
-                </ProfileImgArea>
-                <Font font="PretendardL" size="20px" color="#000000" marginbottom="1px">{nickname || '닉네임'}</Font>
-                <Font font="PretendardL" size="185x" color="#A4A5A6" marginbottom="3px">{email || '이메일'}</Font>
-                <Line
-                margintop="10px"
-                ></Line>
-
-                
-                <Button
-                    color="transparent"
-                    width="17vw"
-                    textcolor="#000000"
-                    height="54px"
-                    hoverColor="#ffffff"
-                    margintbottom="2px"
-                >
-                    <Font
-                        font="PretendardL"
-                        size="23px"
-                        color="#000000"
-                        align="center"
-                        paddingtop="6px"
-                    >
-                        프로필
-                    </Font>
-                </Button>
-
-                <Link to="/mynote" style={{ textDecoration: 'none' }}> 
-                <Button
-                    color="transparent"
-                    width="17vw"
-                    textcolor="#000000"
-                    height="54px"
-                    hoverColor="#ffffff"
-                    margintbottom="2px"
-                    onClick={() => handleButtonClick('/mynote')}
-                >
-                    <Font
-                        font="PretendardL"
-                        size="23px"
-                        color="#000000"
-                        align="center"
-                        paddingtop="6px"
-                    >
-                        정답 / 오답노트
-                    </Font>
-                </Button>
-                </Link>
-
-                <Link to="/feedback" style={{ textDecoration: 'none' }}> 
-                <Button
-                    color="transparent"
-                    width="17vw"
-                    textcolor="#000000"
-                    height="54px"
-                    hoverColor="#ffffff"
-                    margintbottom="2px"
-                    onClick={() => handleButtonClick('/feedbackT')}
-                >
-                    <Font
-                        font="PretendardL"
-                        size="23px"
-                        color="#000000"
-                        align="center"
-                        paddingtop="6px"
-                    >
-                        받은 피드백
-                    </Font>
-                </Button>
-                </Link>
-
-
-                <Button
-                    color="transparent"
-                    width="17vw"
-                    textcolor="#000000"
-                    height="54px"
-                    hoverColor="#ffffff"
-                    margintbottom="2px"
-                    onClick={() => handleButtonClick('/cash')}
-                >
-                    <Font
-                        font="PretendardL"
-                        size="23px"
-                        color="#000000"
-                        align="center"
-                        paddingtop="6px"
-                    >
-                        결제관리
-                    </Font>
-                </Button>
-                <Line
-                    marginbottom="14px"
-                ></Line>
-                <Button
-                    color="transparent"
-                    width="17vw"
-                    textcolor="#000000"
-                    height="54px"
-                    hoverColor="#ffffff"
-                >
-                    <Font
-                        font="PretendardL"
-                        size="20px"
-                        color="#A4A5A6"
-                        align="center"
-                        paddingtop="6px"
-                        marginbottom="0px"
-                    >
-                        로그아웃
-                    </Font>
-                </Button>
-            </Box>
-            <Box
-                height="70vh"
-                width="35vw"
-                border="none"
-                left="20px"
-                justify="flex-start"
-                direction="column"
-                alignitem="center"
-                padding="0px"
-                style={{ display: 'flex' }} // 자식 박스에서 정렬
-            >
-               {/* SearchBar와 피드백 제목을 추가한 부분 */}
-    <div style={{ marginBottom: '5px',width: '100%'  }}>
-        <Font
-            font="PretendardL"
-            size="25px"
-            color="#000000"
-            margintop="15px"
-            spacing="2px"
-            paddingleft="15px"
-            paddingtop="5px"
-            marginbottom="-5px"
-        >
-            받은 피드백
-        </Font>
-        </div>
-        <SearchBar
-            value={searchTerm} // 검색어 상태를 입력 필드에 바인딩
-            onChange={(e) => handleSearch(e.target.value)} // 입력이 변경될 때 필터링 함수 호출
-            left="9px"
-            top="20px"
-       >
-        </SearchBar>
-
-
-                <ReviewContainer>
-                    {filteredReviews.map((review, index) => (
-                          <ReviewCard key={index} onClick={() => handleReviewClick(review)}>
-                          <div style={{ padding: '10px' }}>
-                              <Font font="PretendardB" size="15px" color="#3f8cec">
-                                  {review.userName}
-                              </Font>
-                              <Font font="PretendardL" size="15px" color="#A1A1A1" margintop="5px" spacing="2px">
-                                  점수: {review.score}
-                              </Font>
-                              <Font font="PretendardL" size="10px" color="#000000" margintop="5px" spacing="2px">
-                                  {review.userComment}
-                              </Font>
-                          </div>
-                      </ReviewCard>
-                    ))}
-                </ReviewContainer>
-               
-                {/* 모달 창 */}
-                <Modal show={showModal} onHide={handleCloseModal}>
-                <Modal.Header closeButton>
-                        <Modal.Title>리뷰 상세보기</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <ModalContent>
-                            <Font font="PretendardB" size="20px" color="#3f8cec" marginbottom="5px" >
-                                {selectedReview?.userName}
-                            </Font>
-                            <Font font="PretendardL" size="15px" color="#000000" margintop="0px" paddingbottom="10px">
-                                점수: {selectedReview?.score}
-                            </Font>
-                            <Font font="PretendardL" size="20px" color="#000000" margintop="5px">
-                                {selectedReview?.userComment}
-                            </Font>
-                        </ModalContent>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <ModalButton variant="secondary" onClick={handleCloseModal}>
-                            닫기
-                        </ModalButton>
-                    </Modal.Footer>
-                </Modal>
-            </Box>
-        </div>
-    );
+    // 멘토일 경우에는 아무것도 렌더링하지 않거나 리다이렉션 처리
+    return null; // 또는 다른 내용을 반환할 수 있습니다.
 }
 
 export default FeedbackS;

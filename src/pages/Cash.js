@@ -7,13 +7,23 @@ import Button from '../components/Button';
 import Font from '../components/Font';
 import styled from 'styled-components';
 import defaultProfile from '../assets/img-non-login.png';
-import { useProfile } from '../hooks/ProfileContext'; // 프로필 컨텍스트
 import { useMember } from '../hooks/MemberManager'; // 회원 정보를 관리하는 훅
 import Line from '../components/Line';
 import cashpage from '../assets/cashpage.png';
+import MypageSide from '../components/MypageSide';
 
 
 
+
+const Container = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 100px;
+  background-color: #FFF;
+  height: 100vh;
+  font-family: Arial, sans-serif;
+`;
 
 const ProfileImgArea = styled.div`
 justify-content: center;
@@ -68,140 +78,8 @@ const Cash = () => {
     };
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-start' }}>
-            <Box
-                height="70vh"
-                width="16vw"
-                border="none"
-                alignItems="flex-start"
-                justify="flex-start"
-            >
-                <ProfileImgArea>
-                    <ProfileImage
-                        src={profileUrl ? profileUrl : defaultProfile}
-                        alt="Profile"
-                        onClick={handleImageClick}
-                    />
-                    <input
-                        type="file"
-                        accept="image/*"
-                        onChange={changeProfileImg}
-                        ref={fileInputRef} // ref 설정
-                        style={{ display: 'none' }} // 파일 입력 숨기기
-                    />
-                </ProfileImgArea>
-                <Font font="PretendardL" size="20px" color="#000000" marginbottom="1px">{nickname || '닉네임'}</Font>
-                <Font font="PretendardL" size="185x" color="#A4A5A6" marginbottom="3px">{email || '이메일'}</Font>
-                <Line
-                margintop="10px"
-                ></Line>
-
-                
-                <Button
-                    color="transparent"
-                    width="17vw"
-                    textcolor="#000000"
-                    height="54px"
-                    hoverColor="#ffffff"
-                    margintbottom="2px"
-                >
-                    <Font
-                        font="PretendardL"
-                        size="23px"
-                        color="#000000"
-                        align="center"
-                        paddingtop="6px"
-                    >
-                        프로필
-                    </Font>
-                </Button>
-
-                <Link to="/mynote" style={{ textDecoration: 'none' }}> 
-                <Button
-                    color="transparent"
-                    width="17vw"
-                    textcolor="#000000"
-                    height="54px"
-                    hoverColor="#ffffff"
-                    margintbottom="2px"
-                    onClick={() => handleButtonClick('/mynote')}
-                >
-                    <Font
-                        font="PretendardL"
-                        size="23px"
-                        color="#000000"
-                        align="center"
-                        paddingtop="6px"
-                    >
-                        정답 / 오답노트
-                    </Font>
-                </Button>
-                </Link>
-
-                <Link to="/feedback" style={{ textDecoration: 'none' }}> 
-                <Button
-                    color="transparent"
-                    width="17vw"
-                    textcolor="#000000"
-                    height="54px"
-                    hoverColor="#ffffff"
-                    margintbottom="2px"
-                    onClick={() => handleButtonClick('/feedbackT')}
-                >
-                    <Font
-                        font="PretendardL"
-                        size="23px"
-                        color="#000000"
-                        align="center"
-                        paddingtop="6px"
-                    >
-                        받은 피드백
-                    </Font>
-                </Button>
-                </Link>
-
-
-                <Button
-                    color="transparent"
-                    width="17vw"
-                    textcolor="#000000"
-                    height="54px"
-                    hoverColor="#ffffff"
-                    margintbottom="2px"
-                    onClick={() => handleButtonClick('/cash')}
-                >
-                    <Font
-                        font="PretendardL"
-                        size="23px"
-                        color="#000000"
-                        align="center"
-                        paddingtop="6px"
-                    >
-                        결제관리
-                    </Font>
-                </Button>
-                <Line
-                    marginbottom="14px"
-                ></Line>
-                <Button
-                    color="transparent"
-                    width="17vw"
-                    textcolor="#000000"
-                    height="54px"
-                    hoverColor="#ffffff"
-                >
-                    <Font
-                        font="PretendardL"
-                        size="20px"
-                        color="#A4A5A6"
-                        align="center"
-                        paddingtop="6px"
-                        marginbottom="0px"
-                    >
-                        로그아웃
-                    </Font>
-                </Button>
-            </Box>
+        <Container>
+           <MypageSide/>
             <Box
                 height="70vh"
                 width="30vw"
@@ -211,9 +89,9 @@ const Cash = () => {
                 color="#ffffff"
                 style={{ display: 'flex', flexDirection: 'column', alignItems: 'center'}} // 자식 박스에서 정렬
             >
-               <img src={cashpage} alt="공사중" style={{  height: '60%', width: "95% ", marginLeft: "50px" }} /> {/* //나중에 미디어커리 적용해서 작은화면에서도 안넘치더록하자 */}
+               <img src={cashpage} alt="공사중" style={{  height: '50%', width: "95% ", marginLeft: "50px" }} /> {/* //나중에 미디어커리 적용해서 작은화면에서도 안넘치더록하자 */}
             </Box>
-        </div>
+            </Container>
     );
   }
   

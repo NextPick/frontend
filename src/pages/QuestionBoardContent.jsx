@@ -1,18 +1,32 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const PostDetail = () => {
   const { boardId } = useParams();
   const [post, setPost] = useState(null);
+  const [comments, setComments] = useState([]);
+  const [newComment, setNewComment] = useState('');
+  const [newReply, setNewReply] = useState({});
+  const [editContent, setEditContent] = useState({});
+  const [showReplyInput, setShowReplyInput] = useState({});
+  const [showEditInput, setShowEditInput] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [likesCount, setLikesCount] = useState(0);
+  const currentNickname = localStorage.getItem('nickname');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const response = await axios.get(`/posts/${boardId}`);
+        const response = await axios.get(`http://localhost:8080/boards/${boardId}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+          },
+        });
         setPost(response.data);
+        setLikesCount(response.data.likesCount);
       } catch (err) {
         setError('게시글을 불러오는 중 오류가 발생했습니다.');
       } finally {
@@ -23,77 +37,260 @@ const PostDetail = () => {
     fetchPost();
   }, [boardId]);
 
+  const fetchComments = async () => {
+    try {
+      const response = await axios.get(`http://localhost:8080/boards/${boardId}/comments`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+      });
+      setComments(response.data);
+    } catch (err) {
+      setError('댓글을 불러오는 중 오류가 발생했습니다.');
+    }
+  };
+
+  useEffect(() => {
+    fetchComments();
+  }, [boardId]);
+
+  const handleLike = async () => {
+    try {
+      const response = await axios.post(`http://localhost:8080/boards/${boardId}/likes`, {}, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+      });
+
+      const { likesCount, likedByUser } = response.data;
+      setLikesCount(likesCount);
+      setPost((prevPost) => ({
+        ...prevPost,
+        likedByUser: likedByUser,
+      }));
+    } catch (error) {
+      console.error('좋아요 처리 중 오류 발생:', error);
+    }
+  };
+
+  const handleCommentSubmit = async () => {
+    try {
+      await axios.post(
+        `http://localhost:8080/boards/${boardId}/comments`,
+        { content: newComment },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+          }
+        }
+      );
+      setNewComment('');
+      fetchComments();
+    } catch (error) {
+      console.error('댓글 작성 중 오류 발생:', error);
+    }
+  };
+
+  const handleReplySubmit = async (parentCommentId) => {
+    try {
+      await axios.post(
+        `http://localhost:8080/boards/${boardId}/comments`,
+        {
+          content: newReply[parentCommentId],
+          parentCommentId: parentCommentId,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+          }
+        }
+      );
+      setNewReply({ ...newReply, [parentCommentId]: '' });
+      fetchComments();
+    } catch (error) {
+      console.error('답글 작성 중 오류 발생:', error);
+    }
+  };
+
+  const handleReplyChange = (parentCommentId, value) => {
+    setNewReply({ ...newReply, [parentCommentId]: value });
+  };
+
+  const handleEditCommentSubmit = async (commentId) => {
+    try {
+      await axios.patch(
+        `http://localhost:8080/boards/${boardId}/comments/${commentId}`,
+        { content: editContent[commentId] },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+          }
+        }
+      );
+      setEditContent({ ...editContent, [commentId]: '' });
+      setShowEditInput({ ...showEditInput, [commentId]: false });
+      fetchComments();
+    } catch (error) {
+      console.error('댓글 수정 중 오류 발생:', error);
+    }
+  };
+
+  const handleDeleteComment = async (commentId) => {
+    try {
+      await axios.delete(`http://localhost:8080/boards/${boardId}/comments/${commentId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+      });
+      fetchComments();
+    } catch (error) {
+      console.error('댓글 삭제 중 오류 발생:', error);
+    }
+  };
+
+  const toggleReplyInput = (parentCommentId) => {
+    setShowReplyInput((prevState) => ({
+      ...prevState,
+      [parentCommentId]: !prevState[parentCommentId]
+    }));
+  };
+
+  const toggleEditInput = (commentId) => {
+    setShowEditInput((prevState) => ({
+      ...prevState,
+      [commentId]: !prevState[commentId]
+    }));
+  };
+
+  const renderComments = (parentId = null) => {
+    return comments
+      .filter(comment => comment.parentCommentId === parentId)
+      .map(comment => (
+        <div key={comment.boardCommentId} style={parentId ? replyStyle : commentStyle}>
+          <div style={comment.nickname === currentNickname ? { ...commentItem, ...myCommentStyle } : commentItem}>
+            <div style={commentContent}>
+              <span style={commentAuthor}>
+                {comment.nickname}
+              </span>
+              <span style={commentDate}>{new Date(comment.createdAt).toLocaleDateString()}</span>
+              <p style={commentText}>{comment.content}</p>
+
+              {/* 댓글 수정 버튼 */}
+              {comment.nickname === currentNickname && (
+                <>
+                  <button onClick={() => toggleEditInput(comment.boardCommentId)} style={smallButton}>
+                    수정
+                  </button>
+                  <button onClick={() => handleDeleteComment(comment.boardCommentId)} style={smallButton}>
+                    삭제
+                  </button>
+                  {showEditInput[comment.boardCommentId] && (
+                    <>
+                      <input
+                        type="text"
+                        placeholder="댓글 수정"
+                        value={editContent[comment.boardCommentId] || ''}
+                        onChange={(e) => setEditContent({ ...editContent, [comment.boardCommentId]: e.target.value })}
+                        style={commentInput} 
+                      />
+                      <button onClick={() => handleEditCommentSubmit(comment.boardCommentId)} style={smallButton}>
+                        저장
+                      </button>
+                    </>
+                  )}
+                </>
+              )}
+
+              {/* 답글 달기 버튼 */}
+              {!parentId && (
+                <>
+                  <button style={smallButton} onClick={() => toggleReplyInput(comment.boardCommentId)}>
+                    답글 달기
+                  </button>
+                  {showReplyInput[comment.boardCommentId] && (
+                    <>
+                      <input
+                        type="text"
+                        placeholder="답글 작성"
+                        value={newReply[comment.boardCommentId] || ''}
+                        onChange={(e) => handleReplyChange(comment.boardCommentId, e.target.value)}
+                        style={commentInput}
+                      />
+                      <button style={smallButton} onClick={() => handleReplySubmit(comment.boardCommentId)}>
+                        답글 작성
+                      </button>
+                    </>
+                  )}
+                </>
+              )}
+
+              {/* 대댓글 렌더링 */}
+              {renderComments(comment.boardCommentId)}
+            </div>
+          </div>
+        </div>
+      ));
+  };
+
   if (loading) return <p>로딩 중...</p>;
-  // if (error) return <p>{error}</p>;
+  if (error) return <p>{error}</p>;
+  if (!post) return <p>게시글이 존재하지 않습니다.</p>;
 
   return (
     <div style={container}>
+      <h1 style={boardTitle}>
+        {post.dtype === 'QuestionBoard' ? '면접 질문 게시판' : '면접 리뷰 게시판'}
+      </h1>
       <h2 style={titleContainer}>
-        <span style={mainTitle}>면접 질문 게시판</span>
-        <span style={{ margin: '0 5px -6px', fontSize: '18px'}}>|</span>
-        <span style={subTitle}>게시글 내용</span>
+        <span style={mainTitle}>게시글 제목: {post.title}</span>
+        <span style={{ margin: '0 5px -6px', fontSize: '18px' }}>|</span>
+        <span style={subTitle}>작성자: {post.author}</span>
       </h2>
       <hr style={{ ...divider, width: '900px' }} />
       <div style={contentContainer}>
         <div style={boardContainer}>
-          {/* 게시글 제목 */}
-          <h2 style={title}>CONTROLLER에서 응답 객체로 사용하는 RESPONSEENTITY 이거 맞나요?</h2>
-          
-          {/* 구분선 */}
-          <div style={titleDivider}></div>
+          {post.imageUrls && post.imageUrls.length > 0 && (
+            <div style={imageContainer}>
+              {post.imageUrls.map((imageUrl, index) => (
+                <img key={index} src={imageUrl} alt={`게시글 이미지 ${index + 1}`} style={imageStyle} />
+              ))}
+            </div>
+          )}
 
           <div style={boardInfoContainer}>
-              {/* 작성자 정보 및 날짜 */}
-              <div style={infoContainer}>
+            <div style={infoContainer}>
               <div style={authorContainer}>
-                  <div style={authorAvatar}></div>
-                  <span style={author}>등록자</span>
+                <span style={author}>작성자: {post.author}</span>
               </div>
-              <span style={date}>2024.09.29 | 110 VIEW</span>
-              </div>
-
-              {/* 게시글 내용 컨테이너 */}
-              <div style={postContentContainer}>
-              <p>CONTROLLER에서 응답 객체로 사용하는 RESPONSEENTITY에 대해서 설명해 주세요.</p>
-              <p>→ RESPONSEENTITY는 SPRING MVC에서 HTTP 응답을 표현하는 클래스입니다. 상태 코드, 헤더, 본문을 포함할 수 있으며, 클라이언트에 대한 완전한 HTTP 응답을 제어할 수 있게 해줍니다. 해당 문제에 대한 답으로 이게 맞나요?</p>
-              </div>
-          </div>
-
-          {/* 좋아요 및 댓글 */}
-          <div style={interactionContainer}>
-            <span style={like}>👍</span>
-            <span sytle={count}> 11</span>
-            <span style={comment}>💬</span>
-            <span sytle={count}> 2</span>
-          </div>
-
-          {/* 구분선 */}
-          <div style={commentDivider}></div>
-
-          {/* 댓글 리스트 */}
-          <div style={commentContainer}>
-            <div style={commentItem}>
-              <div style={avatar}></div>
-              <div style={commentContent}>
-                <span style={commentAuthor}>냠냠이다만</span>
-                <span style={commentDate}>09/28 15:00</span>
-                <p style={commentText}>저도 그렇게 생각하고 같은데 더 좋은 답변이 있을지 다른 분들의 의견도 궁금합니다.</p>
-              </div>
+              <span style={date}>작성일: {new Date(post.createdAt).toLocaleDateString()} | 조회수: {post.viewCount} | 수정일: {new Date(post.modifiedAt).toLocaleDateString()}</span>
             </div>
-            <div style={commentItem}>
-              <div style={avatar}></div>
-              <div style={commentContent}>
-                <span style={commentAuthor}>등록자</span>
-                <span style={commentDate}>09/29 15:00</span>
-                <p style={commentText}>네 맞아요! 감사합니다!</p>
-              </div>
-            </div>
-          </div>
 
-          {/* 댓글 입력 */}
-          <div style={commentInputContainer}>
-            <input type="text" placeholder="답글" style={commentInput} />
-            <button style={commentButton}>ENTER</button>
+            <div style={postContentContainer}>
+              <p>{post.content}</p>
+            </div>
+
+            {post.dtype === 'ReviewBoard' && post.boardCategory && (
+              <p>카테고리: {post.boardCategory}</p>
+            )}
+
+            <div style={interactionContainer}>
+              <span onClick={handleLike} style={{ cursor: 'pointer' }}>👍</span>
+              <span>{likesCount}</span>
+              <span>💬 {comments.length}</span>
+            </div>
+
+            {renderComments()}
+
+            <div style={commentInputContainer}>
+              <input
+                type="text"
+                placeholder="댓글 작성"
+                style={commentInput}
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
+              />
+              <button style={smallButton} onClick={handleCommentSubmit}>댓글 달기</button>
+            </div>
           </div>
         </div>
       </div>
@@ -106,63 +303,86 @@ const container = {
   flexDirection: 'column',
   marginTop: '5vh',
   alignItems: 'center',
-  height: '90vh',
-  backgroundColor: '#FFF',
+  backgroundColor: '#F9FAFB', // 부드러운 배경색
+};
+
+const boardTitle = {
+  fontSize: '28px',
+  fontWeight: 'bold',
+  margin: '20px 0',
+  textAlign: 'center',
+  color: '#333', // 텍스트 색상
 };
 
 const titleContainer = {
-  marginBottom: '-10px',
+  marginBottom: '20px',
   display: 'flex',
   alignItems: 'center',
-  justifyContent: 'flex-start', // Aligns content to the start of the flex container
-  width: '900px', // Matches the width of the divider for alignment
-  marginLeft: '20px', // Adds some space from the left edge
+  justifyContent: 'center',
+  width: '100%',
 };
 
 const mainTitle = {
   fontWeight: 'Bold',
-  fontSize: '26px', // Updated font size
+  fontSize: '24px',
+  color: '#111',
 };
 
 const subTitle = {
-  fontSize: '18px', // Updated font size
-  marginTop: '10px',
+  fontSize: '16px',
+  color: '#888',
+  marginLeft: '8px',
 };
 
 const divider = {
-  borderTop: '2px solid #A0A0A0',
+  borderTop: '1px solid #E5E7EB',
   marginBottom: '40px',
+  width: '100%',
 };
-const contentContainer ={
-  justifyContent: 'center',
-  flexDirection: 'column',
-  backgroundColor: '#E0EBF5',
-  alignItems: 'center',
-  width: '800px',
+
+const contentContainer = {
+  backgroundColor: '#FFF',
+  width: '90%',
+  maxWidth: '900px',
   padding: '20px',
-  boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
-  borderRadius: '20px',
-}
+  borderRadius: '10px',
+  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+  marginBottom: '20px',
+};
+
 const boardContainer = {
   width: '100%',
-  maxWidth: '800px',
-  backgroundColor: '#f7f7f7',
-  borderRadius: '8px',
-  border: '1px solid #ccc',
   padding: '20px',
+  backgroundColor: '#FAFAFA',
+  borderRadius: '8px',
+  border: '1px solid #E5E7EB',
+};
+
+const imageContainer = {
+  marginBottom: '15px',
+};
+
+const imageStyle = {
+  maxWidth: '100%',
+  maxHeight: '400px',
+  borderRadius: '10px',
+  boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
+  objectFit: 'cover',
 };
 
 const boardInfoContainer = {
-  margin: '0 40px 0 40px',
-  padding: '10px',
-  backgroundColor: '#f7f7f7',
+  padding: '10px 20px',
+  backgroundColor: '#FAFAFA',
+  borderRadius: '8px',
+  marginBottom: '20px',
 };
 
 const infoContainer = {
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
-  marginBottom: '5px',
+  fontSize: '14px',
+  color: '#666',
 };
 
 const authorContainer = {
@@ -170,150 +390,110 @@ const authorContainer = {
   alignItems: 'center',
 };
 
-const authorAvatar = {
-  width: '50px',
-  height: '50px',
-  backgroundColor: '#ddd',
-  borderRadius: '50%',
-  marginRight: '10px',
-};
-
-const avatar = {
-  width: '65px',
-  height: '65px',
-  backgroundColor: '#ddd',
-  borderRadius: '50%',
-  marginRight: '10px',
-};
-
-const title = {
-  fontSize: '18px',
-  fontWeight: 'bold',
-  marginBottom: '15px',
-};
-
-const titleDivider = {
-  width: 'calc(100% + 40px)',
-  height: '1px',
-  backgroundColor: '#ccc',
-  margin: '15px -20px',
-};
-
 const author = {
-  fontSize: '14px',
+  fontSize: '16px',
+  fontWeight: 'bold',
+  color: '#222',
 };
 
 const date = {
   fontSize: '14px',
-  position: 'relative',
-  top: '27px',
-  margin: '0 4px 30px 0',
+  color: '#888',
 };
 
 const postContentContainer = {
-  border: '1px solid #ccc',
+  backgroundColor: '#FAFAFA',
+  padding: '20px',
   borderRadius: '8px',
-  padding: '15px',
-  backgroundColor: '#f9f9f9',
-  fontSize: '14px',
-  lineHeight: '1.6',
-  marginBottom: '20px',
-  boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
+  fontSize: '16px',
+  color: '#333',
 };
 
 const interactionContainer = {
   display: 'flex',
   gap: '15px',
+  alignItems: 'center',
+  marginTop: '15px',
 };
 
-const like = {
-  marginTop: '-5px',
-  fontSize: '20px',
-};
-
-const comment = {
-  marginTop: '-5px',
-  fontSize: '20px',
-};
-
-const count = {
-  fontSize: '12px',
-}
-
-const commentDivider = {
-  width: '100%',
-  height: '1px',
-  backgroundColor: '#ccc',
-  marginBottom: '10px',
-};
-
-const commentContainer = {
+const commentStyle = {
+  display: 'flex',
+  flexDirection: 'column',
+  padding: '15px 20px',
+  marginBottom: '15px',
+  backgroundColor: '#FFFFFF',
   borderRadius: '8px',
-  padding: '10px',
-  marginBottom: '20px',
+  border: '1px solid #E5E7EB',
+  boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.05)',
+};
+
+const replyStyle = {
+  ...commentStyle,
+  marginLeft: '40px', // 대댓글 들여쓰기
+  backgroundColor: '#F9FAFB', // 대댓글 배경색
 };
 
 const commentItem = {
   display: 'flex',
-  alignItems: 'flex-start',
-  marginBottom: '10px',
+  flexDirection: 'column',
+  padding: '10px',
+  borderRadius: '8px',
 };
 
 const commentContent = {
-  backgroundColor: '#fff',
-  padding: '10px',
-  borderRadius: '4px',
-  border: '1px solid #ddd',
-  boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
-  flex: 1,
-  fontSize: '11px',
+  marginBottom: '10px',
+  fontSize: '14px',
+  color: '#333',
 };
 
 const commentAuthor = {
   fontWeight: 'bold',
   fontSize: '14px',
-  marginRight: '10px',
+  marginBottom: '5px',
+  color: '#111',
 };
 
 const commentDate = {
   fontSize: '12px',
-  color: '#777',
+  color: '#888',
 };
 
-const commentText ={
-  fontSize: '12px',
-}
+const commentText = {
+  marginTop: '5px',
+  color: '#333',
+  lineHeight: '1.6',
+};
+
 const commentInputContainer = {
   display: 'flex',
   alignItems: 'center',
+  width: '100%',
+  marginTop: '20px',
 };
 
 const commentInput = {
   flex: 1,
-  padding: '10px',
-  borderRadius: '7px 0 0 7px',
-  border: '1px solid #ccc',
-  height: '100%',
-  boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
+  padding: '8px',
+  fontSize: '14px',
+  borderRadius: '6px',
+  border: '1px solid #E5E7EB',
+  marginRight: '8px',
 };
 
-const commentButton = {
-  padding: '10px',
-  width: '80px',
-  borderRadius: '0 7px 7px 0',
+const smallButton = {
+  backgroundColor: '#4CAF50',
+  color: '#fff',
+  border: 'none',
+  padding: '8px 12px',
+  borderRadius: '5px',
   fontSize: '12px',
-  height: '100%',
-  border: '1px solid #ccc',
-  backgroundColor: '#E0EBF5',
-  boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
   cursor: 'pointer',
+  transition: 'background-color 0.2s ease',
 };
 
-const pagination = {
-  marginTop: '15px',
-  display: 'flex',
-  gap: '6px',
-  fontSize: '12px',
+const myCommentStyle = {
+  backgroundColor: '#F0F4FF',
+  border: '1px solid #C1D3FF',
 };
 
 export default PostDetail;

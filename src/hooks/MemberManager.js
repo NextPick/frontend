@@ -19,7 +19,7 @@ export const MemberManager = ({ children }) => {
   const setProfileData = (profile) => {
     setName(profile.name || null);
     setProfileUrl(profile.profileUrl || null);
-    // setNickname(profile.nickname || null);
+    setNickname(profile.nickname || null);
     setPhone(profile.phone || null);
     setEmail(profile.email || null);
     setAuthorization(profile.authorization || null);
@@ -34,7 +34,7 @@ export const MemberManager = ({ children }) => {
     const storedLogin = localStorage.getItem('login');
     const storedName = localStorage.getItem('name');
     const storedProfileUrl = localStorage.getItem('profileUrl');
-    // const storedNickname = localStorage.getItem('nickname');
+    const storedNickname = localStorage.getItem('nickname');
     const storedPhone = localStorage.getItem('phone');
     const storedEmail = localStorage.getItem('email');
 
@@ -44,60 +44,60 @@ export const MemberManager = ({ children }) => {
     setLogin(storedLogin === 'true' ? true : storedLogin === 'false' ? false : null);
     setName(storedName);
     setProfileUrl(storedProfileUrl);
-    // setNickname(storedNickname);
+    setNickname(storedNickname);
     setPhone(storedPhone);
     setEmail(storedEmail);
   }, []); // 빈 배열을 주어 컴포넌트가 처음 렌더링될 때만 실행됩니다.
 
-  // // 상태가 변경될 때마다 로컬 스토리지에 저장합니다.
+  // 상태가 변경될 때마다 로컬 스토리지에 저장합니다.
   // useEffect(() => {
-  //   if (authorization !== null) {
-  //     localStorage.setItem('authorization', authorization);
-  //   } else {
-  //     localStorage.removeItem('authorization');
-  //   }
-  //
-  //   if (refresh !== null) {
-  //     localStorage.setItem('refresh', refresh);
-  //   } else {
-  //     localStorage.removeItem('refresh');
-  //   }
-  //
-  //   if (login !== null) {
-  //     localStorage.setItem('login', login.toString());
-  //   } else {
-  //     localStorage.removeItem('login');
-  //   }
-  //
-  //   if (name !== null) {
-  //     localStorage.setItem('name', name);
-  //   } else {
-  //     localStorage.removeItem('name');
-  //   }
-  //
-  //   if (profileUrl !== null) {
-  //     localStorage.setItem('profileUrl', profileUrl);
-  //   } else {
-  //     localStorage.removeItem('profileUrl');
-  //   }
-  //
-  //   // if (nickname !== null) {
-  //   //   localStorage.setItem('nickname', nickname);
-  //   // } else {
-  //   //   localStorage.removeItem('nickname');
-  //   // }
-  //
-  //   if (phone !== null) {
-  //     localStorage.setItem('phone', phone);
-  //   } else {
-  //     localStorage.removeItem('phone');
-  //   }
-  //
-  //   if (email !== null) {
-  //     localStorage.setItem('email', email);
-  //   } else {
-  //     localStorage.removeItem('email');
-  //   }
+    // if (authorization !== null) {
+    //   localStorage.setItem('authorization', authorization);
+    // } else {
+    //   localStorage.removeItem('authorization');
+    // }
+
+    // if (refresh !== null) {
+    //   localStorage.setItem('refresh', refresh);
+    // } else {
+    //   localStorage.removeItem('refresh');
+    // }
+
+    // if (login !== null) {
+    //   localStorage.setItem('login', login.toString());
+    // } else {
+    //   localStorage.removeItem('login');
+    // }
+    
+    // if (name !== null) {
+    //   localStorage.setItem('name', name);
+    // } else {
+    //   localStorage.removeItem('name');
+    // }
+
+    // if (profileUrl !== null) {
+    //   localStorage.setItem('profileUrl', profileUrl);
+    // } else {
+    //   localStorage.removeItem('profileUrl');
+    // }
+
+    // if (nickname !== null) {
+    //   localStorage.setItem('nickname', nickname);
+    // } else {
+    //   localStorage.removeItem('nickname');
+    // }
+
+    // if (phone !== null) {
+    //   localStorage.setItem('phone', phone);
+    // } else {
+    //   localStorage.removeItem('phone');
+    // }
+
+    // if (email !== null) {
+    //   localStorage.setItem('email', email);
+    // } else {
+    //   localStorage.removeItem('email');
+    // }
   // }, [authorization, refresh, login, name, profileUrl, nickname, phone, email]);
 
   // MemberContext.Provider를 통해 상태와 상태 업데이트 함수를 자식 컴포넌트에 제공합니다.
@@ -108,7 +108,7 @@ export const MemberManager = ({ children }) => {
       login, setLogin, 
       name, setName, 
       profileUrl, setProfileUrl, 
-      // nickname, setNickname, 
+      nickname, setNickname, 
       phone, setPhone, 
       email, setEmail, 
       setProfileData // 새로운 함수 제공

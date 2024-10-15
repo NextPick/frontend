@@ -15,7 +15,7 @@ import two from '../assets/two.png';
 import three from '../assets/three.png';
 import axios from 'axios';
 import Swal from 'sweetalert2';
-
+import MypageSide from '../components/MypageSide';
 
 // Styled Components
 const Container = styled.div`
@@ -82,38 +82,42 @@ const Mypage = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const fileInputRef = useRef(null); // 파일 입력을 참조할 ref 생성
-    const [isActive, setIsActive] = useState(false); // 상태 정의
 
 
     useEffect(() => {
         setHeaderMode('main');
-        fetchUserData(); // 컴포넌트가 마운트될 때 사용자 정보 가져오기
     }, [setHeaderMode]);
 
 
-    const fetchUserData = async () => {
-        try {
-            const response = await axios.get(process.env.REACT_APP_API_URL + 'members', {
-                headers: {
-                    Authorization: localStorage.getItem('accessToken'), // 토큰을 헤더에 추가
-                },
-            });
-            if (response.status === 200) {
-                const { email } = response.data; // 이메일만 가져오기
-                setEmail(email);
-            } else {
-                console.error('사용자 정보를 가져오는 데 실패했습니다.');
-            }
-        } catch (error) {
-            console.error('네트워크 오류:', error);
-            Swal.fire({
-                text: `네트워크 오류가 발생했습니다. 인터넷 연결을 확인해 주세요.`,
-                icon: 'error',
-                confirmButtonText: '확인'
-            });
-        }
-    };
 
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const response = await axios.get('http://localhost:8080/members', {
+                    headers: {
+                        Authorization: localStorage.getItem('accessToken'), // 토큰을 헤더에 추가
+                    },
+                });
+                if (response.status === 200) {
+                    const { email, nickname } = response.data.data; // 이메일과 닉네임 가져오기
+                    setEmail(email); // 이메일 상태 업데이트
+                    setNickname(nickname); // 닉네임 상태 업데이트
+                } else {
+                    console.error('사용자 정보를 가져오는 데 실패했습니다.');
+                }
+            } catch (error) {
+                console.error('네트워크 오류:', error);
+                Swal.fire({
+                    text: `네트워크 오류가 발생했습니다. 인터넷 연결을 확인해 주세요.`,
+                    icon: 'error',
+                    confirmButtonText: '확인'
+                });
+
+            }
+        };
+
+        fetchUserData(); // 사용자 정보 가져오기 호출
+    }, []); // 빈 배열을 전달하여 컴포넌트 마운트 시 한 번만 실행
     
     // 프로필 이미지를 변경하는 함수
     const changeProfileImg = (event) => {
@@ -138,48 +142,8 @@ const Mypage = () => {
 
     return (
         <Container>
-            <Box
-                height="100%"
-                width="250px"
-                padding="20px"
-                border="none"
-                alignItems="flex-start"
-                justify="flex-start"
-                textalign="center"
-                color="#e7f0f9"
-                radius="15px"
-            >
-                <ProfileImgArea>
-                    <ProfileImage
-                        src={profileUrl ? profileUrl : defaultProfile}
-                        alt="Profile"
-                        onClick={handleImageClick}
-                    />
-                    <input
-                        type="file"
-                        accept="image/*"
-                        onChange={changeProfileImg}
-                        ref={fileInputRef} // ref 설정
-                        style={{ display: 'none' }} // 파일 입력 숨기기
-                    />
-                </ProfileImgArea>
-                <Font font="Pretendard" size="18px" color="#000000" marginbottom="1px">{nickname || '닉네임'}</Font>
-                <Font font="Pretendard" size="145x" color="#A4A5A6" marginbottom="3px">{email || '이메일'}</Font>
-                <Line
-                    margintop="5px"
-                ></Line>
-                <Menu>
-                    <MenuItem>마이페이지</MenuItem>
-                    <MenuItem active>정답/오답노트</MenuItem>
-                    <MenuItem>받은 피드백</MenuItem>
-                    <MenuItem>결제관리</MenuItem>
-                </Menu>
-                <Line
-                    marginbottom="10px"
-                ></Line>
-                <LogoutButton>로그아웃</LogoutButton>
-            </Box>
-            <Box
+            <MypageSide/>
+                      <Box
                 padding="0px"
                 height="50%"
                 width="33vw"
@@ -264,7 +228,7 @@ const Mypage = () => {
                 <div class="line2"></div>
                 <Button
                     color="transparent"
-                    width="158px"
+                    width="11vw"
                     textcolor="#000000"
                     height="35px"
                     hoverColor="#ffffff"
@@ -274,7 +238,7 @@ const Mypage = () => {
                     justify="none"
                     left="auto"
                     margintbottom="10px"
-                    marginright="5px"
+                    marginright="12px"
                 >
                     <Font
                         font="PretendardL"

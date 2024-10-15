@@ -121,7 +121,6 @@ const Choice = () => {
                         </Button>
                     </>
             ) : null}
-
             {/* 방 만들기 모달 */}
             <Modal show={showAddModal} onHide={handleCloseAddModal}>
                 <Modal.Header closeButton>

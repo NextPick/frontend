@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // useHistory 대신 useNavigate 사용
+import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
-const QuestionBoardPost = () => {
+const ReviewBoardPost = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [category, setCategory] = useState('');
   const [images, setImages] = useState([]); 
   const maxFileSize = 5 * 1024 * 1024; // 5MB
-  const navigate = useNavigate(); // useHistory 대신 useNavigate 사용
+  const navigate = useNavigate();
 
   // 이미지 추가
   const handleImageAdd = (event) => {
@@ -40,7 +39,6 @@ const QuestionBoardPost = () => {
   // 게시글 작성
   const handleSubmitPost = () => {
     const formData = new FormData();
-    formData.append("category", category);
     
     images.forEach((image) => {
       formData.append("images", image.file);
@@ -58,19 +56,18 @@ const QuestionBoardPost = () => {
     })
     .then((response) => response.json())
     .then((data) => {
-      console.log("응답 데이터:", data); // 응답 데이터를 확인
+      console.log("응답 데이터:", data);
       if (data.boardId) {
         Swal.fire("게시글이 성공적으로 등록되었습니다!");
-        navigate(`/board/${data.boardId}`); // boardId를 이용해 상세 페이지로 리다이렉트
+        navigate(`/board/${data.boardId}`); // 게시글 상세 페이지로 이동
       } else {
         Swal.fire("오류 발생", "boardId를 찾을 수 없습니다.", "error");
       }
     })
     .catch((error) => {
       console.error("API 요청 실패:", error);
+      Swal.fire("오류 발생", "게시글 등록 중 오류가 발생했습니다.", "error");
     });
-    
-    
   };
 
   return (
@@ -83,14 +80,6 @@ const QuestionBoardPost = () => {
       <hr style={{ ...divider, width: '900px' }} />
       <div style={contentContainer}>
         <div style={boardContainer}>
-          {/* 카테고리 선택 */}
-          <select value={category} onChange={(e) => setCategory(e.target.value)} style={titleInput}>
-            <option value="">카테고리 선택</option>
-            <option value="BE">백엔드</option>
-            <option value="FE">프론트엔드</option>
-            <option value="CS">컴퓨터 과학</option>
-          </select>
-
           {/* 제목 입력 */}
           <input 
             type="text" 
@@ -289,4 +278,4 @@ const submitButton = {
   cursor: 'pointer',
 };
 
-export default QuestionBoardPost;
+export default ReviewBoardPost;

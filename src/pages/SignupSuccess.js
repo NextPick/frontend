@@ -41,12 +41,14 @@ const SignupSuccess = () => {
 
                     <Link to={'/login'}>
                         <Button
+                        active=""
                             color="transparent"
-                            width="25vw"
+                            width="20vw"
                             textcolor="#000000"
                             hoverColor="#ffffff"
                             fontsize="25px"
                             margintop="55px"
+                            hoverTextColor="black"
                         >
                             로그인으로 계속하기
                         </Button>
