@@ -18,7 +18,6 @@ import FeedbackT from '../pages/FeedbackT.js';
 import FeedbackS from '../pages/FeedbackS.js';
 import AdminPage from '../pages/AdminPage.js'
 import AdminPageQx from '../pages/AdminPageQ.jsx';
-import Administration from '../pages/Administration.js';
 import AdministrationX from '../pages/Administration.jsx';
 import Choice from '../pages/Choice.js';
 import InterviewFeedback from '../pages/InterviewFeedback.js';
@@ -56,12 +55,12 @@ function App() {
               <Route path='/feedbackS' element={<FeedbackS/>} />
               <Route path='/cash' element={<Cash/>} />
               <Route path='/mynote' element={<MyNote/>} />
-              <Route path='/adminpageQx' element={<AdminPageQx/>} />
+              <Route path='/adminpageQ' element={<AdminPageQx/>} />
               <Route path='/adminpage-service' element={<AdminPage/>} />
               <Route path='/choice' element={<Choice/>} />
               <Route path='/interviewfeedback' element={<InterviewFeedback/>} />
               <Route path='/aihome' element={<AiHome/>} />
-              <Route path='/administrationx' element={<AdministrationX/>} />
+              <Route path='/administration' element={<AdministrationX/>} />
               <Route path='/resultcheck' element={<ResultCheck/>} />
               <Route path='/resultpage' element={<ResultPage/>} />
               <Route path='/aiInterview' element={<AiInterview/>} />
@@ -75,8 +74,8 @@ function App() {
               <Route path='/webrtc' element={<WebRTC/>} />
               <Route path='/interviewRoom' element={<InterviewRoom/>} />
               <Route path="/board/question" element={<QuestionBoard />} />
-  <Route path="/board/question/post" element={<QuestionBoardPost />} /> {/* 질문 게시판 작성 경로 */}
-  <Route path="/board/review/post" element={<ReviewBoardPost />} /> {/* 리뷰 게시판 작성 경로 */}
+              <Route path="/board/question/post" element={<QuestionBoardPost />} /> {/* 질문 게시판 작성 경로 */}
+              <Route path="/board/review/post" element={<ReviewBoardPost />} /> {/* 리뷰 게시판 작성 경로 */}
             </Routes>
           </HeaderManager>
           </div>
