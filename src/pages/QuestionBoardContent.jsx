@@ -20,7 +20,7 @@ const PostDetail = () => {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/boards/${boardId}`, {
+        const response = await axios.get(process.env.REACT_APP_API_URL + `boards/${boardId}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
           },
@@ -39,7 +39,7 @@ const PostDetail = () => {
 
   const fetchComments = async () => {
     try {
-      const response = await axios.get(`http://localhost:8080/boards/${boardId}/comments`, {
+      const response = await axios.get(process.env.REACT_APP_API_URL + `boards/${boardId}/comments`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
         },
@@ -56,7 +56,7 @@ const PostDetail = () => {
 
   const handleLike = async () => {
     try {
-      const response = await axios.post(`http://localhost:8080/boards/${boardId}/likes`, {}, {
+      const response = await axios.post(process.env.REACT_APP_API_URL + `boards/${boardId}/likes`, {}, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
         },
@@ -76,7 +76,7 @@ const PostDetail = () => {
   const handleCommentSubmit = async () => {
     try {
       await axios.post(
-        `http://localhost:8080/boards/${boardId}/comments`,
+        process.env.REACT_APP_API_URL + `boards/${boardId}/comments`,
         { content: newComment },
         {
           headers: {
@@ -94,7 +94,7 @@ const PostDetail = () => {
   const handleReplySubmit = async (parentCommentId) => {
     try {
       await axios.post(
-        `http://localhost:8080/boards/${boardId}/comments`,
+        process.env.REACT_APP_API_URL + `boards/${boardId}/comments`,
         {
           content: newReply[parentCommentId],
           parentCommentId: parentCommentId,
@@ -119,7 +119,7 @@ const PostDetail = () => {
   const handleEditCommentSubmit = async (commentId) => {
     try {
       await axios.patch(
-        `http://localhost:8080/boards/${boardId}/comments/${commentId}`,
+        process.env.REACT_APP_API_URL + `boards/${boardId}/comments/${commentId}`,
         { content: editContent[commentId] },
         {
           headers: {
@@ -137,7 +137,7 @@ const PostDetail = () => {
 
   const handleDeleteComment = async (commentId) => {
     try {
-      await axios.delete(`http://localhost:8080/boards/${boardId}/comments/${commentId}`, {
+      await axios.delete(process.env.REACT_APP_API_URL + `boards/${boardId}/comments/${commentId}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
         },

@@ -49,7 +49,7 @@ const QuestionBoardPost = () => {
     formData.append("title", title);
     formData.append("content", content);
 
-    fetch("http://localhost:8080/boards/R", {
+    fetch(process.env.REACT_APP_API_URL + "boards/R", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${localStorage.getItem('accessToken')}`,

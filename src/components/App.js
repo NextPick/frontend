@@ -18,7 +18,6 @@ import FeedbackT from '../pages/FeedbackT.js';
 import FeedbackS from '../pages/FeedbackS.js';
 import AdminPage from '../pages/AdminPage.js'
 import AdminPageQx from '../pages/AdminPageQ.jsx';
-import Administration from '../pages/Administration.js';
 import AdministrationX from '../pages/Administration.jsx';
 import Choice from '../pages/Choice.js';
 import InterviewFeedback from '../pages/InterviewFeedback.js';

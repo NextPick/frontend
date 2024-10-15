@@ -37,7 +37,7 @@ const Mypage = () => {
         const fetchUserData = async () => {
             console.log('API 호출 시작'); // 추가된 로그
             try {
-                const response = await axios.get('http://localhost:8080/members', {
+                const response = await axios.get(process.env.REACT_APP_API_URL + 'members', {
                     headers: {
                         Authorization: localStorage.getItem('accessToken'), // 토큰을 헤더에 추가
                     },

@@ -109,7 +109,7 @@ const Administration = () => {
               {questionData.map((user) => (
                 <TableRow key={user.questionListId}>
                   <TableData>{user.questionCategory.categoryName}</TableData>
-                  <TableData>{user.question}</TableData>
+                  <TableDataQuestion>{user.question}</TableDataQuestion>
                   <TableData>{user.correctRate}%</TableData>
                 </TableRow>
               ))}
@@ -145,7 +145,7 @@ const MainContent = styled.main`
   flex: 1;
   padding: 20px;
   max-width: 800px;
-  height: 74.5vh;
+  height: 100%;
   background-color: #f1f7fd;
   border-radius: 15px;
   margin-left: 20px;
@@ -227,6 +227,12 @@ const TableData = styled.td`
   padding: 5px;
   font-size: 14px;
   text-align: center;
+`;
+
+const TableDataQuestion = styled.td`
+  padding: 5px;
+  font-size: 14px;
+  text-align: left;
 `;
 
 const Pagination = styled.div`
