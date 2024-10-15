@@ -8,7 +8,7 @@ background-color: ${(props) => (props.active ? '#137df696' : props.color || 'tra
 transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;    
 width: ${(props) => props.width};
   color: ${(props) => props.textcolor}; /* 텍스트 색상 */
-  margin-top: ${(props) => props.margintop};
+  margin-top: ${(props) => props.margintop || "0px"};
   margin-bottom: ${(props) => props.margintbottom};
   margin-right: ${(props) => props.marginright};
   margin-left: ${(props) => props.marginleft};
@@ -24,6 +24,7 @@ width: ${(props) => props.width};
     margin-right: ${(props) => props.right};
     padding: ${(props) => props.padding};
     display: ${(props) => props.display};
+    color: ${(props) => props.fontcolor || "black"};
 
   &:hover {
     background-color: ${(props) => props.hoverColor || '#0077ff96'};
@@ -34,12 +35,13 @@ width: ${(props) => props.width};
 
 const Button = (props) => {
   // 1. props {} 안에 추가
-  const {    hoverTextColor, active, color, width, children, textcolor, margintop, margintbottom, marginleft, marginright, height, right, radius, border, hoverColor, fontsize, fontfamily, onClick, align, justify, left, padding, display } = props;
+  const {    hoverTextColor, active, color, fontcolor, width, children, textcolor, margintop, margintbottom, marginleft, marginright, height, right, radius, border, hoverColor, fontsize, fontfamily, onClick, align, justify, left, padding, display } = props;
   return (
     // 3 아래 props 받을 수 있도록 추가
     <StyledButton
     active={active}
       color={color}
+      fontcolor={fontcolor}
       hoverTextColor={hoverTextColor} 
       width={width}
       textcolor={textcolor}

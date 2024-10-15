@@ -35,6 +35,7 @@ import ResultCheck from '../pages/ResultCheck.js';
 import ResultPage from '../pages/ResultPage.js';
 import WebRTC from "../pages/WebRTC";
 import InterviewRoom from "../pages/InterviewRoom"
+import '../styles/global.css';
 
 
 // App 컴포넌트를 정의하는 함수형 컴포넌트
