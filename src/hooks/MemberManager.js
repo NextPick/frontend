@@ -49,56 +49,56 @@ export const MemberManager = ({ children }) => {
     setEmail(storedEmail);
   }, []); // 빈 배열을 주어 컴포넌트가 처음 렌더링될 때만 실행됩니다.
 
-  // 상태가 변경될 때마다 로컬 스토리지에 저장합니다.
-  useEffect(() => {
-    if (authorization !== null) {
-      localStorage.setItem('authorization', authorization);
-    } else {
-      localStorage.removeItem('authorization');
-    }
-
-    if (refresh !== null) {
-      localStorage.setItem('refresh', refresh);
-    } else {
-      localStorage.removeItem('refresh');
-    }
-
-    if (login !== null) {
-      localStorage.setItem('login', login.toString());
-    } else {
-      localStorage.removeItem('login');
-    }
-    
-    if (name !== null) {
-      localStorage.setItem('name', name);
-    } else {
-      localStorage.removeItem('name');
-    }
-
-    if (profileUrl !== null) {
-      localStorage.setItem('profileUrl', profileUrl);
-    } else {
-      localStorage.removeItem('profileUrl');
-    }
-
-    // if (nickname !== null) {
-    //   localStorage.setItem('nickname', nickname);
-    // } else {
-    //   localStorage.removeItem('nickname');
-    // }
-
-    if (phone !== null) {
-      localStorage.setItem('phone', phone);
-    } else {
-      localStorage.removeItem('phone');
-    }
-
-    if (email !== null) {
-      localStorage.setItem('email', email);
-    } else {
-      localStorage.removeItem('email');
-    }
-  }, [authorization, refresh, login, name, profileUrl, nickname, phone, email]);
+  // // 상태가 변경될 때마다 로컬 스토리지에 저장합니다.
+  // useEffect(() => {
+  //   if (authorization !== null) {
+  //     localStorage.setItem('authorization', authorization);
+  //   } else {
+  //     localStorage.removeItem('authorization');
+  //   }
+  //
+  //   if (refresh !== null) {
+  //     localStorage.setItem('refresh', refresh);
+  //   } else {
+  //     localStorage.removeItem('refresh');
+  //   }
+  //
+  //   if (login !== null) {
+  //     localStorage.setItem('login', login.toString());
+  //   } else {
+  //     localStorage.removeItem('login');
+  //   }
+  //
+  //   if (name !== null) {
+  //     localStorage.setItem('name', name);
+  //   } else {
+  //     localStorage.removeItem('name');
+  //   }
+  //
+  //   if (profileUrl !== null) {
+  //     localStorage.setItem('profileUrl', profileUrl);
+  //   } else {
+  //     localStorage.removeItem('profileUrl');
+  //   }
+  //
+  //   // if (nickname !== null) {
+  //   //   localStorage.setItem('nickname', nickname);
+  //   // } else {
+  //   //   localStorage.removeItem('nickname');
+  //   // }
+  //
+  //   if (phone !== null) {
+  //     localStorage.setItem('phone', phone);
+  //   } else {
+  //     localStorage.removeItem('phone');
+  //   }
+  //
+  //   if (email !== null) {
+  //     localStorage.setItem('email', email);
+  //   } else {
+  //     localStorage.removeItem('email');
+  //   }
+  // }, [authorization, refresh, login, name, profileUrl, nickname, phone, email]);
 
   // MemberContext.Provider를 통해 상태와 상태 업데이트 함수를 자식 컴포넌트에 제공합니다.
   return (

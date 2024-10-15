@@ -14,12 +14,21 @@ const WebRTC = () => {
     let localStream = undefined;
     let stompClient;
     const location = useLocation();
-    const roomOccupation = location.state;
+    const {roomTitle, roomOccupation} = location.state || {};
+    console.log(roomOccupation)
     let camCount = 0;
-    let memberEmail = localStorage.getItem('email');
     let memberId;
-    let memberType;
+    let memberType = localStorage.getItem('type')
     let accessToken = localStorage.getItem('accessToken');
+    let otherMemberIdList = [];
+    let roomId;
+    let memberEmail = localStorage.getItem('email');
+
+    const otherMembers = {
+        otherMember1: null,
+        otherMember2: null,
+        otherMember3: null,
+    };
 
     const [memo, setMemo] = useState('');
     const [tutor1, setTutor1] = useState('');
@@ -81,11 +90,6 @@ const WebRTC = () => {
                 // 회원 순번 받기
                 stompClient.subscribe(`/topic/memberId/${myKey}`, (message) => {
                     memberId = message.body;
-                })
-
-                // 회원 타입 받기
-                stompClient.subscribe(`/topic/memberType/${myKey}`, (message) => {
-                    memberType = message.body;
                 })
 
                 // ICE 후보 구독
@@ -167,6 +171,7 @@ const WebRTC = () => {
             pc.addEventListener('track', (event) => {
                 onTrack(event, otherKey);
             });
+
             // 사용자 연결 종료 시 처리
             pc.addEventListener('iceconnectionstatechange', () => {
                 if (pc.iceConnectionState === 'disconnected' || pc.iceConnectionState === 'closed') {
@@ -242,6 +247,8 @@ const WebRTC = () => {
             camCount = camCount + 1;
             console.log(camCount);
 
+            handleGetParticipants(otherKey);
+
             document.getElementById('remoteStreamDiv' + camCount).appendChild(video);
         }
     };
@@ -265,32 +272,52 @@ const WebRTC = () => {
         }, 1000);
     };
 
-    const handleButtonClick = async () => {
+    const handleEnterButtonClick = async () => {
         await handleEnterRoom();
     };
 
-    // const handlePostFeedback = async () => {
+    // const handlePostFeedback = async (value) => {
     //     try {
-    //         const response = await axios.post( "https://server.nextpick.site/" + `${roomId}/`)
+    //         const response = await axios.post(process.env.REACT_APP_API_URL + `${roomId}/` + value,
+    //             {
+    //             content:
+    //         })
     //     } catch (error) {
     //         alert("피드백 생성에 실패 했습니다.")
     //     }
+    // }
 
-    const handleGetParticipants = async () => {
+    const handleGetParticipants = async (key) => {
         try {
-            const resposne = await axios.get(process.env.REACT_APP_API_URL + "rooms/" + `${roomUuid}/` + "participants", {
+            const response = await axios.get(process.env.REACT_APP_API_URL + "rooms/" + `${roomUuid}/` + "participants/" + key, {
                headers: {
                    'Content-Type': 'application/json',
                    Authorization: `Bearer ${accessToken}`
                }
             });
-            let data = resposne.data.data;
-            
+            let data = response.data.data;
+            roomId = data.roomId;
+            if (!otherMemberIdList.includes(data.memberId)) {
+                otherMemberIdList.push(data.memberId);
+            }
         } catch (error) {
-
+            alert("member를 찾을 수 없습니다.")
         }
     }
 
+    const test = async () => {
+        otherMemberIdList.forEach((memberId, index) => {
+             if (index < 3) {
+                 otherMembers[`otherMember${index + 1}`] = memberId;
+             }
+        });
+
+        console.log(otherMembers);
+    }
+
+    const handlePostButtonClick = async () => {
+
+    }
 
     return (
         <div className="container">
@@ -310,7 +337,7 @@ const WebRTC = () => {
                         <div id="remoteStreamDiv3"></div>
                     </div>
                 </div>
-                <button onClick={handleButtonClick}>입장하기</button>
+                <button onClick={handleEnterButtonClick}>입장하기</button>
             </div>
 
             <div className="input-section">
