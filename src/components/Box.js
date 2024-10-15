@@ -21,7 +21,7 @@ background-color: ${(props) => props.color || '#579ef03a'} ;
     height: ${(props) => props.height ||'60vh'} ;
     /* 내용에 맞게 높이 조정 */
     width: ${(props) => props.width || '40vw'};
-    margin-top: ${(props) => props.top || '30px'};
+    margin-top: ${(props) => props.top || '0px'};
     margin-bottom: ${(props) => props.bottom};
     margin-left: ${(props) => props.left};
     text-align:${(props) => props.textalign};

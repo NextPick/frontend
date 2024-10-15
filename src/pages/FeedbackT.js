@@ -12,6 +12,21 @@ import { useMember } from '../hooks/MemberManager'; // 회원 정보를 관리�
 import Line from '../components/Line';
 import { FaStar } from 'react-icons/fa'; // 별점 표시를 위한 react-icons
 import ReviewForm from '../components/ReviewForm ';
+import MypageSide from '../components/MypageSide';
+
+
+
+
+const Container = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 100px;
+  background-color: #FFF;
+  height: 100vh;
+  font-family: Arial, sans-serif;
+`;
+
 
 const ProfileImgArea = styled.div`
 justify-content: center;
@@ -116,143 +131,11 @@ const FeedbackT = () => {
 
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-start' }}>
-           <Box
-                height="70vh"
-                width="16vw"
-                border="none"
-                alignItems="flex-start"
-                justify="flex-start"
-            >
-                <ProfileImgArea>
-                    <ProfileImage
-                        src={profileUrl ? profileUrl : defaultProfile}
-                        alt="Profile"
-                        onClick={handleImageClick}
-                    />
-                    <input
-                        type="file"
-                        accept="image/*"
-                        onChange={changeProfileImg}
-                        ref={fileInputRef} // ref 설정
-                        style={{ display: 'none' }} // 파일 입력 숨기기
-                    />
-                </ProfileImgArea>
-                <Font font="PretendardL" size="20px" color="#000000" marginbottom="1px">{nickname || '닉네임'}</Font>
-                <Font font="PretendardL" size="185x" color="#A4A5A6" marginbottom="3px">{email || '이메일'}</Font>
-                <Line
-                margintop="10px"
-                ></Line>
-
-                
-                <Button
-                    color="transparent"
-                    width="17vw"
-                    textcolor="#000000"
-                    height="54px"
-                    hoverColor="#ffffff"
-                    margintbottom="2px"
-                >
-                    <Font
-                        font="PretendardL"
-                        size="23px"
-                        color="#000000"
-                        align="center"
-                        paddingtop="6px"
-                    >
-                        프로필
-                    </Font>
-                </Button>
-
-                <Link to="/mynote" style={{ textDecoration: 'none' }}> 
-                <Button
-                    color="transparent"
-                    width="17vw"
-                    textcolor="#000000"
-                    height="54px"
-                    hoverColor="#ffffff"
-                    margintbottom="2px"
-                    onClick={() => handleButtonClick('/mynote')}
-                >
-                    <Font
-                        font="PretendardL"
-                        size="23px"
-                        color="#000000"
-                        align="center"
-                        paddingtop="6px"
-                    >
-                        정답 / 오답노트
-                    </Font>
-                </Button>
-                </Link>
-
-                <Link to="/feedback" style={{ textDecoration: 'none' }}> 
-                <Button
-                    color="transparent"
-                    width="17vw"
-                    textcolor="#000000"
-                    height="54px"
-                    hoverColor="#ffffff"
-                    margintbottom="2px"
-                    onClick={() => handleButtonClick('/feedbackT')}
-                >
-                    <Font
-                        font="PretendardL"
-                        size="23px"
-                        color="#000000"
-                        align="center"
-                        paddingtop="6px"
-                    >
-                        받은 피드백
-                    </Font>
-                </Button>
-                </Link>
-
-
-                <Button
-                    color="transparent"
-                    width="17vw"
-                    textcolor="#000000"
-                    height="54px"
-                    hoverColor="#ffffff"
-                    margintbottom="2px"
-                    onClick={() => handleButtonClick('/cash')}
-                >
-                    <Font
-                        font="PretendardL"
-                        size="23px"
-                        color="#000000"
-                        align="center"
-                        paddingtop="6px"
-                    >
-                        결제관리
-                    </Font>
-                </Button>
-                <Line
-                    marginbottom="14px"
-                ></Line>
-                <Button
-                    color="transparent"
-                    width="17vw"
-                    textcolor="#000000"
-                    height="54px"
-                    hoverColor="#ffffff"
-                >
-                    <Font
-                        font="PretendardL"
-                        size="20px"
-                        color="#A4A5A6"
-                        align="center"
-                        paddingtop="6px"
-                        marginbottom="0px"
-                    >
-                        로그아웃
-                    </Font>
-                </Button>
-            </Box>
-
+        <Container>
+             <MypageSide/>
             <Box
-                height="70vh"
+             color="#e7f0f9"
+                 height="100%"
                 width="35vw"
                 border="none"
                 left="20px"
@@ -268,7 +151,7 @@ const FeedbackT = () => {
                         size="25px"
                         color="#000000"
                         margintop="0px"
-                        paddingtop="7px"
+                        paddingtop="15px"
                         spacing="2px"
                         paddingleft="13px"
                     >
@@ -307,7 +190,7 @@ const FeedbackT = () => {
 
 
                 <div style={{ alignSelf: 'flex-start' }}>
-                    <Font font="PretendardL" size="25px" color="#000000" margintop="0px" paddingtop="7px" spacing="2px" paddingleft="13px">
+                    <Font font="PretendardL" size="25px" color="#000000" margintop="0px" paddingtop="15px" spacing="2px" paddingleft="13px">
                         받은 피드백
                     </Font>
                 </div>
@@ -323,7 +206,7 @@ const FeedbackT = () => {
                 {/* ReviewForm 컴포넌트 사용 */}
                 <ReviewForm onSubmit={handleReviewSubmit} />
             </Box>
-        </div>
+            </Container>
     );
 }
 
