@@ -19,7 +19,6 @@ import AudioRecorder from '../pages/AudioRecorder.jsx'; // 추가한 페이지 �
 import FeedbackT from '../pages/FeedbackT.js';
 import FeedbackS from '../pages/FeedbackS.js';
 import AdminPage from '../pages/AdminPage.js'
-import AdminPageQ from '../pages/AdminPageQ.js';
 import AdminPageQx from '../pages/AdminPageQ.jsx';
 import Administration from '../pages/Administration.js';
 import AdministrationX from '../pages/Administration.jsx';
@@ -35,6 +34,7 @@ import ResultCheck from '../pages/ResultCheck.js';
 import ResultPage from '../pages/ResultPage.js';
 import WebRTC from "../pages/WebRTC";
 import InterviewRoom from "../pages/InterviewRoom"
+import '../styles/global.css';
 
 
 // App 컴포넌트를 정의하는 함수형 컴포넌트
@@ -58,7 +58,6 @@ function App() {
               <Route path='/feedbackS' element={<FeedbackS/>} />
               <Route path='/cash' element={<Cash/>} />
               <Route path='/mynote' element={<MyNote/>} />
-              <Route path='/adminpageQ' element={<AdminPageQ/>} />
               <Route path='/adminpageQx' element={<AdminPageQx/>} />
               <Route path='/adminpage-service' element={<AdminPage/>} />
               <Route path='/administration' element={<Administration/>} />

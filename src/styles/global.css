@@ -111,3 +111,7 @@
   align-items: center; /* 수직 중앙 정렬 */
   height: 100%; /* 헤더의 높이에 맞춤 */
 }
+
+body{
+  font-family: "PretendardL", "함박눈", sans-serif;
+}
