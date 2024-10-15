@@ -8,8 +8,7 @@ import Box from './Box'
 import defaultProfile from '../assets/img-non-login.png';
 import { useMember } from '../hooks/MemberManager'; // 회원 정보를 관리하는 훅
 import axios from 'axios';
-import Swal from 'sweetalert2';
-
+import { useNavigate } from 'react-router-dom';
 
 
 const ProfileImgArea = styled.div`
@@ -75,6 +74,8 @@ const AdminpageSide = () => {
     const { profileUrl, setProfileUrl, nickname,  setNickname,  email,  setEmail } = useMember();
     const fileInputRef = useRef(null); // 파일 입력을 참조할 ref 생성
     const [activeMenu, setActiveMenu] = useState('마이페이지'); // 활성화된 메뉴 상태
+    const navigate = useNavigate(); // navigate 정의
+    const [roles, setRoles] = useState([]); // 역할 상태 추가
 
 
     useEffect(() => {
@@ -89,6 +90,7 @@ const AdminpageSide = () => {
                     const { email, nickname } = response.data.data; // 이메일과 닉네임 가져오기
                     setEmail(email); // 이메일 상태 업데이트
                     setNickname(nickname); // 닉네임 상태 업데이트
+                    setRoles(roles); // 역할 상태 업데이트
                 } else {
                     console.error('사용자 정보를 가져오는 데 실패했습니다.');
                 }
@@ -132,6 +134,23 @@ const handleImageClick = () => {
     };
 
 
+    const handleRangeClick = () => {
+        handleMenuClick('서비스 이용비율'); // 메뉴 클릭 처리
+        navigate('/adminpage-service'); // 마이페이지로 이동
+    };
+    
+    const handleQxClick = () => {
+        handleMenuClick('면접질문 관리'); // 메뉴 클릭 처리
+        navigate('/adminpageQx'); // 마이페이지로 이동
+    };
+    
+    const handleAministrationxClick = () => {
+        handleMenuClick('멘토가입 신청관리'); // 메뉴 클릭 처리
+        navigate('/administrationx'); // 마이페이지로 이동
+    };
+    
+
+    
 
 
   return (
@@ -167,10 +186,10 @@ const handleImageClick = () => {
                     margintop="10px"
                 ></Line>
                 <Menu>
-                <MenuItem active={activeMenu === '서비스 이용비율'} onClick={() => handleMenuClick('마이페이지')}>마이페이지</MenuItem>
-                <MenuItem active={activeMenu === '면접질문 관리'} onClick={() => handleMenuClick('정답/오답노트')}>정답/오답노트</MenuItem>
-                <MenuItem active={activeMenu === '멘토가입 신청관리'} onClick={() => handleMenuClick('받은 피드백')}>받은 피드백</MenuItem>
-                <MenuItem active={activeMenu === '사용자 신고목록 관리'} onClick={() => handleMenuClick('결제관리')}>결제관리</MenuItem>
+                <MenuItem active={activeMenu === '서비스 이용비율'} onClick={() => handleRangeClick('서비스 이용비율')}>서비스 이용비율</MenuItem>
+                <MenuItem active={activeMenu === '면접질문 관리'} onClick={() => handleQxClick('면접질문 관리')}>면접질문 관리</MenuItem>
+                <MenuItem active={activeMenu === '멘토가입 신청관리'} onClick={() => handleAministrationxClick('멘토가입 신청관리')}>멘토가입 신청관리</MenuItem>
+                <MenuItem active={activeMenu === '사용자 신고목록 관리'} onClick={() => handleMenuClick('사용자 신고목록 관리')}>사용자 신고목록 관리</MenuItem>
                 </Menu>
                 <Line
                     marginbottom="10px"
