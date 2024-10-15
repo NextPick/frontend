@@ -266,7 +266,7 @@ const Mypage = () => {
                 <div class="line2"></div>
                 <Button
                     color="transparent"
-                    width="158px"
+                    width="11vw"
                     textcolor="#000000"
                     height="35px"
                     hoverColor="#ffffff"
@@ -276,7 +276,7 @@ const Mypage = () => {
                     justify="none"
                     left="auto"
                     margintbottom="10px"
-                    marginright="5px"
+                    marginright="12px"
                 >
                     <Font
                         font="PretendardL"

@@ -297,7 +297,7 @@ const AiInterview = () => {
 const MicrophoneContainer = styled.div`
     display: flex;
     align-items: center;
-    margin-top: 70px;
+    margin-top: 30px;
 `;
 
 const Container = styled.div`

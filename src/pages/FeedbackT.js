@@ -151,7 +151,7 @@ const FeedbackT = () => {
                         size="25px"
                         color="#000000"
                         margintop="0px"
-                        paddingtop="7px"
+                        paddingtop="15px"
                         spacing="2px"
                         paddingleft="13px"
                     >
@@ -190,7 +190,7 @@ const FeedbackT = () => {
 
 
                 <div style={{ alignSelf: 'flex-start' }}>
-                    <Font font="PretendardL" size="25px" color="#000000" margintop="0px" paddingtop="7px" spacing="2px" paddingleft="13px">
+                    <Font font="PretendardL" size="25px" color="#000000" margintop="0px" paddingtop="15px" spacing="2px" paddingleft="13px">
                         받은 피드백
                     </Font>
                 </div>

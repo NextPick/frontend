@@ -114,7 +114,7 @@ const ResultPage = () => {
     }, [setHeaderMode]);
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-start' }}>
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', height:'100vh' }}>
             <Box
                 height="70vh"
                 width="60vw"

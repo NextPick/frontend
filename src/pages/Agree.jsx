@@ -196,12 +196,17 @@ const checkbox = {
 };
 
 const nextButtonStyle = {
-  padding: '10px 20px',
-  borderRadius: '20px',
+  padding: '10px 15px',
+  borderRadius: '10px',
   border: '1px solid #ccc',
   fontSize: '16px',
   cursor: 'pointer',
-  marginTop: '20px',
+  width:'5vw',
+  display: 'flex',
+  alignContent:'center',
+  justifyContent:'center'
+
+
 };
 
 export default AgreementBoxes;

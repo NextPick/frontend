@@ -7,9 +7,10 @@ import styled from 'styled-components';
 import { useMember } from '../hooks/MemberManager'; // 회원 정보를 관리하는 훅
 import Button from '../components/Button';
 
+
+
 const AiHome = () => {
     const { setHeaderMode } = useHeaderMode();
-    const { profileUrl, nickname } = useMember();
     const navigate = useNavigate();
     
     // 기본 카테고리 BE와 하위 카테고리 초기화
@@ -110,6 +111,7 @@ const AiHome = () => {
                       margintbottom="10px"
                       fontsize="20px"
                       marginright="15px"
+                      hoverTextColor="black"
                       onClick={handleStartInterviewClick} // 클릭 핸들러 추가
                     >
                         AI 면접시작하기 →
@@ -147,7 +149,7 @@ const CategoryButton = styled.button`
   }
 
   ${({ isSelected }) => isSelected && `
-      background-color: white;
+      background-color: black;
       transition: background-color 0.3s;
   `}
 `;
