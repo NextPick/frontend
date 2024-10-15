@@ -30,6 +30,8 @@ const Signup = () => {
   
   const handleBlur = (e) => {
     const { name, value } = e.target;
+    if(value==="" || value===null)
+      return;
     switch (name) {
       case '이메일':
         emailValidation(value);
@@ -58,13 +60,13 @@ const Signup = () => {
       if (type === '이메일') {
         if (!emailValidation(formData.이메일)) ValidationResult = false;
         else {
-          url = 'http://localhost:8080/members/verify/email';
+          url = process.env.REACT_APP_API_URL + 'members/verify/email';
           body = { email: formData.이메일 };
         }
       } else if (type === '닉네임') {
         if (!nicknameValidation(formData.닉네임)) ValidationResult = false;
         else {
-          url = 'http://localhost:8080/members/verify/nickname';
+          url = process.env.REACT_APP_API_URL + 'verify/nickname';
           body = { nickname: formData.닉네임 };
         }
       }
@@ -119,7 +121,7 @@ const Signup = () => {
     }
 
     try {
-      const response = await axios.post('http://localhost:8080/members', {
+      const response = await axios.post(process.env.REACT_APP_API_URL + 'members', {
         name: formData.이름,
         gender: formData.성별,
         email: formData.이메일,

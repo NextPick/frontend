@@ -89,6 +89,7 @@ const Mypage = () => {
     }, [setHeaderMode]);
 
 
+
     useEffect(() => {
         const fetchUserData = async () => {
             try {
@@ -111,6 +112,7 @@ const Mypage = () => {
                     icon: 'error',
                     confirmButtonText: '확인'
                 });
+
             }
         };
 
