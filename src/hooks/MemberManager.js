@@ -19,7 +19,7 @@ export const MemberManager = ({ children }) => {
   const setProfileData = (profile) => {
     setName(profile.name || null);
     setProfileUrl(profile.profileUrl || null);
-    // setNickname(profile.nickname || null);
+    setNickname(profile.nickname || null);
     setPhone(profile.phone || null);
     setEmail(profile.email || null);
     setAuthorization(profile.authorization || null);
@@ -34,7 +34,7 @@ export const MemberManager = ({ children }) => {
     const storedLogin = localStorage.getItem('login');
     const storedName = localStorage.getItem('name');
     const storedProfileUrl = localStorage.getItem('profileUrl');
-    // const storedNickname = localStorage.getItem('nickname');
+    const storedNickname = localStorage.getItem('nickname');
     const storedPhone = localStorage.getItem('phone');
     const storedEmail = localStorage.getItem('email');
 
@@ -44,7 +44,7 @@ export const MemberManager = ({ children }) => {
     setLogin(storedLogin === 'true' ? true : storedLogin === 'false' ? false : null);
     setName(storedName);
     setProfileUrl(storedProfileUrl);
-    // setNickname(storedNickname);
+    setNickname(storedNickname);
     setPhone(storedPhone);
     setEmail(storedEmail);
   }, []); // 빈 배열을 주어 컴포넌트가 처음 렌더링될 때만 실행됩니다.
@@ -108,7 +108,7 @@ export const MemberManager = ({ children }) => {
       login, setLogin, 
       name, setName, 
       profileUrl, setProfileUrl, 
-      // nickname, setNickname, 
+      nickname, setNickname, 
       phone, setPhone, 
       email, setEmail, 
       setProfileData // 새로운 함수 제공
