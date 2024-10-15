@@ -27,6 +27,8 @@ const Signup = () => {
   
   const handleBlur = (e) => {
     const { name, value } = e.target;
+    if(value==="" || value===null)
+      return;
     switch (name) {
       case '이메일':
         emailValidation(value);

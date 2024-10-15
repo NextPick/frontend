@@ -35,7 +35,12 @@ const Login = () => {
           confirmButtonText: '확인'
         });
         const accessToken = response.headers['authorization'];
+        const Type = response.headers['type'];
+        const nickname = response.data.nickname; // 응답 본문에서 한글 닉네임 가져오기
+        console.log(Type);
         localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('type', Type);
+        localStorage.setItem('nickname', nickname);
         localStorage.setItem('email', username);
         navigate("/")
       } else if (response.status === 401) {
