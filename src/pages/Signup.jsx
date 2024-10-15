@@ -63,7 +63,7 @@ const Signup = () => {
       } else if (type === '닉네임') {
         if (!nicknameValidation(formData.닉네임)) ValidationResult = false;
         else {
-          url = process.env.REACT_APP_API_URL + 'verify/nickname';
+          url = process.env.REACT_APP_API_URL + 'members/verify/nickname';
           body = { nickname: formData.닉네임 };
         }
       }
