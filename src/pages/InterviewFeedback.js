@@ -41,18 +41,23 @@ const InterviewFeedback = () => {
 
     const handleGetMenteeFeedback = async () => {
         try {
-            const response = await axios.get(process.env.REACT_APP_API_URL + "mentee/feedback/" + roomId,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer ${accessToken}`,
-                    },
-                });
-            let data = response.data.data;
-            setContent(data.content);
-            setMentorNickname(data.mentorNickname);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}mentee/feedback/${roomId}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${accessToken}` // 인증 헤더 설정
+                }
+            });
+
+            if (response.data && response.data.data) {
+                let data = response.data.data;
+                setContent(data.content);
+                setMentorNickname(data.mentorNickname);
+            } else {
+                console.error("Received unexpected response structure:", response.data);
+            }
         } catch (error) {
-            alert("멘티 피드백을 불러오는데 실패했습니다.")
+            console.error("멘티 피드백을 불러오는 중 오류 발생:", error); // 오류 메시지 출력
+            alert("멘티 피드백을 불러오는데 실패했습니다."); // 사용자에게 오류 알림
         }
     }
 
