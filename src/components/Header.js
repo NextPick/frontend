@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import '../styles/global.css';  
 import { useHeaderMode } from '../hooks/HeaderManager.js'; 
 import logo from '../assets/KakaoTalk_20241015_104803914_02.png'; // 로고 경로
+import { NavItem } from 'react-bootstrap';
 
 const Header = () => {
     const { headerMode } = useHeaderMode();
@@ -50,7 +51,7 @@ const Header = () => {
                     {nickname ? (
                         <div style={styles.userContainer}>
                         <Link to='/mypage' className='navLink' onClick={handleLinkClick}>
-                            <span style={styles.welcomeMessage}>{nickname}님 환영합니다!</span>
+                            <span style={styles.welcomeMessage}><em style={{ fontStyle:'normal', color:'#177FF9', fontWeight:'bold' }}>[{nickname}]</em>님 환영합니다!</span>
                             </Link>
                             <button onClick={handleLogout} style={styles.logoutButton}>로그아웃</button>
                         </div>
@@ -95,14 +96,16 @@ const styles = {
     },
     navLinks: {
         display: 'flex',
-        paddingTop: '5px',
+        // paddingTop: '5px',
         gap: '20px', // 링크 간격 조정
     },
+
     userContainer: {
         display: 'flex',
-        marginRight: '60px',
-        marginTop: '11px',
-        marginLeft: '-60px'
+        alignItems: 'center'
+        // marginRight: '60px',
+        // marginTop: '11px',
+        // marginLeft: '-60px'
     },
     welcomeMessage: {
         marginRight: '12px',
@@ -137,7 +140,7 @@ styleSheet.insertRule(`
 
 styleSheet.insertRule(`
     .navLink:hover {
-        color: #0594; // 호버 시 색상 변경
+        color: #177FF9; // 호버 시 색상 변경
     }
 `, styleSheet.cssRules.length);
 

@@ -43,22 +43,26 @@ const Home = () => {
       <div className='section1'>
         <div className='maintext1'>나만의 면접 컨설턴트
           <p>취업드림</p>
-          <div className='maintext2'>ai 서비스와 엄선해서 선정한 면접코치를
-            <p>바탕으로 취업에 대한 답을 찾아드립니다</p></div>
-        </div>
-        <div className='mainimg'>
-          <Link to={'/login'}>
+          <div className='maintext2'>
+            ai 서비스와 엄선된 면접코치를
+            <p>바탕으로 취업에 대한 답을 찾아드립니다</p>
+          </div>
+            <Link to={'/login'}>
             <Button
               color="#177FF9"
-              width="230px"
               textcolor="#ffffff"
-              margintop="310px"
-              height="75px"
-              fontsize="1.9rem"
+              // margintop="310px"
+              padding="10px 20px;"
+              radius="10px!important;"
+              fontsize="20px;"
+              fontcolor="#fff;"
             >
               체험하러 가기
             </Button>
           </Link>
+        </div>
+        <div className='mainimg'>
+          
         </div>
       </div>
       <Arrow/>
@@ -83,10 +87,12 @@ const Home = () => {
         align="center"
         paddingtop="5px"
         >
-    <p style={{ margin: '7px 0' }}>누적 면접 촬영 건수 10,000,000건</p>
-    <p style={{ margin: '7px 0' }}>FE/BE/CS 총 질문 10,000+</p>
-    <p style={{ margin: '7px 0' }}>관리자가 엄선한 튜터의 프라이빗한</p> 
-    <p style={{ margin: '7px 0' }}>1대1 면접 피드백까지</p>
+          <p style={{ lineHeight:'60px' }}>
+            누적 면접 촬영 건수 10,000,000건<br/>
+            FE/BE/CS 총 질문 10,000+<br/>
+            관리자가 엄선한 튜터의 프라이빗한<br/>
+            1대1 면접 피드백까지
+          </p>
         </Font>
         <div className='section3photo'/>
       </div>
