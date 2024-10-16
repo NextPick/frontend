@@ -1,22 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
-import Line from '../components/Line';
-import { useMember } from '../hooks/MemberManager'; // 회원 정보를 관리하는 훅
 import AdminpageSide from '../components/AdminpageSide';
-
-
+import { useMember } from '../hooks/MemberManager';
 
 const Administration = () => {
   const [mentorData, setMentorData] = useState([]);
+  const [totalPages, setTotalPages] = useState(1);
   const { profileUrl, setProfileUrl, nickname, email } = useMember();
   const [page, setPage] = useState(1);
 
   useEffect(() => {
-    axios.get(process.env.REACT_APP_API_URL + `members/mentor?page=${page}&size=20`)
+    axios.get(`${process.env.REACT_APP_API_URL}members/mentor`, {
+      params: { page, size: 20 }
+    })
       .then(response => {
         const data = response.data.data;
         setMentorData(data);
+        setTotalPages(response.data.pageInfo.totalPages);
       })
       .catch(error => {
         console.error('Error fetching data:', error);
@@ -26,16 +27,9 @@ const Administration = () => {
   const handleAccept = (memberId) => {
     const accessToken = localStorage.getItem('accessToken');
     axios.patch(
-      process.env.REACT_APP_API_URL + `members/admin/${memberId}`,
-      {
-        status: "ACTIVE",
-        guiltyScore: -6
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        }
-      }
+      `${process.env.REACT_APP_API_URL}members/admin/${memberId}`,
+      { status: "ACTIVE", guiltyScore: -6 },
+      { headers: { Authorization: `Bearer ${accessToken}` } }
     )
     .then(() => {
       setMentorData(prevData => prevData.filter(user => user.memberId !== memberId));
@@ -47,10 +41,8 @@ const Administration = () => {
 
   const handleReject = (memberId) => {
     const accessToken = localStorage.getItem('accessToken');
-    axios.delete(process.env.REACT_APP_API_URL + `members/admin/${memberId}`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      }
+    axios.delete(`${process.env.REACT_APP_API_URL}members/admin/${memberId}`, {
+      headers: { Authorization: `Bearer ${accessToken}` }
     })
     .then(() => {
       setMentorData(prevData => prevData.filter(user => user.memberId !== memberId));
@@ -62,7 +54,7 @@ const Administration = () => {
 
   return (
     <Container>
-       <AdminpageSide/>
+      <AdminpageSide />
       <MainContent>
         <Title>멘토가입 신청관리</Title>
         <TableContainer>
@@ -93,20 +85,24 @@ const Administration = () => {
           </Table>
         </TableContainer>
         <Pagination>
-          {[1, 2, 3, 4].map((num) => (
-            <PaginationDot
-              key={num}
-              active={page === num}
-              onClick={() => setPage(num)}
-            />
+          <button onClick={() => setPage(page - 1)} disabled={page === 1}>이전</button>
+          {Array.from({ length: totalPages }, (_, index) => (
+            <button
+              key={index}
+              onClick={() => setPage(index + 1)}
+              style={index + 1 === page ? activePageStyle : {}}
+            >
+              {index + 1}
+            </button>
           ))}
+          <button onClick={() => setPage(page + 1)} disabled={page === totalPages}>다음</button>
         </Pagination>
       </MainContent>
     </Container>
   );
 };
 
-// Styled Components with hover animations
+// Styled Components
 const Container = styled.div`
   display: flex;
   justify-content: center;
@@ -115,14 +111,6 @@ const Container = styled.div`
   background-color: #FFF;
   height: 100vh;
   font-family: Arial, sans-serif;
-`;
-
-const LogoutButton = styled.button`
-  border: none;
-  background-color: transparent;
-  color: #333;
-  cursor: pointer;
-  margin-top: 20px;
 `;
 
 const MainContent = styled.main`
@@ -185,15 +173,14 @@ const Pagination = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 20px;
+  gap: 10px;
+  font-size: 14px;
 `;
 
-const PaginationDot = styled.span`
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  margin: 0 5px;
-  cursor: pointer;
-  background-color: ${({ active }) => (active ? '#000' : '#ccc')};
-`;
+const activePageStyle = {
+  fontWeight: 'bold',
+  backgroundColor: '#4b8da6',
+  color: 'white',
+};
 
 export default Administration;

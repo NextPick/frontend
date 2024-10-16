@@ -129,13 +129,13 @@ const AdminpageSide = () => {
     // 메뉴 이름에 따른 페이지 네비게이션
     switch (menuName) {
       case '서비스 이용비율':
-        navigate('/adminpage-service');
+        navigate('/admin/service');
         break;
       case '면접질문 관리':
-        navigate('/adminpageQ');
+        navigate('/admin/question');
         break;
       case '멘토가입 신청관리':
-        navigate('/administration');
+        navigate('/admin');
         break;
       case '사용자 신고목록 관리':
         // 아무 이동도 하지 않음
