@@ -11,25 +11,38 @@ const QuestionBoardPost = () => {
   const navigate = useNavigate();
 
   // 이미지 추가
-  const handleImageAdd = (event) => {
-    const selectedFiles = Array.from(event.target.files);
-    const oversizedFiles = selectedFiles.filter((file) => file.size > maxFileSize);
-    
-    if (oversizedFiles.length > 0) {
-      alert("파일의 크기가 5MB를 넘었습니다.");
-    }
+// 이미지 추가
+// const handleImageAdd = (event) => {
+//   const selectedFiles = Array.from(event.target.files);
+//   const oversizedFiles = selectedFiles.filter((file) => file.size > maxFileSize);
+  
+//   if (oversizedFiles.length > 0) {
+//     alert("파일의 크기가 5MB를 넘었습니다.");
+//   }
 
-    const validFiles = selectedFiles
-      .filter((file) => file.size <= maxFileSize)
-      .slice(0, 3 - images.length); // 최대 3개까지 허용
+//   const validFiles = selectedFiles.filter((file) => file.size <= maxFileSize);
 
-    const newImages = validFiles.map((file) => ({
-      file,
-      url: URL.createObjectURL(file),
-    }));
+//   const newImages = validFiles.map((file) => ({
+//     file,
+//     url: URL.createObjectURL(file),
+//   }));
 
-    setImages([...images, ...newImages]);
-  };
+//   setImages([...images, ...newImages]);
+// };
+
+// 이미지 추가 (파일 크기 제한 제거)
+const handleImageAdd = (event) => {
+  const selectedFiles = Array.from(event.target.files);
+
+  const newImages = selectedFiles.map((file) => ({
+    file,
+    url: URL.createObjectURL(file),
+  }));
+
+  setImages([...images, ...newImages]);
+};
+
+
 
   // 이미지 제거
   const handleImageRemove = (index) => {
@@ -257,21 +270,21 @@ const fileInput = {
   display: 'none',
 };
 
-const imageList = {
-  display: 'flex',
-  gap: '10px',
-};
+// const imageList = {
+//   display: 'flex',
+//   gap: '10px',
+// };
 
 const imageContainer = {
   position: 'relative',
 };
 
-const imagePlaceholder = {
-  width: '80px',
-  height: '80px',
-  objectFit: 'cover',
-  borderRadius: '4px',
-};
+// const imagePlaceholder = {
+//   width: '80px',
+//   height: '80px',
+//   objectFit: 'cover',
+//   borderRadius: '4px',
+// };
 
 const removeButton = {
   position: 'absolute',
@@ -282,6 +295,24 @@ const removeButton = {
   backgroundColor: 'transparent',
   cursor: 'pointer',
 };
+
+const imageList = {
+  display: 'flex',
+  flexWrap: 'wrap', // 이미지를 여러 줄에 걸쳐 보여줄 수 있도록 함
+  gap: '10px',
+  justifyContent: 'center',
+};
+
+const imagePlaceholder = {
+  width: '150px', // 이미지를 일정 크기로 제한
+  height: '150px', 
+  objectFit: 'cover', // 이미지 비율 유지하면서 잘림 처리
+  borderRadius: '4px',
+  boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
+};
+
+
+
 
 const submitButton = {
   fontSize: '14px',
