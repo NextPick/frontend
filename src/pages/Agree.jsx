@@ -133,11 +133,13 @@ const titleContainer = {
 };
 
 const mainTitle = {
+  fontFamily: 'Pretendard',
   fontWeight: 'Bold',
   fontSize: '26px',
 };
 
 const subTitle = {
+  fontFamily: 'Pretendard',
   fontSize: '18px',
   marginTop: '10px',
 };
@@ -156,11 +158,13 @@ const boxWrapper = {
 };
 
 const sectionTitle = {
+  fontFamily: 'Pretendard',
   fontSize: '20px',
   marginBottom: '10px',
 };
 
 const boxContainer = {
+  fontFamily: 'Pretendard',
   display: 'flex',
   flexDirection: 'column',
   backgroundColor: '#E0EBF5',
@@ -182,31 +186,27 @@ const contentBox = {
 };
 
 const checkboxLabel = {
-  display: 'flex',
-  alignItems: 'center',
+  fontFamily: 'Pretendard',
   marginTop: '20px',
   fontSize: '14px',
-  width:"100%"
+  width: '100%',
 };
 
 const checkbox = {
   marginRight: '5px',
   marginBottom: '0px',
-  width:"5%"
 };
 
 const nextButtonStyle = {
+  fontFamily: 'Pretendard',
   padding: '10px 15px',
   borderRadius: '10px',
   border: '1px solid #ccc',
   fontSize: '16px',
   cursor: 'pointer',
-  width:'5vw',
   display: 'flex',
   alignContent:'center',
   justifyContent:'center'
-
-
 };
 
 export default AgreementBoxes;

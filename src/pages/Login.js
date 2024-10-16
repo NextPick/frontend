@@ -84,7 +84,7 @@ const LoginPage = () => {
         <div style={styles.illustration}>
           <img src={loginImage} alt="nextpick Logo" style={styles.loginImage} />
         </div>
-        <button onClick={() => navigate('/signupOption')} style={styles.signupButton}>회원 가입</button>
+        <button onClick={() => navigate('/agree')} style={styles.signupButton}>회원 가입</button>
       </div>
 
       <div style={styles.rightPanel}>

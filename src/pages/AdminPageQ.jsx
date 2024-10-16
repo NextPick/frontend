@@ -153,9 +153,9 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 100px;
+  padding: 50px;
   background-color: #FFF;
-  height: 100vh;
+  height: 90vh;
   font-family: Arial, sans-serif;
 `;
 
@@ -164,7 +164,7 @@ const MainContent = styled.main`
   padding: 20px;
   max-width: 800px;
   height: 100%;
-  background-color: #f1f7fd;
+  background-color: #e7f0f9;
   border-radius: 15px;
   margin-left: 20px;
   text-align: center;

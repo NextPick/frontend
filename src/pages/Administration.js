@@ -19,9 +19,9 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 100px;
-  background-color: #FFF;
-  height: 100vh;
+  padding: 50px;
+  background-color: #D4E5F0;
+  height: 90vh;
   font-family: Arial, sans-serif;
 `;
 
