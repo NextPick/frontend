@@ -36,18 +36,6 @@ const ReviewBoard = () => {
             Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
           }
         });
-
-        const boardData = response.data;
-        if (boardData && boardData.content && boardData.content.length > 0) {
-          setBoards(boardData.content);
-          setTotalPages(Math.ceil(boardData.content.length / size));
-        } else if (boardData && boardData.length > 0) {
-          setBoards(boardData);
-          setTotalPages(Math.ceil(boardData.length / size));
-        } else {
-          setBoards([]);
-          setTotalPages(1);
-        }
       } catch (error) {
         console.error('질문 게시판 데이터 가져오기 오류:', error);
       }
