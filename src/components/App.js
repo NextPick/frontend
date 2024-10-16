@@ -59,12 +59,12 @@ function App() {
                 <Route path='/cash' element={<Cash />} />
                 <Route path='/mynote' element={<MyNote />} />
                 <Route path='/not' element={<Not />} />
-                <Route path='/adminpageQx' element={<AdminPageQx />} />
+                <Route path='/adminpageQ' element={<AdminPageQx />} />
                 <Route path='/adminpage-service' element={<AdminPage />} />
                 <Route path='/choice' element={<Choice />} />
                 <Route path='/interviewfeedback' element={<InterviewFeedback />} />
                 <Route path='/aihome' element={<AiHome />} />
-                <Route path='/administrationx' element={<AdministrationX />} />
+                <Route path='/administration' element={<AdministrationX />} />
                 <Route path='/resultcheck' element={<ResultCheck />} />
                 <Route path='/resultpage' element={<ResultPage />} />
                 <Route path='/aiInterview' element={<AiInterview />} />

@@ -1,81 +1,69 @@
-import React, { useState } from 'react';
-import { VictoryPie } from 'victory';
+// components/Chart.js
+import React, { useEffect, useState } from 'react';
+import { Pie } from 'react-chartjs-2';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import BarChart from './BarChart';
 
-// 로컬 데이터 정의
-const localData = [
-  { x: 'Apples', y: 35 },
-  { x: 'Bananas', y: 40 },
-  { x: 'Oranges', y: 55 },
-  { x: 'Berries', y: 30 },
-  { x: 'Grapes', y: 25 },
-];
+ChartJS.register(ArcElement, Tooltip, Legend);
 
-const Chart = () => {
-  const [hoveredIndex, setHoveredIndex] = useState(null); // 마우스 오버된 차트 부분의 인덱스 상태
+const Chart = ({ onSelectCategory }) => {
+    const [chartData, setChartData] = useState({
+        labels: [],
+        datasets: [{
+            data: [],
+            backgroundColor: [],
+            borderWidth: 1,
+        }],
+    });
 
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', width: '100%', alignItems: 'center', justifyContent: 'flex-start' }}>
-      {/* 그래프 */}
-      <div style={{ flex: '0 0 auto', display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '20px' }}>
-        <VictoryPie
-          data={localData} // 로컬 데이터 사용
-          colorScale={['#FF5722', '#FF9800', '#FFC107', '#FFEB3B', '#CDDC39']}
-          labels={({ datum }) => `${datum.x}: ${datum.y}`} // 레이블 설정
-          innerRadius={50} // 파이 내부 빈 공간
-          style={{
-            parent: {
-              viewBox: '0 0 800 800', // 원 그래프의 크기를 2배로 키움
-              width: '360px', // 너비를 2배로 조정
-              height: '300px', // 높이를 2배로 조정npm
-            },
-            data: {
-              stroke: 'white',
-              strokeWidth: 2,
-              transition: 'transform 0.2s ease-in-out', // 애니메이션 적용
-            },
-          }}
-          events={[
-            {
-              target: 'data',
-              eventHandlers: {
-                onMouseOver: (evt, props) => {
-                  setHoveredIndex(props.index); // 마우스 오버 시 해당 인덱스 저장
-                },
-                onMouseOut: () => {
-                  setHoveredIndex(null); // 마우스 아웃 시 인덱스 초기화
-                },
-              },
-            },
-          ]}
-        />
-      </div>
+    const colors = {
+        BE: '#ff6384', // Bright Red for BE
+        CS: '#36a2eb', // Bright Blue for CS
+        FE: '#ffcd56'  // Bright Yellow for FE
+    };
 
-      {/* 데이터 표시 */}
-      <div  style={{
-    display: 'grid', // grid 레이아웃 사용
-    gridTemplateColumns: 'repeat(3, 1fr)', // 1행에 2개의 열로 구성
-    gridGap: '12px', // 요소 간의 간격 조정
-  }}>
-        {localData.map((datum, index) => (
-          <div
-            key={datum.x}
-            style={{
-              fontSize:"21px",
-              fontFamily:"함박눈",
-              color: index === hoveredIndex ? '#FF5722' : 'black', // 호버된 인덱스에 따라 색상 변경
-              fontWeight: index === hoveredIndex ? 'bold' : 'normal', // 호버된 인덱스에 따라 굵게 표시
-              cursor: 'pointer',
-              padding: '5px 0',
-            }}
-            onMouseOver={() => setHoveredIndex(index)} // 마우스 오버 시 인덱스 설정
-            onMouseOut={() => setHoveredIndex(null)} // 마우스 아웃 시 인덱스 초기화
-          >
-            {datum.x}: {datum.y} {/* 레이블 텍스트 유지 */}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+    useEffect(() => {
+        fetch('http://localhost:8080/statistics/question')
+            .then(response => response.json())
+            .then(data => {
+                const beCategories = ["java", "spring", "nodeJs", "expressJs", "django", "flask", "ruby", "php", "graphQL", "mySQL"];
+                const csCategories = ["networking", "os", "dataStructure", "algorithms", "softwareEngineering", "designPatterns", "computerArchitecture", "cybersecurity", "artificialIntelligence"];
+                const feCategories = ["react", "vue", "angular", "html5", "css3", "javaScriptES6Plus", "typeScript", "sassScss", "webpack", "responsiveWebDesign"];
+
+                const beTotal = beCategories.reduce((sum, key) => sum + data.data[key], 0);
+                const csTotal = csCategories.reduce((sum, key) => sum + data.data[key], 0);
+                const feTotal = feCategories.reduce((sum, key) => sum + data.data[key], 0);
+
+                setChartData({
+                    labels: ['BE', 'CS', 'FE'],
+                    datasets: [{
+                        data: [beTotal, csTotal, feTotal],
+                        backgroundColor: [colors.BE, colors.CS, colors.FE],
+                    }],
+                });
+            })
+            .catch(error => console.error('Error fetching data:', error));
+    }, []);
+
+    const handlePieClick = (event, elements) => {
+        if (elements.length > 0) {
+            const index = elements[0].index;
+            const selectedLabel = chartData.labels[index];
+            onSelectCategory(selectedLabel);
+        }
+    };
+
+    const options = {
+        responsive: true,
+        maintainAspectRatio: false,
+        onClick: handlePieClick,
+    };
+
+    return (
+        <div style={{ width: '100%', height: '400px' }}>
+            <Pie data={chartData} options={options} />
+        </div>
+    );
 };
 
 export default Chart;

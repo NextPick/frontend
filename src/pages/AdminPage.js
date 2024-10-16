@@ -1,17 +1,47 @@
-import React, { useEffect, useState, useRef } from 'react';
+// components/AdminPage.js
+import React, { useEffect, useState } from 'react';
 import { useHeaderMode } from '../hooks/HeaderManager';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import Box from '../components/Box';
-import '../styles/login.css';
-import Font from '../components/Font';
-import styled from 'styled-components';
-import defaultProfile from '../assets/img-non-login.png';
 import Chart from '../components/Chart';
+import BarChart from '../components/BarChart';
 import AdminpageSide from '../components/AdminpageSide';
+import styled from 'styled-components';
 
+const AdminPage = () => {
+    const { setHeaderMode } = useHeaderMode();
+    const [activeTab, setActiveTab] = useState('chart');
+    const [selectedCategory, setSelectedCategory] = useState(null);
 
+    useEffect(() => {
+        setHeaderMode('main');
+    }, [setHeaderMode]);
 
+    const renderTabContent = () => {
+        if (activeTab === 'chart') {
+            return (
+                <ChartContainer>
+                    <ChartWrapper>
+                        <Chart onSelectCategory={setSelectedCategory} />
+                    </ChartWrapper>
+                    <ChartWrapper>
+                        {selectedCategory && <BarChart category={selectedCategory} />}
+                    </ChartWrapper>
+                </ChartContainer>
+            );
+        }
+    };
 
+    return (
+        <Container>
+            <AdminpageSide />
+            <MainContent>
+                <Title>서비스 이용비율</Title>
+                {renderTabContent()}
+            </MainContent>
+        </Container>
+    );
+};
+
+export default AdminPage;
 
 // Styled Components
 const Container = styled.div`
@@ -21,70 +51,34 @@ const Container = styled.div`
   padding: 100px;
   background-color: #FFF;
   height: 100vh;
-  font-family: Arial, sans-serif;
 `;
 
+const MainContent = styled.main`
+  flex: 1;
+  padding: 20px;
+  max-width: 800px;
+  height: 100%;
+  background-color: #f1f7fd;
+  border-radius: 15px;
+  margin-left: 20px;
+`;
 
-const AdminPage = () => {
-    const { headerMode, setHeaderMode } = useHeaderMode();
-    const [activeTab, setActiveTab] = useState('chart'); // 탭 상태를 관리
+const Title = styled.h2`
+  font-size: 24px;
+  margin-top: 0px;
+  margin-bottom: 10px;
+  text-align: left;
+`;
 
+const ChartContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 800px;
+  margin-top: 100px;
+`;
 
-    useEffect(() => {
-        setHeaderMode('main');
-    }, [setHeaderMode]);
-
-  
-
-
- // 탭에 따라 표시할 콘텐츠를 정의
- const renderTabContent = () => {
-    if (activeTab === 'chart') {
-        return (
-            <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center' }}>
-                     <div style={{ alignSelf: 'flex-start' , marginBottom: '10px', width:"35vw" }}> {/* 왼쪽 정렬을 위한 스타일 */}
-                    <Font
-                        font="PretendardL"
-                        size="22px"
-                        color="#000000"
-                        margintop="5px"
-                        spacing="2px"
-                        paddingtop="5px"
-                        paddingleft="13px"
-                        marginbottom="2px"
-                    >
-                        서비스 이용비율
-                    </Font>
-                </div>
-                       {/* 여기에 차트 컴포넌트를 추가합니다 */}
-                <div style={{ width: '75%', marginTop: '10px' }}>
-                <Chart /> {/* 'answer' 탭에서만 차트가 렌더링됩니다 */}
-          </div>
-        </div>
-      );
-    } 
-  };
-
-    return (
-        <Container>
-           <AdminpageSide/>
-            <Box
-                height="74vh"
-                width="50.5vw"
-                border="none"
-                left="20px"
-                justify="flex-start"
-                direction="column"
-                alignitem="center"
-                padding="0px"
-                color="#e7f0f9"
-                style={{ display: 'flex'}} // 자식 박스에서 정렬
-            >
-              
-                {renderTabContent()} 
-            </Box>
-            </Container>
-    );
-  }
-  
-export default AdminPage;
+const ChartWrapper = styled.div`
+  width: 45%;
+  height: 400px;
+`;
