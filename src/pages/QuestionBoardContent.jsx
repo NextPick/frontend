@@ -18,7 +18,7 @@ const PostDetail = () => {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/boards/${boardId}`, {
+        const response = await axios.get(process.env.REACT_APP_API_URL + `boards/${boardId}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
           },
@@ -38,7 +38,7 @@ const PostDetail = () => {
   // 댓글 목록 가져오기
   const fetchComments = async () => {
     try {
-      const response = await axios.get(`http://localhost:8080/boards/${boardId}/comments`, {
+      const response = await axios.get(process.env.REACT_APP_API_URL + `boards/${boardId}/comments`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
         },
@@ -81,7 +81,7 @@ const PostDetail = () => {
 
   const handleLike = async () => {
     try {
-      const response = await axios.post(`http://localhost:8080/boards/${boardId}/likes`, {}, {
+      const response = await axios.post(process.env.REACT_APP_API_URL + `boards/${boardId}/likes`, {}, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
         },
@@ -102,7 +102,7 @@ const PostDetail = () => {
   const handleCommentSubmit = async () => {
     try {
       await axios.post(
-        `http://localhost:8080/boards/${boardId}/comments`,
+        process.env.REACT_APP_API_URL + `boards/${boardId}/comments`,
         { content: newComment },
         {
           headers: {
@@ -153,7 +153,7 @@ const PostDetail = () => {
   const handleReplySubmit = async (parentCommentId) => {
     try {
       await axios.post(
-        `http://localhost:8080/boards/${boardId}/comments`,
+        process.env.REACT_APP_API_URL + `boards/${boardId}/comments`,
         {
           content: newReply[parentCommentId],
           parentCommentId: parentCommentId,  // 부모 댓글 ID 포함
@@ -175,7 +175,56 @@ const PostDetail = () => {
     setNewReply({ ...newReply, [parentCommentId]: value });
   };
 
+<<<<<<< HEAD
   // 댓글 및 대댓글 렌더링
+=======
+  const handleEditCommentSubmit = async (commentId) => {
+    try {
+      await axios.patch(
+        process.env.REACT_APP_API_URL + `boards/${boardId}/comments/${commentId}`,
+        { content: editContent[commentId] },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+          }
+        }
+      );
+      setEditContent({ ...editContent, [commentId]: '' });
+      setShowEditInput({ ...showEditInput, [commentId]: false });
+      fetchComments();
+    } catch (error) {
+      console.error('댓글 수정 중 오류 발생:', error);
+    }
+  };
+
+  const handleDeleteComment = async (commentId) => {
+    try {
+      await axios.delete(process.env.REACT_APP_API_URL + `boards/${boardId}/comments/${commentId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+      });
+      fetchComments();
+    } catch (error) {
+      console.error('댓글 삭제 중 오류 발생:', error);
+    }
+  };
+
+  const toggleReplyInput = (parentCommentId) => {
+    setShowReplyInput((prevState) => ({
+      ...prevState,
+      [parentCommentId]: !prevState[parentCommentId]
+    }));
+  };
+
+  const toggleEditInput = (commentId) => {
+    setShowEditInput((prevState) => ({
+      ...prevState,
+      [commentId]: !prevState[commentId]
+    }));
+  };
+
+>>>>>>> 8691765f2c22e338a1f6e24f474b7df475061bac
   const renderComments = (parentId = null) => {
     return comments
       .filter(comment => comment.parentCommentId === parentId)

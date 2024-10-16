@@ -117,7 +117,7 @@ const ResultPage = () => {
 
       // POST 요청으로 변경하여 solvesIdList를 본문에 포함
       const response = await axios.post(
-        'http://localhost:8080/solves/list',
+        process.env.REACT_APP_API_URL + 'solves/list',
         {
           solvesIdList: solvesIdList,
         },

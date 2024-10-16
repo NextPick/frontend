@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHeaderMode } from '../hooks/HeaderManager';
-import { useNavigate } from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 import Box from '../components/Box';
 import '../styles/login.css';
 import Button from '../components/Button';
@@ -16,13 +16,13 @@ const InterviewFeedback = () => {
     const [userScore, setUserScore] = useState(0); // 사용자의 별점
     const [userReview, setUserReview] = useState(''); // 사용자의 리뷰
     const [submittedReviews, setSubmittedReviews] = useState([]); // 제출된 리뷰들
-    let roomId = 0; // 실제 값 할당 필요
+    const location = useLocation();
+    const roomId = location.state?.roomId || 0;
     let mentorId = 0; // 실제 값 할당 필요
     const [feedback, setFeedback] = useState('');
     const [mentorNickname, setMentorNickname] = useState('');
     const [content, setContent] = useState('');
-
-
+    const [isTrue, setIsTrue] = useState(false);
     useEffect(() => {
         setHeaderMode('main');
     }, [setHeaderMode]);
@@ -41,18 +41,23 @@ const InterviewFeedback = () => {
 
     const handleGetMenteeFeedback = async () => {
         try {
-            const response = await axios.get(process.env.REACT_APP_API_URL + roomId,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer ${accessToken}`,
-                    },
-                });
-            const data = response.data.data;
-            setContent(data.content);
-            setMentorNickname(data.mentorNickname);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}mentee/feedback/${roomId}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${accessToken}` // 인증 헤더 설정
+                }
+            });
+
+            if (response.data && response.data.data) {
+                let data = response.data.data;
+                setContent(data.content);
+                setMentorNickname(data.mentorNickname);
+            } else {
+                console.error("Received unexpected response structure:", response.data);
+            }
         } catch (error) {
-            alert("멘티 피드백을 불러오는데 실패했습니다.")
+            console.error("멘티 피드백을 불러오는 중 오류 발생:", error); // 오류 메시지 출력
+            alert("멘티 피드백을 불러오는데 실패했습니다."); // 사용자에게 오류 알림
         }
     }
 
@@ -60,7 +65,7 @@ const InterviewFeedback = () => {
         try {
             const response = await axios.post(process.env.REACT_APP_API_URL + `mentee/feedback/${roomId}/${mentorId}`,
                 {
-                    content: feedback,
+                    content: userReview,
                     starRating: userScore,
                 },
                 {
@@ -76,17 +81,21 @@ const InterviewFeedback = () => {
         }
     };
 
+    useEffect(() => {
+        handleGetMenteeFeedback()
+    }, [])
+
     return (
         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-start' }}>
             <Box height="100%" width="35vw" border="none" alignItems="flex-start" justify="flex-start" style={{ display: 'flex' }}>
                 <div style={{ marginBottom: '5px', width: '100%' }}>
                     <Font font="PretendardL" size="22px" color="#000000" margintop="5px" spacing="2px" paddingleft="13px" paddingtop="5px" marginbottom="8px">
-                        {mentorNickname} 피드백
+                        {mentorNickname}의 피드백
                     </Font>
                 </div>
                 <Box height="57vh" width="30vw" border="none" alignItems="center" justify="center" top="10px" bottom="10px" style={{ display: 'flex' }}>
                     <Font font="PretendardB" size="18px" color="#000000" margintop="5px" spacing="2px" paddingleft="13px" paddingtop="5px" marginbottom="8px">
-                        멘토링 후기를 작성해주세요!
+                        {content}
                     </Font>
                 </Box>
                 <Box height="28vh" width="30vw" border="none" alignItems="flex-start" justify="flex-start" top="10px" direction='column' bottom="10px" style={{ display: 'flex', flexDirection: 'column' }}>

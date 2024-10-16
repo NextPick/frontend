@@ -20,7 +20,7 @@ const EditBoardPage = () => {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/boards/${boardId}`, {
+        const response = await axios.get(process.env.REACT_APP_API_URL + `boards/${boardId}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
           },
@@ -105,7 +105,7 @@ const EditBoardPage = () => {
     });
 
     try {
-      await axios.patch(`http://localhost:8080/boards/${boardId}`, formData, {
+      await axios.patch(process.env.REACT_APP_API_URL + `boards/${boardId}`, formData, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
           'Content-Type': 'multipart/form-data',

@@ -1,5 +1,5 @@
+
 import React, { useEffect, useState, useRef } from 'react';
-import { useHeaderMode } from '../hooks/HeaderManager';
 import Box from '../components/Box';
 import '../styles/login.css';
 import Button from '../components/Button';
@@ -135,110 +135,132 @@ const PaginationDot = styled.span`
 
 
 const MyNote = () => {
-    const fileInputRef = useRef(null); // 파일 입력을 참조할 ref 생성
-    const [activeTab, setActiveTab] = useState('answer'); // 탭 상태를 관리
-    const [sortOption, setSortOption] = useState('');
-    const [page, setPage] = useState(1);
-    const [type, setType] = useState("none");
-    const [sort, setSort] = useState("recent");
-    const [category, setCategory] = useState(-1);
-    const [keyword, setKeyword] = useState("");
-    const [questionData, setQuestionData] = useState([]);
-    const [categories, setCategories] = useState([]);
+  const [activeTab, setActiveTab] = useState('answer'); // 탭 상태를 관리
+  const [sortOption, setSortOption] = useState('');
+  const [page, setPage] = useState(1);
+  const [type, setType] = useState("none");
+  const [sort, setSort] = useState("recent");
+  const [category, setCategory] = useState(-1);
+  const [keyword, setKeyword] = useState("");
+  const [questionData, setQuestionData] = useState([]);
+  const [wrongQuestionData, setWrongQuestionData] = useState([]);
+  const [categories, setCategories] = useState([]);  
 
 
-   
-    const handleSearchChange = (e) => {
-        setKeyword(e.target.value);
-      };
-    
+
+  const handleSearchChange = (e) => {
+    setKeyword(e.target.value);
+  };
 
 
-    const handleCategoryChange = (e) => {
-        setCategory(e.target.value);
+
+  const handleCategoryChange = (e) => {
+    setCategory(e.target.value);
+  };
+
+  const handleSortChange = (e) => {
+    setSort(e.target.value);
+  };
+
+
+  const handleSearchClick = () => {
+    axios.get(process.env.REACT_APP_API_URL + `questions?size=20&page=${page}&type=${type}&sort=${sort}&category=${category}&keyword=${keyword}`)
+      .then(response => {
+        const data = response.data.data;
+        setQuestionData(data);
+      })
+      .catch(error => {
+        console.error('검색 요청 오류:', error);
+      });
+  };
+
+
+  const fetchQuestions = () => {
+
+    const headers = {
+      Authorization: localStorage.getItem('accessToken')
     };
+    // 정답 데이터 요청
+    axios.get(`${process.env.REACT_APP_API_URL}solves?size=20&page=${page}&type=none&sort=${sort}&category=${category}&keyword=${keyword}&correct=true`, { headers })
+      .then(response => {
+        if (response.status === 200) {
+          setQuestionData(response.data.data);
+        } else {
+          console.error('정답 데이터 가져오기 실패:', response.status);
+        }
+      })
+      .catch(error => {
+        console.error('정답 데이터 요청 오류:', error);
+      });
 
-    const handleSortChange = (e) => {
-        setSort(e.target.value);
-    };
+    // 오답 데이터 요청
+    axios.get(`${process.env.REACT_APP_API_URL}solves?size=20&page=${page}&type=none&sort=${sort}&category=${category}&keyword=${keyword}&correct=false`, { headers })
+      .then(response => {
+        if (response.status === 200) {
+          setWrongQuestionData(response.data.data);
+        } else {
+          console.error('오답 데이터 가져오기 실패:', response.status);
+        }
+      })
+      .catch(error => {
+        console.error('오답 데이터 요청 오류:', error);
+      });
+  };
 
-
-    const handleSearchClick = () => {
-        axios.get(process.env.REACT_APP_API_URL + `questions?size=20&page=${page}&type=${type}&sort=${sort}&category=${category}&keyword=${keyword}`)
-            .then(response => {
-                const data = response.data.data;
-                setQuestionData(data);
-            })
-            .catch(error => {
-                console.error('검색 요청 오류:', error);
-            });
-    };
-
-
-
-    useEffect(() => {
-        axios.get(process.env.REACT_APP_API_URL + `questions?size=20&page=${page}&type=${type}&sort=${sort}&category=${category}&keyword=${keyword}`)
-            .then(response => {
-                const data = response.data.data;
-                setQuestionData(data);
-            })
-            .catch(error => {
-                console.error('데이터 가져오기 오류:', error);
-            });
-    }, [page, sort, category, keyword]);
-
-    useEffect(() => {
-        axios.get(process.env.REACT_APP_API_URL + 'question/category')
-            .then(response => {
-                setCategories(response.data.data);
-            })
-            .catch(error => {
-                console.error('카테고리 가져오기 오류:', error);
-            });
-    }, []);
-
+  
+  useEffect(() => {
+    fetchQuestions();
+    axios.get(`${process.env.REACT_APP_API_URL}question/category`)
+      .then(response => {
+        setCategories(response.data.data);
+      })
+      .catch(error => {
+        console.error('카테고리 가져오기 오류:', error);
+      });
+  }, [page, sort, category, keyword]);
 
 
-    // 탭을 전환하는 함수
-    const switchTab = (tab) => {
-        setActiveTab(tab);
-    };
 
-    // 탭에 따라 표시할 콘텐츠를 정의
-    const renderTabContent = () => {
-        if (activeTab === 'answer') {
-            return (
-                <MainContent>
-                    <SearchContainer>
-                        <SearchInput
-                            type="text"
-                            placeholder="검색"
-                            value={keyword}
-                            onChange={handleSearchChange}
-                        />
-                        <SearchButton onClick={handleSearchClick}>
-                            <img src={searchIcon} alt="Search Icon" />
-                        </SearchButton>
-                        <SortDropdown value={sort} onChange={handleSortChange}>
-                            <option value="recent">최신순</option>
-                            <option value="popularity">인기순</option>
-                            <option value="difficulty">난이도순</option>
-                        </SortDropdown>
-                        <SortDropdown value={category} onChange={handleCategoryChange}>
-                            <option value={-1}>전체</option>
-                            {categories.map((cat) => (
-                                <option key={cat.questionCategoryId} value={cat.questionCategoryId}>
-                                    {cat.categoryName}
-                                </option>
-                            ))}
-                        </SortDropdown>
-                    </SearchContainer>
-                    <TableContainer>
+  // 탭을 전환하는 함수
+  const switchTab = (tab) => {
+    setActiveTab(tab);
+  };
+
+  const renderTabContent = () => {
+    const dataToRender = activeTab === 'answer' ? questionData : wrongQuestionData;
+
+    return (
+      <MainContent>
+        <SearchContainer>
+          <SearchInput
+            type="text"
+            placeholder="검색"
+            value={keyword}
+            onChange={handleSearchChange}
+          />
+          <SearchButton onClick={fetchQuestions}>
+            <img src={searchIcon} alt="Search Icon" />
+          </SearchButton>
+          <SortDropdown value={sort} onChange={handleSortChange}>
+            <option value="recent">최신순</option>
+            <option value="popularity">인기순</option>
+            <option value="difficulty">난이도순</option>
+          </SortDropdown>
+          <SortDropdown value={category} onChange={handleCategoryChange}>
+            <option value={-1}>전체</option>
+            {categories.map((cat) => (
+              <option key={cat.questionCategoryId} value={cat.questionCategoryId}>
+                {cat.categoryName}
+              </option>
+            ))}
+          </SortDropdown>
+        </SearchContainer>
+        <TableContainer>
           <Table>
             <colgroup>
-              <col style={{ width: '16%' }} /> {/* 2:14% */}
-              <col style={{ width: '70%' }} /> {/* 10:71% */}
-              <col style={{ width: '14%' }} /> {/* 1:15% */}
+              <col style={{ width: '16%' }} />
+              <col style={{ width: '70%' }} />
+              <col style={{ width: '14%' }} />
             </colgroup>
             <thead>
               <tr>
@@ -248,11 +270,13 @@ const MyNote = () => {
               </tr>
             </thead>
             <tbody>
-              {questionData.map((user) => (
-                <TableRow key={user.questionListId}>
-                  <TableData>{user.questionCategory.categoryName}</TableData>
-                  <TableData>{user.question}</TableData>
-                  <TableData>{user.correctRate}%</TableData>
+              {dataToRender.map((question) => (
+                <TableRow key={question.questionListId}>
+                  <TableData>
+                    {question.questionCategory ? question.questionCategory.categoryName : '없음'}
+                  </TableData>
+                  <TableData>{question.question}</TableData>
+                  <TableData>{question.correctRate}%</TableData>
                 </TableRow>
               ))}
             </tbody>
@@ -267,149 +291,86 @@ const MyNote = () => {
             />
           ))}
         </Pagination>
-        </MainContent>
-
-            );
-        } else if (activeTab === 'wrong') {
-            return (
-                <MainContent>
-                <SearchContainer>
-                    <SearchInput
-                        type="text"
-                        placeholder="검색"
-                        value={keyword}
-                        onChange={handleSearchChange}
-                    />
-                    <SearchButton onClick={handleSearchClick}>
-                        <img src={searchIcon} alt="Search Icon" />
-                    </SearchButton>
-                    <SortDropdown value={sort} onChange={handleSortChange}>
-                        <option value="recent">최신순</option>
-                        <option value="popularity">인기순</option>
-                        <option value="difficulty">난이도순</option>
-                    </SortDropdown>
-                    <SortDropdown value={category} onChange={handleCategoryChange}>
-                        <option value={-1}>전체</option>
-                        {categories.map((cat) => (
-                            <option key={cat.questionCategoryId} value={cat.questionCategoryId}>
-                                {cat.categoryName}
-                            </option>
-                        ))}
-                    </SortDropdown>
-                </SearchContainer>
-                <TableContainer>
-      <Table>
-        <colgroup>
-          <col style={{ width: '14%' }} /> {/* 2:14% */}
-          <col style={{ width: '71%' }} /> {/* 10:71% */}
-          <col style={{ width: '15%' }} /> {/* 1:15% */}
-        </colgroup>
-        <thead>
-          <tr>
-            <TableHeader>카테고리</TableHeader>
-            <TableHeader>문제</TableHeader>
-            <TableHeader>정답률</TableHeader>
-          </tr>
-        </thead>
-        <tbody>
-          {questionData.map((user) => (
-            <TableRow key={user.questionListId}>
-              <TableData>{user.questionCategory.categoryName}</TableData>
-              <TableData>{user.question}</TableData>
-              <TableData>{user.correctRate}%</TableData>
-            </TableRow>
-          ))}
-        </tbody>
-      </Table>
-    </TableContainer>
-    <Pagination>
-      {[1, 2, 3, 4].map((num) => (
-        <PaginationDot
-          key={num}
-          active={page === num}
-          onClick={() => setPage(num)}
-        />
-      ))}
-    </Pagination>
-    </MainContent>
-            );
-        }
-    };
-
-    return (
-
-        <Container>
-           <MypageSide/>
-            <SearchContainer>
-                <Box
-                    padding="0px"
-                    height="100%"
-                    width="33vw"
-                    border="none"
-                    color="#f1f7fd"
-                    justify="space-between"
-                    radius="15px"
-                    left="20px"
-                    overflow="hidden"
-                >
-                    <div style={{ display: 'flex', flexDirection: 'row' }}>
-                        <Button
-                            height="11vh"
-                            width="16.5vw"
-                            border="none"
-                            radius="3px"
-                            top="none"
-                            color="#0372f396"
-                            margintbottom="0px"
-                            margintop="0px"
-                            onClick={() => switchTab('answer')}
-                        >
-                            <Font
-                                font="PretendardB"
-                                size="24px"
-                                color="#000000"
-                                margintop="0px"
-                                paddingtop="7px"
-                                spacing="2px"
-                                align="center"
-                                marginbottom="0px"
-                            >
-                                정답
-                            </Font>
-                        </Button>
-                        <Button
-                            height="11vh"
-                            width="16.5vw"
-                            border="none"
-                            radius="3px"
-                            alignitem="flex-start"
-                            justify="flex-start"
-                            top="none"
-                            color="#0372f396"
-                            margintbottom="0px"
-                             margintop="0px"
-                            onClick={() => switchTab('wrong')}
-                        >
-                            <Font
-                                font="PretendardB"
-                                size="24px"
-                                color="#000000"
-                                margintop="0px"
-                                paddingtop="7px"
-                                spacing="2px"
-                                align="center"
-                                marginbottom="0px"
-                            >
-                                오답
-                            </Font>
-                        </Button>
-                    </div>
-                    {renderTabContent()}
-                </Box>
-                 </SearchContainer>
-
-        </Container>
+      </MainContent>
     );
+};
+
+
+ 
+  return (
+
+    <Container>
+      <MypageSide />
+      <SearchContainer>
+        <Box
+          padding="0px"
+          height="100%"
+          width="33vw"
+          border="none"
+          color="#f1f7fd"
+          justify="space-between"
+          radius="15px"
+          left="20px"
+          overflow="hidden"
+        >
+          <div style={{ display: 'flex', flexDirection: 'row' }}>
+            <Button
+              height="11vh"
+              width="16.5vw"
+              border="none"
+              radius="3px"
+              top="none"
+              color="#0372f396"
+              margintbottom="0px"
+              margintop="0px"
+              onClick={() => switchTab('answer')}
+            >
+              <Font
+                font="PretendardB"
+                size="24px"
+                color="#000000"
+                margintop="0px"
+                paddingtop="7px"
+                spacing="2px"
+                align="center"
+                marginbottom="0px"
+              >
+                정답
+              </Font>
+            </Button>
+            <Button
+              height="11vh"
+              width="16.5vw"
+              border="none"
+              radius="3px"
+              alignitem="flex-start"
+              justify="flex-start"
+              top="none"
+              color="#0372f396"
+              margintbottom="0px"
+              margintop="0px"
+              onClick={() => switchTab('wrong')}
+            >
+              <Font
+                font="PretendardB"
+                size="24px"
+                color="#000000"
+                margintop="0px"
+                paddingtop="7px"
+                spacing="2px"
+                align="center"
+                marginbottom="0px"
+              >
+                오답
+              </Font>
+            </Button>
+          </div>
+          {renderTabContent()}
+        </Box>
+      </SearchContainer>
+
+    </Container>
+  );
 }
 
 export default MyNote;

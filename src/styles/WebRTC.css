@@ -1,24 +1,26 @@
 .container {
     display: flex;
+    justify-content: space-between;
+    height: 100vh;
+    width: 100vw; /* 전체 너비 사용 */
 }
 
 .video-section {
-    width: 50%;
+    flex: 1;
+    width: 100%; /* 비디오 섹션 너비 증가 */
     padding: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 0.25rem;
+    border-right: 1px solid #ccc; /* 오른쪽 경계선 추가 */
+    display: flex;
     flex-direction: column;
     height: 100%;
-    display: flex;
 }
 
 .video-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    aspect-ratio: 16 / 9;
     gap: 1rem;
     width: 100%;
-    margin-bottom: 1rem;
+
 }
 
 .video-placeholder {
@@ -29,36 +31,47 @@
     overflow: hidden;
 }
 
-.icon-bar {
-    display: flex;
-    justify-content: center;
-    margin-top: 1rem;
-}
-
-.icon-bar > * {
-    margin: 0 0.5rem;
-}
-
 .input-section {
-    width: 50%;
+    width: 30%; /* 입력 섹션 너비 감소 */
     padding: 1rem;
     background-color: #e6f3ff;
+    flex-direction: column;
+    height: 100%;
 }
 
-textarea, input {
-    width: 100%;
-    padding: 0.5rem;
-    margin-bottom: 0.5rem;
-    border: 1px solid #ccc;
+.memo-area {
+    flex: 0 0 auto;
+    margin-bottom: 1rem;
 }
 
 textarea {
-    height: 20rem;
+    width: 100%;
+    height: 150px;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+    border: 1px solid #ccc;
     resize: none;
 }
 
+.tutor-feedback {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.tutor-input {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+input {
+    flex-grow: 1;
+    padding: 0.5rem;
+    margin-right: 0.5rem;
+    border: 1px solid #ccc;
+}
+
 button {
-    margin-top: 1rem;
     padding: 0.5rem 1rem;
     background-color: #3b82f6;
     color: white;
@@ -73,7 +86,19 @@ button:hover {
 
 #remoteStreamDiv1,
 #remoteStreamDiv2,
-#remoteStreamDiv3 {
+#remoteStreamDiv3,
+#localStream {
     width: 100%;
     height: 100%;
+    object-fit: cover; /* 비디오가 컨테이너를 꽉 채우도록 */
+}
+
+/* 비디오 섹션 내부의 제목과 버튼 스타일링 */
+.video-section h2 {
+    margin-bottom: 1rem;
+}
+
+.video-section > button {
+    margin-top: 1rem;
+    align-self: center;
 }

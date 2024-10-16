@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useHeaderMode } from '../hooks/HeaderManager';
 import '../styles/login.css';
-import Button from '../components/Button'; // Button 컴포넌트 import
-import choicefe from '../assets/choicefe.png'; // 이미지 파일 import
-import choicebe from '../assets/choicebe.png'; // 이미지 파일 import
+import Button from '../components/Button';
+import choicefe from '../assets/choicefe.png';
+import choicebe from '../assets/choicebe.png';
 import styled from 'styled-components';
-import { Modal, Button as ModalButton } from 'react-bootstrap'; // Modal 컴포넌트 추가
+import { Modal, Button as ModalButton } from 'react-bootstrap';
 import Input from '../components/Input';
 import Swal from 'sweetalert2';
 import axios from "axios";
-import {useNavigate} from "react-router-dom"; // SweetAlert2 import
+import { useNavigate } from "react-router-dom";
 
-// 모달 창 스타일
 const ModalContent = styled.div`
     display: flex;
     flex-direction: column;
@@ -22,14 +21,34 @@ const ModalContent = styled.div`
 const Choice = () => {
     const { setHeaderMode } = useHeaderMode();
     const [roomTitle, setRoomTitle] = useState('');
-    const [roomOccupation, setRoomOccupation] = useState('');
+    const [roomOccupation, setRoomOccupation] = useState(''); // 상태로 관리
     const [showAddModal, setShowAddModal] = useState(false);
-    let accessToken = window.localStorage.getItem('accessToken');
+    const accessToken = localStorage.getItem('accessToken');
     const navigate = useNavigate();
+    const type = localStorage.getItem('type');
+    let title;
+    let memberId;
+    let roomUuid;
+    let roomId;
 
-    const handleShowAddModal = () => {
+    const handleShowAddModalFE = () => {
         setShowAddModal(true);
+        setRoomOccupation("FE");
+        console.log("Selected occupation: FE");
     };
+
+    const handleShowAddModalBE = () => {
+        setShowAddModal(true);
+        setRoomOccupation("BE");
+        console.log("Selected occupation: BE");
+    }
+
+    const handleNavigate = async (occupation) => {
+        setRoomOccupation(occupation); // 상태 업데이트
+        await handleGetInterviewRoom(occupation);
+        console.log(roomUuid,title,roomId, occupation);
+        navigate('/webrtc', { state: { roomUuid: roomUuid, title: title, roomId: roomId, roomOccupation: occupation, memberId: memberId } }); // occupation을 인자로 전달
+    }
 
     const handleCloseAddModal = () => {
         setShowAddModal(false);
@@ -48,11 +67,8 @@ const Choice = () => {
             return;
         }
 
-        console.log(`방 제목: ${roomTitle}, 방 직군: ${roomOccupation}`);
-        navigate('/WebRTC');
-
         try {
-            const response = await axios.post('https://server.nextpick.site/rooms',
+            const response = await axios.post(process.env.REACT_APP_API_URL + 'rooms',
                 {
                     title: roomTitle,
                     occupation: roomOccupation,
@@ -64,18 +80,43 @@ const Choice = () => {
                     },
                 }
             );
-            // 방 생성 성공 시 추가 동작 (예: 알림)
             Swal.fire({
                 icon: 'success',
                 title: '방이 성공적으로 생성되었습니다.',
                 confirmButtonText: '확인'
+            }).then(() => {
+                let data = response.data.data;
+                roomUuid = data.roomUuid;
+                title = data.title;
+                roomId = data.roomId;
+                memberId = data.memberId;
+
+                console.log(roomUuid,title,roomId,roomOccupation, memberId);
+                setShowAddModal(false);
+                navigate('/webrtc', { state: { roomUuid: roomUuid, title: title, roomId: roomId, roomOccupation: roomOccupation, memberId: memberId }  }); // 방 생성 후 이동
             });
-            setShowAddModal(false); // 모달 닫기
-            navigate('/interviewRoom', { state: roomOccupation });
         } catch (error) {
             alert("방 만드는 중 오류가 발생했습니다. 다시 시도해주세요.");
         }
     };
+
+    const handleGetInterviewRoom = async (occupation) => {
+        try {
+            const response = await axios.get(process.env.REACT_APP_API_URL + "rooms/" + occupation,
+                {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${accessToken}`,
+                }
+            });
+            let data = response.data.data;
+            roomUuid = data.roomUuid;
+            title = data.title;
+            roomId = data.roomId;
+        } catch (error) {
+            alert("직군의 남은 방이 없습니다.")
+        }
+    }
 
     useEffect(() => {
         setHeaderMode('main');
@@ -83,13 +124,26 @@ const Choice = () => {
 
     return (
         <div className='wrap' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '90vh', gap: "10px", width: "100%" }}>
-            {/* 버튼 클릭 시 모달 열기 */}
-            <Button color="transparent" radius="5px" hoverColor="#FFFFFF" onClick={handleShowAddModal}>
-                <img src={choicefe} alt="fe" style={{ width: '360px', height: '340px' }} />
-            </Button>
-            <Button color="transparent" radius="5px" hoverColor="#FFFFFF" onClick={handleShowAddModal}>
-                <img src={choicebe} alt="be" style={{ width: '360px', height: '340px' }} />
-            </Button>
+            {/* 조건부 렌더링에 따라 버튼 표시 */}
+            {type === 'MENTOR' ? (
+                <>
+                    <Button color="transparent" radius="5px" hoverColor="#FFFFFF" onClick={handleShowAddModalFE}>
+                        <img src={choicefe} alt="fe" style={{ width: '350px', height: '340px' }} />
+                    </Button>
+                    <Button color="transparent" radius="5px" hoverColor="#FFFFFF" onClick={handleShowAddModalBE}>
+                        <img src={choicebe} alt="be" style={{ width: '350px', height: '340px' }} />
+                    </Button>
+                </>
+            ) : type === 'MENTEE' ? (
+                <>
+                    <Button color="transparent" radius="5px" hoverColor="#FFFFFF" onClick={() => handleNavigate("FE")}>
+                        <img src={choicefe} alt="fe" style={{ width: '350px', height: '340px' }} />
+                    </Button>
+                    <Button color="transparent" radius="5px" hoverColor="#FFFFFF" onClick={() => handleNavigate("BE")}>
+                        <img src={choicebe} alt="be" style={{ width: '350px', height: '340px' }} />
+                    </Button>
+                </>
+            ) : null}
 
             {/* 방 만들기 모달 */}
             <Modal show={showAddModal} onHide={handleCloseAddModal}>
@@ -103,16 +157,6 @@ const Choice = () => {
                             value={roomTitle}
                             onChange={(e) => setRoomTitle(e.target.value)}
                         />
-                        <select
-                            value={roomOccupation}
-                            onChange={(e) => setRoomOccupation(e.target.value)}
-                            style={{ marginTop: '10px', padding: '10px', borderRadius: '5px' }}
-                        >
-                            <option value="" disabled>방 직군 선택</option>
-                            <option value="BE">백앤드</option>
-                            <option value="FE">프론트앤드</option>
-                            {/* 필요한 경우 추가 직군 옵션을 여기에 추가하세요 */}
-                        </select>
                     </ModalContent>
                 </Modal.Body>
                 <Modal.Footer>
