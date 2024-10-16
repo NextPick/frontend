@@ -58,7 +58,7 @@ function App() {
                 <Route path='/mynote' element={<MyNote />} />
                 <Route path='/not' element={<Not />} />
                 <Route path='/adminpageQ' element={<AdminPageQx />} />
-                <Route path='/adminpage-service' element={<AdminPage />} />
+                <Route path='/admin/adminpage-service' element={<AdminPage />} />
                 <Route path='/choice' element={<Choice />} />
                 <Route path='/interviewfeedback' element={<InterviewFeedback />} />
                 <Route path='/aihome' element={<AiHome />} />
