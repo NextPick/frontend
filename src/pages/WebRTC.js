@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
 import "../styles/WebRTC.css";
@@ -25,11 +25,12 @@ const WebRTC = () => {
     const [questions, setQuestions] = useState([]);
 
     // 다른 회원 정보를 저장하기 위한 객체
-    const otherMembers = {
+    // 상태로 otherMembers 선언
+    const [otherMembers, setOtherMembers] = useState({
         otherMember1: null,
         otherMember2: null,
         otherMember3: null,
-    };
+    });
 
     // 메모 및 튜터 피드백을 위한 상태 관리
     const [memo, setMemo] = useState('');
@@ -47,7 +48,7 @@ const WebRTC = () => {
             localStream.getTracks().forEach(track => track.stop()); // 로컬 스트림 중지
         }
         // 다른 페이지로 이동
-        navigate("/InterviewFeedback", {state: {roomId: roomId}}) // 이동할 페이지 경로로 변경
+        navigate("/InterviewFeedback", {state: {roomId: roomId, mentorId: memberId}}) // 이동할 페이지 경로로 변경
     };
 
     // 카메라 시작 함수
@@ -72,7 +73,7 @@ const WebRTC = () => {
     const connectSocket = async () => {
         const socket = new SockJS(process.env.REACT_APP_API_URL + 'signaling'); // SockJS 소켓 생성
         stompClient = Stomp.over(socket); // STOMP 클라이언트 생성
-        // stompClient.debug = null; // 디버그 메시지 비활성화
+        stompClient.debug = null; // 디버그 메시지 비활성화
 
         stompClient.connect(
             {
@@ -311,6 +312,7 @@ const WebRTC = () => {
             console.log(data);
             if (!otherMemberIdList.includes(data.memberId)) {
                 otherMemberIdList.push(data.memberId); // 다른 회원 ID 목록에 추가
+                console.log(otherMemberIdList);
             }
             handleMemberId();
         } catch (error) {
@@ -318,23 +320,22 @@ const WebRTC = () => {
         }
     };
 
-    // 다른 멤버 정보 테스트
-    const handleMemberId = async () => {
+    // handleMemberId 함수 수정
+    const handleMemberId = () => {
+        const newMembers = { ...otherMembers }; // 기존 상태 복사
         otherMemberIdList.forEach((memberId, index) => {
-            if (index < otherMemberIdList.length) {
-                if (otherMembers[`otherMember${index + 1}`] == null) {
-                    otherMembers[`otherMember${index + 1}`] = memberId; // 다른 멤버 정보 저장
-                }
+            if (index < 3 && newMembers[`otherMember${index + 1}`] == null) {
+                newMembers[`otherMember${index + 1}`] = memberId; // 새로운 값 할당
             }
         });
-
+        setOtherMembers(newMembers); // 상태 업데이트
     };
 
     // 피드백 버튼 클릭 처리
     const handlePostButtonClick1 = async (menteeId) => {
         // 여기에 피드백 전송 로직을 추가할 수 있습니다.
         try {
-            const response = await axios.post(process.env.REACT_APP_API_URL + "mentee/feedback/" + `${roomId}/` + memberId, {
+            const response = await axios.post(process.env.REACT_APP_API_URL + "mentee/feedback/" + `${roomId}/` + menteeId, {
                 content: tutor1
             },{
                 headers: {
@@ -352,7 +353,7 @@ const WebRTC = () => {
     const handlePostButtonClick2 = async (menteeId) => {
         // 여기에 피드백 전송 로직을 추가할 수 있습니다.
         try {
-            const response = await axios.post(process.env.REACT_APP_API_URL + "mentee/feedback/" + `${roomId}/` + memberId, {
+            const response = await axios.post(process.env.REACT_APP_API_URL + "mentee/feedback/" + `${roomId}/` + menteeId, {
                 content: tutor2
             },{
                 headers: {
@@ -370,7 +371,7 @@ const WebRTC = () => {
     const handlePostButtonClick3 = async (menteeId) => {
         // 여기에 피드백 전송 로직을 추가할 수 있습니다.
         try {
-            const response = await axios.post(process.env.REACT_APP_API_URL + "mentee/feedback/" + `${roomId}/` + memberId, {
+            const response = await axios.post(process.env.REACT_APP_API_URL + "mentee/feedback/" + `${roomId}/` + menteeId, {
                 content: tutor3
             },{
                 headers: {
@@ -439,7 +440,7 @@ const WebRTC = () => {
                                     value={tutor1}
                                     onChange={(e) => setTutor1(e.target.value)}
                                 />
-                                <button value={otherMembers.otherMember1} onClick={() => {handlePostButtonClick1(otherMembers.otherMember1)}}>제출</button>
+                                <button onClick={() => {handlePostButtonClick1(otherMembers.otherMember1)}}>제출</button>
                             </div>
                             <div className="tutor-input">
                                 <input
@@ -447,7 +448,7 @@ const WebRTC = () => {
                                     value={tutor2}
                                     onChange={(e) => setTutor2(e.target.value)}
                                 />
-                                <button value={otherMembers.otherMember2} onClick={() => {handlePostButtonClick2(otherMembers.otherMember2)}}>제출</button>
+                                <button onClick={() => {handlePostButtonClick2(otherMembers.otherMember2)}}>제출</button>
                             </div>
                             <div className="tutor-input">
                                 <input
@@ -455,7 +456,7 @@ const WebRTC = () => {
                                     value={tutor3}
                                     onChange={(e) => setTutor3(e.target.value)}
                                 />
-                                <button value={otherMembers.otherMember3} onClick={() => {handlePostButtonClick3(otherMembers.otherMember3)}}>제출</button>
+                                <button onClick={() => {handlePostButtonClick3(otherMembers.otherMember3)}}>제출</button>
                             </div>
                         </div>
                     </div>

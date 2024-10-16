@@ -17,8 +17,7 @@ const InterviewFeedback = () => {
     const [userReview, setUserReview] = useState(''); // 사용자의 리뷰
     const [submittedReviews, setSubmittedReviews] = useState([]); // 제출된 리뷰들
     const location = useLocation();
-    const roomId = location.state?.roomId || 0;
-    let mentorId = 0; // 실제 값 할당 필요
+    const {roomId, mentorId} = location.state || {};
     const [feedback, setFeedback] = useState('');
     const [mentorNickname, setMentorNickname] = useState('');
     const [content, setContent] = useState('');
@@ -36,12 +35,15 @@ const InterviewFeedback = () => {
         setSubmittedReviews((prevReviews) => [...prevReviews, newReview]); // 리뷰 추가
 
         // 피드백 API 호출
+        console.log(userReview);
+        console.log(userScore)
+        console.log(mentorId);
         await handleMentorFeedback();
     };
 
     const handleGetMenteeFeedback = async () => {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}mentee/feedback/${roomId}`, {
+            const response = await axios.get(process.env.REACT_APP_API_URL + `mentee/feedback/${roomId}`, {
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${accessToken}` // 인증 헤더 설정
@@ -63,7 +65,7 @@ const InterviewFeedback = () => {
 
     const handleMentorFeedback = async () => {
         try {
-            const response = await axios.post(process.env.REACT_APP_API_URL + `mentee/feedback/${roomId}/${mentorId}`,
+            const response = await axios.post(process.env.REACT_APP_API_URL + `mentor/feedback/${roomId}/1`,
                 {
                     content: userReview,
                     starRating: userScore,
