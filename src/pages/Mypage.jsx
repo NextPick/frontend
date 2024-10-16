@@ -6,15 +6,11 @@ import '../styles/login.css';
 import Button from '../components/Button';
 import Font from '../components/Font';
 import styled from 'styled-components';
-import defaultProfile from '../assets/img-non-login.png';
-import { useProfile } from '../hooks/ProfileContext'; // 프로필 컨텍스트
 import { useMember } from '../hooks/MemberManager'; // 회원 정보를 관리하는 훅
-import Line from '../components/Line';
 import one from '../assets/one.png';
 import two from '../assets/two.png';
 import three from '../assets/three.png';
 import axios from 'axios';
-import Swal from 'sweetalert2';
 import MypageSide from '../components/MypageSide';
 
 // Styled Components
@@ -28,90 +24,40 @@ const Container = styled.div`
   font-family: Arial, sans-serif;
 `;
 
-const MenuItem = styled.p`
-  padding: 10px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease;
-  background-color: ${({ active }) => (active ? '#137df696' : 'transparent')};
-  color: ${({ active }) => (active ? '#ffffff' : '#000')};
-
-  &:hover {
-    background-color: #0077ff96;
-    color: #ffffff;
-  }
-`;
-
-const LogoutButton = styled.button`
-  border: none;
-  background-color: transparent;
-  color: #333;
-  cursor: pointer;
-  margin-top: 20px;
-`;
-
-const ProfileImgArea = styled.div`
-justify-content: center;
-margin-top: 10px;
-padding: 3px;
-display: flex; // 플렉스 박스 설정
-    align-items: flex-start; // 이미지가 박스 시작 부분에 정렬되도록 설정
-`;
 
 
-const ProfileImage = styled.img`
-    width: 70px; // 원하는 너비
-    height: 70px; // 원하는 높이
-    object-fit: cover; // 이미지 크기를 유지하며 잘림
-    border-radius: 50%; // 원하는 경우 둥글게 만들기
-    cursor: pointer; // 커서를 포인터로 변경
-    margin: 0 auto;
-`;
-
-
-const Menu = styled.div`
-  margin-top: 20px;
-  text-align: center;
-  margin-bottom: 20px;
-  font-size: 16px;
-  width: 100%;
-`;
 
 const Mypage = () => {
-    const { profileUrl, setProfileUrl, nickname,  setNickname,  email,  setEmail } = useMember();
+    const { profileUrl, setProfileUrl, nickname,  setNickname,  email,  setEmail, type, setType } = useMember();
     const { headerMode, setHeaderMode } = useHeaderMode();
-    const navigate = useNavigate();
-    const location = useLocation();
-    const fileInputRef = useRef(null); // 파일 입력을 참조할 ref 생성
-
-
-    useEffect(() => {
-        setHeaderMode('main');
-    }, [setHeaderMode]);
-
+   
 
 
     useEffect(() => {
         const fetchUserData = async () => {
+            console.log('API 호출 시작'); // 추가된 로그
             try {
-                const response = await axios.get('http://localhost:8080/members', {
+                const response = await axios.get(process.env.REACT_APP_API_URL + 'members', {
                     headers: {
                         Authorization: localStorage.getItem('accessToken'), // 토큰을 헤더에 추가
                     },
                 });
                 if (response.status === 200) {
-                    const { email, nickname } = response.data.data; // 이메일과 닉네임 가져오기
-                    setEmail(email); // 이메일 상태 업데이트
-                    setNickname(nickname); // 닉네임 상태 업데이트
+                    const { email, nickname, type } = response.data.data; 
+                    setEmail(email);
+                    setNickname(nickname);
+                    setType(type);
+
                 } else {
                     console.error('사용자 정보를 가져오는 데 실패했습니다.');
                 }
             } catch (error) {
-                console.error('네트워크 오류:', error);
-                Swal.fire({
-                    text: `네트워크 오류가 발생했습니다. 인터넷 연결을 확인해 주세요.`,
-                    icon: 'error',
-                    confirmButtonText: '확인'
-                });
+                // console.error('네트워크 오류:', error);
+                // Swal.fire({
+                //     text: `네트워크 오류가 발생했습니다. 인터넷 연결을 확인해 주세요.`,
+                //     icon: 'error',
+                //     confirmButtonText: '확인'
+                // });
 
             }
         };
@@ -119,26 +65,15 @@ const Mypage = () => {
         fetchUserData(); // 사용자 정보 가져오기 호출
     }, []); // 빈 배열을 전달하여 컴포넌트 마운트 시 한 번만 실행
     
-    // 프로필 이미지를 변경하는 함수
-    const changeProfileImg = (event) => {
-        const file = event.target.files && event.target.files[0]; // 안전하게 접근
-
-        if (file) {
-            const reader = new FileReader(); // FileReader를 사용하여 파일을 읽습니다.
-            reader.onloadend = () => {
-                setProfileUrl(reader.result); // 읽은 결과를 프로필 URL로 설정합니다.
-            };
-            reader.readAsDataURL(file); // 파일을 데이터 URL로 읽습니다.
-        }
-    };
-
-    const handleImageClick = () => {
-        if (fileInputRef.current) {
-            fileInputRef.current.click(); // 클릭 시 파일 입력 트리거
-        }
-    };
-
     
+
+    useEffect(() => {
+        setHeaderMode('main');
+    }, [setHeaderMode]);
+
+
+
+  
 
     return (
         <Container>
@@ -188,7 +123,7 @@ const Mypage = () => {
                         justify="center"
                         marginleft="10px"
                     >
-                        이름
+                          {nickname} {/* 닉네임 표시 */}
                     </Font>
                 </div>
                 <div class="line2"></div>
@@ -205,7 +140,7 @@ const Mypage = () => {
                         justify="center"
                         marginleft="10px"
                     >
-                        번호
+                       {type} {/* 닉네임 표시 */}
                     </Font>
                 </div>
                 <div class="line2"></div>
@@ -222,7 +157,7 @@ const Mypage = () => {
                         marginleft="10px"
                         justify="center"
                     >
-                        이메일
+                           {email} {/* 이메일 표시 */}
                     </Font>
                 </div>
                 <div class="line2"></div>

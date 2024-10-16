@@ -14,6 +14,9 @@ export const MemberManager = ({ children }) => {
   const [nickname, setNickname] = useState(null); // 사용자 닉네임
   const [phone, setPhone] = useState(null); // 사용자 전화번호
   const [email, setEmail] = useState(null); // 사용자 이메일
+  const [type, setType] = useState(null)
+  // const [roles, setRoles] = useState(null); // 역할 상태 추가
+
 
   // 사용자 정보 한 번에 업데이트하는 함수 추가
   const setProfileData = (profile) => {
@@ -25,6 +28,8 @@ export const MemberManager = ({ children }) => {
     setAuthorization(profile.authorization || null);
     setRefresh(profile.refresh || null);
     setLogin(profile.login !== undefined ? profile.login : null);
+    setType(profile.type || null);
+    // setRoles(profile.roles || null);
   };
 
   // 컴포넌트가 마운트될 때 로컬 스토리지에서 데이터를 가져옵니다.
@@ -37,6 +42,9 @@ export const MemberManager = ({ children }) => {
     const storedNickname = localStorage.getItem('nickname');
     const storedPhone = localStorage.getItem('phone');
     const storedEmail = localStorage.getItem('email');
+    const storedType = localStorage.getItem('type');
+    // const storedRoles = localStorage.getItem('roles');
+
 
     // 가져온 데이터를 상태에 설정합니다.
     setAuthorization(storedAuthorization);
@@ -47,6 +55,8 @@ export const MemberManager = ({ children }) => {
     setNickname(storedNickname);
     setPhone(storedPhone);
     setEmail(storedEmail);
+    setType(storedType);
+    // setRoles(storedRoles);
   }, []); // 빈 배열을 주어 컴포넌트가 처음 렌더링될 때만 실행됩니다.
 
   // 상태가 변경될 때마다 로컬 스토리지에 저장합니다.
@@ -111,6 +121,8 @@ export const MemberManager = ({ children }) => {
       nickname, setNickname, 
       phone, setPhone, 
       email, setEmail, 
+      type, setType,
+      // roles, setRoles,
       setProfileData // 새로운 함수 제공
     }}>
       {children}

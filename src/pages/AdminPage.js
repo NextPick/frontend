@@ -69,8 +69,8 @@ const AdminPage = () => {
         <Container>
            <AdminpageSide/>
             <Box
-                height="73vh"
-                width="35vw"
+                height="74vh"
+                width="50.5vw"
                 border="none"
                 left="20px"
                 justify="flex-start"

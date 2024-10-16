@@ -116,7 +116,7 @@ const FeedbackS = () => {
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/members', {
+                const response = await axios.get(process.env.REACT_APP_API_URL + 'members', {
                     headers: {
                         Authorization: localStorage.getItem('accessToken'), // 토큰을 헤더에 추가
                     },

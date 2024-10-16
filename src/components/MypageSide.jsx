@@ -1,7 +1,6 @@
-import React, { useEffect, useRef, useState }  from 'react';
+import React, { useEffect, useRef, useState,  }  from 'react';
 import '../styles/global.css';
 import Line from './Line';
-import Button from './Button';
 import Font from './Font';
 import styled from 'styled-components';
 import Box from './Box'
@@ -9,7 +8,7 @@ import defaultProfile from '../assets/img-non-login.png';
 import { useMember } from '../hooks/MemberManager'; // 회원 정보를 관리하는 훅
 import axios from 'axios';
 // import Swal from 'sweetalert2';
-
+import { useNavigate } from 'react-router-dom';
 
 
 const ProfileImgArea = styled.div`
@@ -72,15 +71,15 @@ const Menu = styled.div`
 
 
 const MypageSide = () => {
-    const { profileUrl, setProfileUrl, nickname,  setNickname,  email,  setEmail } = useMember();
+    const { profileUrl, setProfileUrl, nickname,  setNickname,  email,  setEmail, type, setType } = useMember();
     const fileInputRef = useRef(null); // 파일 입력을 참조할 ref 생성
     const [activeMenu, setActiveMenu] = useState('마이페이지'); // 활성화된 메뉴 상태
-
+    const navigate = useNavigate(); // navigate 정의
 
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/members', {
+                const response = await axios.get(process.env.REACT_APP_API_URL + 'members', {
                     headers: {
                         Authorization: localStorage.getItem('accessToken'), // 토큰을 헤더에 추가
                     },
@@ -89,6 +88,7 @@ const MypageSide = () => {
                     const { email, nickname } = response.data.data; // 이메일과 닉네임 가져오기
                     setEmail(email); // 이메일 상태 업데이트
                     setNickname(nickname); // 닉네임 상태 업데이트
+                    setType(type )
                 } else {
                     console.error('사용자 정보를 가져오는 데 실패했습니다.');
                 }
@@ -126,12 +126,40 @@ const handleImageClick = () => {
 };
 
 
+const handleMypageClick = () => {
+    handleMenuClick('마이페이지'); // 메뉴 클릭 처리
+    navigate('/mypage'); // 마이페이지로 이동
+};
+
+const handleMynoteClick = () => {
+    handleMenuClick('마이노트'); // 메뉴 클릭 처리
+    navigate('/mynote'); // 마이페이지로 이동
+};
+
+const handleCashClick = () => {
+    handleMenuClick('결제창'); // 메뉴 클릭 처리
+    navigate('/cash'); // 마이페이지로 이동
+};
+
+
     // 메뉴 항목 클릭 시 활성화 상태 변경
     const handleMenuClick = (menuName) => {
         setActiveMenu(menuName); // 클릭한 메뉴 이름을 활성화 상태로 설정
     };
 
 
+    const handleFeedbackClick = () => {
+        console.log('사용자 타입:', type); // 타입 확인
+        if (type === 'MENTOR') {
+            setActiveMenu('받은 피드백'); // 상태 설정
+            navigate('/feedbackT'); // 멘토 타입일 경우 피드백 T 페이지로 이동
+        } else if (type === 'MENTEE') {
+            setActiveMenu('받은 피드백'); // 상태 설정
+            navigate('/feedbackS'); // 멘티 타입일 경우 피드백 S 페이지로 이동
+        } else {
+            console.error('유효하지 않은 타입입니다.',  type); // 타입이 유효하지 않을 경우
+        }
+    };
 
 
   return (
@@ -166,10 +194,10 @@ const handleImageClick = () => {
                     margintop="10px"
                 ></Line>
                 <Menu>
-                <MenuItem active={activeMenu === '마이페이지'} onClick={() => handleMenuClick('마이페이지')}>마이페이지</MenuItem>
-                <MenuItem active={activeMenu === '정답/오답노트'} onClick={() => handleMenuClick('정답/오답노트')}>정답/오답노트</MenuItem>
-                <MenuItem active={activeMenu === '받은 피드백'} onClick={() => handleMenuClick('받은 피드백')}>받은 피드백</MenuItem>
-                <MenuItem active={activeMenu === '결제관리'} onClick={() => handleMenuClick('결제관리')}>결제관리</MenuItem>
+                <MenuItem active={activeMenu === '마이페이지'} onClick={() => handleMypageClick('마이페이지')}>마이페이지</MenuItem>
+                <MenuItem active={activeMenu === '마이노트'} onClick={() => handleMynoteClick('마이노트')}>정답/오답노트</MenuItem>
+                <MenuItem active={activeMenu === '받은 피드백'} onClick={() => handleFeedbackClick('받은 피드백')}>받은 피드백</MenuItem>
+                <MenuItem active={activeMenu === '결제창'} onClick={() => handleCashClick('결제창')}>결제관리</MenuItem>
                 </Menu>
                 <Line
                     marginbottom="10px"

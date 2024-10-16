@@ -29,7 +29,7 @@ const QuestionBoard = () => {
           params.keyword = searchKeyword;
         }
 
-        const response = await axios.get('http://localhost:8080/boards/R', {
+        const response = await axios.get(process.env.REACT_APP_API_URL + 'boards/R', {
           params,
           headers: {
             Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
