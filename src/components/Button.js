@@ -9,7 +9,7 @@ transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
 width: ${(props) => props.width};
   color: ${(props) => props.textcolor}; /* 텍스트 색상 */
   margin-top: ${(props) => props.margintop || "0px"};
-  margin-bottom: ${(props) => props.margintbottom};
+  margin-bottom: ${(props) => props.margintbottom || "0px"};
   margin-right: ${(props) => props.marginright};
   margin-left: ${(props) => props.marginleft};
   height: ${(props) => props.height};

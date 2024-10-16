@@ -206,7 +206,6 @@ const styles = {
     flex: 1,
   },
   searchInput: {
-    marginTop: '20px',
     width: '100%',
     Height: '15px',
     padding: '12px',
@@ -218,8 +217,6 @@ const styles = {
   searchButton: {
     position: 'absolute',
     right: '12px',
-    top: '35%',
-    transform: 'translateY(-50%)',
     backgroundColor: 'transparent',
     border: 'none',
     cursor: 'pointer',

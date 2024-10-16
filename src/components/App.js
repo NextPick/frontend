@@ -36,8 +36,6 @@ import InterviewRoom from "../pages/InterviewRoom"
 import '../styles/global.css';
 import Not from '../pages/Not.js';
 
-
-// App 컴포넌트를 정의하는 함수형 컴포넌트
 function App() {
   return (
     <MemberManager>
