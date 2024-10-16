@@ -44,12 +44,12 @@ const Header = () => {
                         <Link to='/choice' className='navLink' onClick={handleLinkClick}>화상 면접</Link>
                         <Link to='/board/question' className='navLink' onClick={handleLinkClick}>질문 게시판</Link>
                         <Link to='/board/review' className='navLink' onClick={handleLinkClick}>면접 후기 게시판</Link>
-                        <Link to='/audio-recorder' className='navLink' onClick={handleLinkClick}>음성 인식</Link>
-                        
                     </div>
                     {nickname ? (
                         <div style={styles.userContainer}>
+                        <Link to='/mypage' className='navLink' onClick={handleLinkClick}>
                             <span style={styles.welcomeMessage}>{nickname}님 환영합니다!</span>
+                            </Link>
                             <button onClick={handleLogout} style={styles.logoutButton}>로그아웃</button>
                         </div>
                     ) : (
@@ -94,32 +94,29 @@ const styles = {
     navLinks: {
         display: 'flex',
         paddingTop: '5px',
-        paddingLeft: '25px',
-
         gap: '20px', // 링크 간격 조정
     },
     userContainer: {
         display: 'flex',
         marginRight: '60px',
-        alignItems: 'center',
-        marginLeft: 'auto',
+        marginTop: '11px',
+        marginLeft: '-60px'
     },
     welcomeMessage: {
-        marginRight: '15px',
-        marginTop: '3px',
+        marginRight: '12px',
         fontSize: '16px',
         color: '#343a40',
     },
     logoutButton: {
-        padding: '6px 11px',
+        padding: '5px 10px',
         border: 'none',
         borderRadius: '4px',
-        backgroundColor: '#dc3552', // 로그아웃 버튼 색상
+        backgroundColor: 'rgb(150 190 213)', // 로그아웃 버튼 색상
         color: 'white',
         cursor: 'pointer',
         fontSize: '13px',
         transition: 'background-color 0.3s',
-        marginBottom: '13px',
+        marginBottom: '-5x',
     },
 };
 
