@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';  
 import '../styles/global.css';  
 import { useHeaderMode } from '../hooks/HeaderManager.js'; 
-import logo from '../assets/KakaoTalk_20241015_104803914_02.png'; // 로고 경로
+import logo from '../assets/mainlogo.png'; // 로고 경로
 import { NavItem } from 'react-bootstrap';
 
 const Header = () => {
