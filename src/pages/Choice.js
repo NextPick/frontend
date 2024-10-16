@@ -128,10 +128,10 @@ const Choice = () => {
             {type === 'MENTOR' ? (
                 <>
                     <Button color="transparent" radius="5px" hoverColor="#FFFFFF" onClick={handleShowAddModalFE}>
-                        <img src={choicefe} alt="fe" style={{ width: '350px', height: '340px' }} />
+                        <img src={choicefe} alt="fe" style={{ width: '380px', height: '340px' }} />
                     </Button>
                     <Button color="transparent" radius="5px" hoverColor="#FFFFFF" onClick={handleShowAddModalBE}>
-                        <img src={choicebe} alt="be" style={{ width: '350px', height: '340px' }} />
+                        <img src={choicebe} alt="be" style={{ width: '380px', height: '340px' }} />
                     </Button>
                 </>
             ) : type === 'MENTEE' ? (
