@@ -28,7 +28,7 @@ const ResultCheck = () => {
     useEffect(() => {
         if (questionListId) {
             // API 요청으로 정답과 정답률 가져오기
-            axios.get(`${process.env.REACT_APP_API_URL}/questions/${questionListId}`)
+            axios.get(`${process.env.REACT_APP_API_URL}questions/${questionListId}`)
                 .then(response => {
                     const data = response.data.data;
                     console.log(data);
@@ -140,7 +140,6 @@ const ResultCheck = () => {
                     </DetailsWrapper>
                 </ContentContainer>
 
-                {/* 버튼과 마이크 이미지를 수평으로 정렬하기 위한 컨테이너 추가 */}
                 <ButtonContainer>
                     <Button
                         width="170px"
