@@ -69,6 +69,23 @@ const EditBoardPage = () => {
     }
   };
 
+  // 게시글 삭제 핸들러 추가
+  const handleDeletePost = async () => {
+    try {
+      await axios.delete(`http://localhost:8080/boards/${boardId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+      });
+
+      // 게시물 삭제 후, dtype에 따라 리다이렉트
+      const redirectPath = post.dtype === 'QuestionBoard' ? '/boards/questions' : '/boards/reviews';
+      navigate(redirectPath); // dType에 따라 게시판 리스트 페이지로 이동
+    } catch (error) {
+      setError('게시글 삭제 중 오류가 발생했습니다.');
+    }
+  };
+
   // 폼 제출 핸들러
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -151,6 +168,9 @@ const EditBoardPage = () => {
         </div>
         <button type="submit" style={buttonStyle}>수정 완료</button>
       </form>
+
+      {/* 게시글 삭제 버튼 추가 */}
+      <button onClick={handleDeletePost} style={deleteButtonStyle}>게시글 삭제</button>
     </div>
   );
 };
@@ -198,6 +218,16 @@ const imageStyle = {
 const buttonStyle = {
   padding: '10px 20px',
   backgroundColor: '#4CAF50',
+  color: '#fff',
+  border: 'none',
+  borderRadius: '5px',
+  cursor: 'pointer',
+  marginTop: '20px',
+};
+
+const deleteButtonStyle = {
+  padding: '10px 20px',
+  backgroundColor: '#FF6347',
   color: '#fff',
   border: 'none',
   borderRadius: '5px',

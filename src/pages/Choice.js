@@ -21,31 +21,33 @@ const ModalContent = styled.div`
 const Choice = () => {
     const { setHeaderMode } = useHeaderMode();
     const [roomTitle, setRoomTitle] = useState('');
-    const [roomOccupation, setRoomOccupation] = useState('');
+    const [roomOccupation, setRoomOccupation] = useState(''); // 상태로 관리
     const [showAddModal, setShowAddModal] = useState(false);
     const accessToken = localStorage.getItem('accessToken');
     const navigate = useNavigate();
     const type = localStorage.getItem('type');
-    let roomOccupationMT = null;
+    let title;
+    let memberId;
+    let roomUuid;
+    let roomId;
 
     const handleShowAddModalFE = () => {
         setShowAddModal(true);
         setRoomOccupation("FE");
+        console.log("Selected occupation: FE");
     };
 
     const handleShowAddModalBE = () => {
         setShowAddModal(true);
         setRoomOccupation("BE");
+        console.log("Selected occupation: BE");
     }
 
-    const handleNavigateFE = () => {
-        roomOccupationMT = "FE";
-        navigate('/webrtc', { state: roomOccupationMT });
-    }
-
-    const handleNavigateBE = () => {
-        roomOccupationMT = "BE";
-        navigate('/webrtc', { state: roomOccupationMT });
+    const handleNavigate = async (occupation) => {
+        setRoomOccupation(occupation); // 상태 업데이트
+        await handleGetInterviewRoom(occupation);
+        console.log(roomUuid,title,roomId, occupation);
+        navigate('/webrtc', { state: { roomUuid: roomUuid, title: title, roomId: roomId, roomOccupation: occupation, memberId: memberId } }); // occupation을 인자로 전달
     }
 
     const handleCloseAddModal = () => {
@@ -59,8 +61,8 @@ const Choice = () => {
                 title: '모든 필드를 입력해주세요.',
                 confirmButtonText: '확인'
             }).then(() => {
-                setRoomTitle('');
-                setRoomOccupation('');
+                setRoomTitle(''); // 방 제목 초기화
+                setRoomOccupation(''); // 방 직군 초기화
             });
             return;
         }
@@ -83,14 +85,38 @@ const Choice = () => {
                 title: '방이 성공적으로 생성되었습니다.',
                 confirmButtonText: '확인'
             }).then(() => {
-                let dataToPass = { roomTitle: roomTitle, roomOccupation: roomOccupation };
+                let data = response.data.data;
+                roomUuid = data.roomUuid;
+                title = data.title;
+                roomId = data.roomId;
+                memberId = data.memberId;
+
+                console.log(roomUuid,title,roomId,roomOccupation, memberId);
                 setShowAddModal(false);
-                navigate('/webrtc', { state: dataToPass });
+                navigate('/webrtc', { state: { roomUuid: roomUuid, title: title, roomId: roomId, roomOccupation: roomOccupation, memberId: memberId }  }); // 방 생성 후 이동
             });
         } catch (error) {
             alert("방 만드는 중 오류가 발생했습니다. 다시 시도해주세요.");
         }
     };
+
+    const handleGetInterviewRoom = async (occupation) => {
+        try {
+            const response = await axios.get(process.env.REACT_APP_API_URL + "rooms/" + occupation,
+                {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${accessToken}`,
+                }
+            });
+            let data = response.data.data;
+            roomUuid = data.roomUuid;
+            title = data.title;
+            roomId = data.roomId;
+        } catch (error) {
+            alert("직군의 남은 방이 없습니다.")
+        }
+    }
 
     useEffect(() => {
         setHeaderMode('main');
@@ -109,18 +135,16 @@ const Choice = () => {
                     </Button>
                 </>
             ) : type === 'MENTEE' ? (
-                    <>
-                        <Button color="transparent" radius="5px" hoverColor="#FFFFFF" onClick={handleNavigateFE}>
-                            <img src={choicefe} alt="fe" style={{ width: '350px', height: '340px' }} />
-                        </Button>
-                        <Button color="transparent" radius="5px" hoverColor="#FFFFFF" onClick={handleNavigateBE}>
-                            <img src={choicebe} alt="be" style={{ width: '350px', height: '340px' }} />
-                        </Button>
-                        <Button color="transparent" radius="5px" hoverColor="#FFFFFF" onClick={() => navigate('/webrtc')}>
-                            입장하기
-                        </Button>
-                    </>
+                <>
+                    <Button color="transparent" radius="5px" hoverColor="#FFFFFF" onClick={() => handleNavigate("FE")}>
+                        <img src={choicefe} alt="fe" style={{ width: '350px', height: '340px' }} />
+                    </Button>
+                    <Button color="transparent" radius="5px" hoverColor="#FFFFFF" onClick={() => handleNavigate("BE")}>
+                        <img src={choicebe} alt="be" style={{ width: '350px', height: '340px' }} />
+                    </Button>
+                </>
             ) : null}
+
             {/* 방 만들기 모달 */}
             <Modal show={showAddModal} onHide={handleCloseAddModal}>
                 <Modal.Header closeButton>

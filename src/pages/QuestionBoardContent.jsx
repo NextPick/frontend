@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -8,15 +8,13 @@ const PostDetail = () => {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
   const [newReply, setNewReply] = useState({});
-  const [editContent, setEditContent] = useState({});
-  const [showReplyInput, setShowReplyInput] = useState({});
-  const [showEditInput, setShowEditInput] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [likesCount, setLikesCount] = useState(0);
-  const currentNickname = localStorage.getItem('nickname');
+  const currentUserNickname = localStorage.getItem('nickname'); // 현재 로그인한 사용자 닉네임
   const navigate = useNavigate();
 
+  // 게시글 가져오기
   useEffect(() => {
     const fetchPost = async () => {
       try {
@@ -37,6 +35,7 @@ const PostDetail = () => {
     fetchPost();
   }, [boardId]);
 
+  // 댓글 목록 가져오기
   const fetchComments = async () => {
     try {
       const response = await axios.get(process.env.REACT_APP_API_URL + `boards/${boardId}/comments`, {
@@ -53,6 +52,32 @@ const PostDetail = () => {
   useEffect(() => {
     fetchComments();
   }, [boardId]);
+
+  // 게시글 삭제 처리
+  const handleDeletePost = async () => {
+    try {
+      const boardType = post.dtype; // dtype 미리 저장
+      await axios.delete(`http://localhost:8080/boards/${boardId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+      });
+
+      // dtype에 따라 해당 페이지로 이동
+      if (boardType === 'ReviewBoard') {
+        navigate('/board/review'); // ReviewBoard로 이동
+      } else if (boardType === 'QuestionBoard') {
+        navigate('/board/question'); // QuestionBoard로 이동
+      }
+    } catch (error) {
+      console.error('게시글 삭제 중 오류 발생:', error);
+    }
+  };
+
+  // 게시글 수정 페이지로 이동
+  const handleEditPost = () => {
+    navigate(`/board/edit/${boardId}`); // 수정 페이지로 이동
+  };
 
   const handleLike = async () => {
     try {
@@ -73,6 +98,7 @@ const PostDetail = () => {
     }
   };
 
+  // 댓글 추가 처리
   const handleCommentSubmit = async () => {
     try {
       await axios.post(
@@ -84,20 +110,53 @@ const PostDetail = () => {
           }
         }
       );
-      setNewComment('');
-      fetchComments();
+      setNewComment('');  // 댓글 입력 필드 초기화
+      fetchComments();     // 댓글 목록 새로고침
     } catch (error) {
       console.error('댓글 작성 중 오류 발생:', error);
     }
   };
 
+  // 댓글 삭제 처리
+  const handleDeleteComment = async (commentId) => {
+    try {
+      await axios.delete(`http://localhost:8080/boards/${boardId}/comments/${commentId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        }
+      });
+      fetchComments(); // 댓글 목록 새로고침
+    } catch (error) {
+      console.error('댓글 삭제 중 오류 발생:', error);
+    }
+  };
+
+  // 댓글 수정 처리
+  const handleUpdateComment = async (commentId, updatedContent) => {
+    try {
+      await axios.patch(
+        `http://localhost:8080/boards/${boardId}/comments/${commentId}`,
+        { content: updatedContent },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+          }
+        }
+      );
+      fetchComments(); // 댓글 목록 새로고침
+    } catch (error) {
+      console.error('댓글 수정 중 오류 발생:', error);
+    }
+  };
+
+  // 대댓글 추가 처리
   const handleReplySubmit = async (parentCommentId) => {
     try {
       await axios.post(
         process.env.REACT_APP_API_URL + `boards/${boardId}/comments`,
         {
           content: newReply[parentCommentId],
-          parentCommentId: parentCommentId,
+          parentCommentId: parentCommentId,  // 부모 댓글 ID 포함
         },
         {
           headers: {
@@ -105,10 +164,10 @@ const PostDetail = () => {
           }
         }
       );
-      setNewReply({ ...newReply, [parentCommentId]: '' });
-      fetchComments();
+      setNewReply({ ...newReply, [parentCommentId]: '' });  // 입력 필드 초기화
+      fetchComments();  // 댓글 목록 새로고침
     } catch (error) {
-      console.error('답글 작성 중 오류 발생:', error);
+      console.error('대댓글 작성 중 오류 발생:', error);
     }
   };
 
@@ -116,6 +175,9 @@ const PostDetail = () => {
     setNewReply({ ...newReply, [parentCommentId]: value });
   };
 
+<<<<<<< HEAD
+  // 댓글 및 대댓글 렌더링
+=======
   const handleEditCommentSubmit = async (commentId) => {
     try {
       await axios.patch(
@@ -162,69 +224,63 @@ const PostDetail = () => {
     }));
   };
 
+>>>>>>> 8691765f2c22e338a1f6e24f474b7df475061bac
   const renderComments = (parentId = null) => {
     return comments
       .filter(comment => comment.parentCommentId === parentId)
       .map(comment => (
-        <div key={comment.boardCommentId} style={parentId ? replyStyle : commentStyle}>
-          <div style={comment.nickname === currentNickname ? { ...commentItem, ...myCommentStyle } : commentItem}>
+        <div key={comment.boardCommentId} style={{ marginLeft: parentId ? '40px' : '0px' }}>
+          <div style={commentItem}>
+            <div style={avatar}></div>
             <div style={commentContent}>
-              <span style={commentAuthor}>
+              <span
+                style={currentUserNickname === comment.nickname ? currentUserNicknameStyle : commentAuthor}
+              >
                 {comment.nickname}
               </span>
-              <span style={commentDate}>{new Date(comment.createdAt).toLocaleDateString()}</span>
+              <span style={commentDate}>
+                {new Date(comment.createdAt).toLocaleDateString()}
+
+                {/* 댓글 수정/삭제 버튼을 댓글 작성 시간 옆에 작게 표시 */}
+                {currentUserNickname === comment.nickname && (
+                  <span style={commentActions}>
+                    <button
+                      style={editButton}
+                      onClick={() => handleUpdateComment(comment.boardCommentId, prompt('댓글 수정', comment.content))}
+                    >
+                      수정
+                    </button>
+                    <button
+                      style={deleteButton}
+                      onClick={() => handleDeleteComment(comment.boardCommentId)}
+                    >
+                      삭제
+                    </button>
+                  </span>
+                )}
+              </span>
               <p style={commentText}>{comment.content}</p>
 
-              {/* 댓글 수정 버튼 */}
-              {comment.nickname === currentNickname && (
-                <>
-                  <button onClick={() => toggleEditInput(comment.boardCommentId)} style={smallButton}>
-                    수정
-                  </button>
-                  <button onClick={() => handleDeleteComment(comment.boardCommentId)} style={smallButton}>
-                    삭제
-                  </button>
-                  {showEditInput[comment.boardCommentId] && (
-                    <>
-                      <input
-                        type="text"
-                        placeholder="댓글 수정"
-                        value={editContent[comment.boardCommentId] || ''}
-                        onChange={(e) => setEditContent({ ...editContent, [comment.boardCommentId]: e.target.value })}
-                        style={commentInput} 
-                      />
-                      <button onClick={() => handleEditCommentSubmit(comment.boardCommentId)} style={smallButton}>
-                        저장
-                      </button>
-                    </>
-                  )}
-                </>
-              )}
-
-              {/* 답글 달기 버튼 */}
+              {/* 부모 댓글일 때만 대댓글 입력 필드 제공 */}
               {!parentId && (
-                <>
-                  <button style={smallButton} onClick={() => toggleReplyInput(comment.boardCommentId)}>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <input
+                    type="text"
+                    placeholder="답글 달기"
+                    value={newReply[comment.boardCommentId] || ''}
+                    onChange={(e) => handleReplyChange(comment.boardCommentId, e.target.value)}
+                    style={replyInput}
+                  />
+                  <button
+                    style={replyButton}
+                    onClick={() => handleReplySubmit(comment.boardCommentId)}
+                  >
                     답글 달기
                   </button>
-                  {showReplyInput[comment.boardCommentId] && (
-                    <>
-                      <input
-                        type="text"
-                        placeholder="답글 작성"
-                        value={newReply[comment.boardCommentId] || ''}
-                        onChange={(e) => handleReplyChange(comment.boardCommentId, e.target.value)}
-                        style={commentInput}
-                      />
-                      <button style={smallButton} onClick={() => handleReplySubmit(comment.boardCommentId)}>
-                        답글 작성
-                      </button>
-                    </>
-                  )}
-                </>
+                </div>
               )}
 
-              {/* 대댓글 렌더링 */}
+              {/* 대댓글 재귀 렌더링 */}
               {renderComments(comment.boardCommentId)}
             </div>
           </div>
@@ -238,17 +294,14 @@ const PostDetail = () => {
 
   return (
     <div style={container}>
-      <h1 style={boardTitle}>
-        {post.dtype === 'QuestionBoard' ? '면접 질문 게시판' : '면접 리뷰 게시판'}
-      </h1>
       <h2 style={titleContainer}>
-        <span style={mainTitle}>게시글 제목: {post.title}</span>
-        <span style={{ margin: '0 5px -6px', fontSize: '18px' }}>|</span>
+        <span style={mainTitle}>{post.title}</span>
         <span style={subTitle}>작성자: {post.author}</span>
       </h2>
       <hr style={{ ...divider, width: '900px' }} />
       <div style={contentContainer}>
         <div style={boardContainer}>
+          {/* 이미지 렌더링 */}
           {post.imageUrls && post.imageUrls.length > 0 && (
             <div style={imageContainer}>
               {post.imageUrls.map((imageUrl, index) => (
@@ -279,8 +332,22 @@ const PostDetail = () => {
               <span>💬 {comments.length}</span>
             </div>
 
+            {/* 게시글 수정/삭제 버튼 */}
+            {currentUserNickname === post.author && (
+              <div style={{ marginTop: '20px', textAlign: 'left' }}>
+                <button onClick={handleEditPost} style={commentButton}>
+                  수정
+                </button>
+                <button onClick={handleDeletePost} style={deleteButton}>
+                  삭제
+                </button>
+              </div>
+            )}
+
+            {/* 댓글 리스트 */}
             {renderComments()}
 
+            {/* 새 댓글 입력 */}
             <div style={commentInputContainer}>
               <input
                 type="text"
@@ -289,7 +356,7 @@ const PostDetail = () => {
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
               />
-              <button style={smallButton} onClick={handleCommentSubmit}>댓글 달기</button>
+              <button style={commentButton} onClick={handleCommentSubmit}>댓글 달기</button>
             </div>
           </div>
         </div>
@@ -298,91 +365,114 @@ const PostDetail = () => {
   );
 };
 
+// 스타일 정의
 const container = {
   display: 'flex',
   flexDirection: 'column',
   marginTop: '5vh',
   alignItems: 'center',
-  backgroundColor: '#F9FAFB', // 부드러운 배경색
+  backgroundColor: '#FFF',
+  padding: '20px',
+  borderRadius: '10px',
+  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
 };
 
-const boardTitle = {
-  fontSize: '28px',
+const currentUserNicknameStyle = {
+  color: '#08a10d',
   fontWeight: 'bold',
-  margin: '20px 0',
-  textAlign: 'center',
-  color: '#333', // 텍스트 색상
+};
+
+const editButton = {
+  backgroundColor: '#154282',
+  color: '#fff',
+  border: 'none',
+  padding: '2px 5px',
+  borderRadius: '5px',
+  cursor: 'pointer',
+  fontSize: '12px',
+};
+
+const replyButton = {
+  backgroundColor: '#4CAF50',
+  color: '#fff',
+  border: 'none',
+  padding: '6px 12px',
+  borderRadius: '8px',
+  cursor: 'pointer',
+  fontSize: '12px',
+  marginLeft: '10px',
 };
 
 const titleContainer = {
-  marginBottom: '20px',
   display: 'flex',
+  flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'center',
-  width: '100%',
+  width: '900px',
 };
 
 const mainTitle = {
-  fontWeight: 'Bold',
-  fontSize: '24px',
-  color: '#111',
+  fontWeight: 'bold',
+  fontSize: '26px',
 };
 
 const subTitle = {
-  fontSize: '16px',
+  fontSize: '18px',
+  marginTop: '10px',
   color: '#888',
-  marginLeft: '8px',
 };
 
 const divider = {
-  borderTop: '1px solid #E5E7EB',
+  borderTop: '2px solid #A0A0A0',
   marginBottom: '40px',
   width: '100%',
 };
 
 const contentContainer = {
-  backgroundColor: '#FFF',
-  width: '90%',
-  maxWidth: '900px',
+  justifyContent: 'center',
+  flexDirection: 'column',
+  backgroundColor: '#E0EBF5',
+  alignItems: 'center',
+  width: '800px',
   padding: '20px',
-  borderRadius: '10px',
-  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-  marginBottom: '20px',
+  boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
+  borderRadius: '20px',
 };
 
 const boardContainer = {
   width: '100%',
-  padding: '20px',
-  backgroundColor: '#FAFAFA',
+  backgroundColor: '#f7f7f7',
   borderRadius: '8px',
-  border: '1px solid #E5E7EB',
+  border: '1px solid #ccc',
+  padding: '20px',
+  boxSizing: 'border-box',
 };
 
 const imageContainer = {
   marginBottom: '15px',
+  display: 'flex',
+  justifyContent: 'center',
 };
 
 const imageStyle = {
-  maxWidth: '100%',
-  maxHeight: '400px',
-  borderRadius: '10px',
-  boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
-  objectFit: 'cover',
+  maxWidth: '80%',
+  maxHeight: '300px',
+  marginBottom: '10px',
+  borderRadius: '8px',
+  boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
 };
 
 const boardInfoContainer = {
-  padding: '10px 20px',
-  backgroundColor: '#FAFAFA',
-  borderRadius: '8px',
-  marginBottom: '20px',
+  margin: '0 40px 0 40px',
+  padding: '10px',
+  backgroundColor: '#f7f7f7',
 };
 
 const infoContainer = {
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
-  fontSize: '14px',
-  color: '#666',
+  marginBottom: '5px',
 };
 
 const authorContainer = {
@@ -391,109 +481,122 @@ const authorContainer = {
 };
 
 const author = {
-  fontSize: '16px',
+  fontSize: '14px',
   fontWeight: 'bold',
-  color: '#222',
 };
 
 const date = {
   fontSize: '14px',
   color: '#888',
+  marginTop: '5px',
 };
 
 const postContentContainer = {
-  backgroundColor: '#FAFAFA',
-  padding: '20px',
+  padding: '15px',
+  backgroundColor: '#f9f9f9',
+  marginBottom: '20px',
   borderRadius: '8px',
-  fontSize: '16px',
-  color: '#333',
+  border: '1px solid #ddd',
+  boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
 };
 
 const interactionContainer = {
   display: 'flex',
   gap: '15px',
+  marginTop: '20px',
   alignItems: 'center',
-  marginTop: '15px',
-};
-
-const commentStyle = {
-  display: 'flex',
-  flexDirection: 'column',
-  padding: '15px 20px',
-  marginBottom: '15px',
-  backgroundColor: '#FFFFFF',
-  borderRadius: '8px',
-  border: '1px solid #E5E7EB',
-  boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.05)',
-};
-
-const replyStyle = {
-  ...commentStyle,
-  marginLeft: '40px', // 대댓글 들여쓰기
-  backgroundColor: '#F9FAFB', // 대댓글 배경색
 };
 
 const commentItem = {
   display: 'flex',
-  flexDirection: 'column',
+  alignItems: 'flex-start',
+  marginBottom: '10px',
   padding: '10px',
   borderRadius: '8px',
+  backgroundColor: '#FFF',
+  boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
+  border: '1px solid #ddd',
+};
+
+const avatar = {
+  width: '40px',
+  height: '40px',
+  backgroundColor: '#ccc',
+  borderRadius: '50%',
+  marginRight: '10px',
 };
 
 const commentContent = {
-  marginBottom: '10px',
+  flex: 1,
   fontSize: '14px',
-  color: '#333',
 };
 
 const commentAuthor = {
   fontWeight: 'bold',
   fontSize: '14px',
-  marginBottom: '5px',
-  color: '#111',
+  marginRight: '10px',
+  color: '#555',
 };
 
 const commentDate = {
   fontSize: '12px',
   color: '#888',
+  marginLeft: '10px',
 };
 
 const commentText = {
   marginTop: '5px',
+  fontSize: '14px',
   color: '#333',
-  lineHeight: '1.6',
+};
+
+const commentActions = {
+  display: 'inline',
+  marginLeft: '10px',
+};
+
+const replyInput = {
+  flex: 1,
+  padding: '8px',
+  borderRadius: '8px',
+  border: '1px solid #ccc',
+  marginRight: '10px',
+  fontSize: '14px',
 };
 
 const commentInputContainer = {
   display: 'flex',
   alignItems: 'center',
-  width: '100%',
   marginTop: '20px',
 };
 
 const commentInput = {
   flex: 1,
-  padding: '8px',
+  padding: '10px',
+  borderRadius: '8px',
+  border: '1px solid #ccc',
+  marginRight: '10px',
   fontSize: '14px',
-  borderRadius: '6px',
-  border: '1px solid #E5E7EB',
-  marginRight: '8px',
 };
 
-const smallButton = {
+const commentButton = {
   backgroundColor: '#4CAF50',
   color: '#fff',
   border: 'none',
-  padding: '8px 12px',
-  borderRadius: '5px',
-  fontSize: '12px',
+  padding: '10px 20px',
+  borderRadius: '8px',
   cursor: 'pointer',
-  transition: 'background-color 0.2s ease',
+  fontWeight: 'bold',
 };
 
-const myCommentStyle = {
-  backgroundColor: '#F0F4FF',
-  border: '1px solid #C1D3FF',
+const deleteButton = {
+  backgroundColor: '#FF6B6B',
+  color: '#fff',
+  border: 'none',
+  padding: '2px 5px',
+  borderRadius: '5px',
+  cursor: 'pointer',
+  fontSize: '12px',
 };
 
 export default PostDetail;
