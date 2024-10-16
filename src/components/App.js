@@ -30,18 +30,11 @@ import AiInterview from '../pages/AiInterview.js';
 import ResultCheck from '../pages/ResultCheck.js';
 import ResultPage from '../pages/ResultPage.js';
 import WebRTC from "../pages/WebRTC";
-<<<<<<< HEAD
 import ReviewBoardPost from "../pages/ReviewBoardPost.jsx";
-import EditBoardPage from '../pages/EditBoardPage.jsx';  // 새로 추가된 수정 페이지 컴포넌트
+import EditBoardPage from '../pages/EditBoardPage.jsx'; 
 import InterviewRoom from "../pages/InterviewRoom"
 import '../styles/global.css';
-=======
-import InterviewRoom from "../pages/InterviewRoom";
-import ReviewBoardPost from "../pages/ReviewBoardPost.jsx";
-import EditBoardPage from '../pages/EditBoardPage.jsx';  // 새로 추가된 수정 페이지 컴포넌트
-import '../styles/global.css';
 import Not from '../pages/Not.js';
->>>>>>> 8691765f2c22e338a1f6e24f474b7df475061bac
 
 
 // App 컴포넌트를 정의하는 함수형 컴포넌트
