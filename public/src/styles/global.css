@@ -1,0 +1,117 @@
+@font-face {
+  font-family: "강원교육튼튼N";
+  src: url("../assets/fonts/강원교육튼튼.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "강원교육튼튼B";
+  src: url("../assets/fonts/SB 어그로 B.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "강원교육튼튼L";
+  src: url("../assets/fonts/SB 어그로 L.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "강원교육튼튼M";
+  src: url("../assets/fonts/SB 어그로 M.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("../assets/fonts/Pretendard-Medium.otf") format("truetype");
+}
+
+@font-face {
+  font-family: "PretendardB";
+  src: url("../assets/fonts/Pretendard-Black.otf") format("truetype");
+}
+
+@font-face {
+  font-family: "PretendardL";
+  src: url("../assets/fonts/Pretendard-Light.otf") format("truetype");
+}
+
+@font-face {
+  font-family: "함박눈";
+  src: url("../assets/fonts/SF함박눈TTF.ttf") format("truetype");
+}
+
+.width-wrapper {
+  display: flex; /* Flexbox 사용 */
+  justify-content: center; /* 수평 중앙 정렬 */
+  align-items: center; /* 수직 중앙 정렬 */
+  height: 100%; /* 헤더의 높이에 맞춤 */
+}
+
+.width-wrapper img {
+  margin: 0 10px; /* 로고 간의 좌우 간격 유지 */
+}
+
+/* 각 로고의 기본 스타일 */
+#logo {
+  width: 55px; /* 로고 너비 */
+  height: 45px; /* 로고 높이 */
+  margin-right: 20px; /* 오른쪽 여백 추가 (조정 필요) */
+}
+
+#aiinterview {
+  width: 17.3px; /* 로고 너비 */
+  height: 10px; /* 로고 높이 */
+  position: relative; /* 상대 위치 지정 */
+  top: -4px; /* 위로 이동 (조정 필요) */
+}
+
+#faceinterview {
+  width: 15.3px; /* 로고 너비 */
+  height: 5.7px; /* 로고 높이 */
+  position: relative; /* 상대 위치 지정 */
+  top: -5.2px; /* 위로 이동 (조정 필요) */
+}
+
+#board {
+  width: 11.3px; /* 로고 너비 */
+  height: 5.7px; /* 로고 높이 */
+  position: relative; /* 상대 위치 지정 */
+  top: -5.2px; /* 위로 이동 (조정 필요) */
+}
+
+#board2 {
+  width: 11.8px; /* 로고 너비 */
+  height: 5.7px; /* 로고 높이 */
+  position: relative; /* 상대 위치 지정 */
+  top: -5.2px; /* 위로 이동 (조정 필요) */
+}
+
+#login {
+  width: 11px; /* 로고 너비 */
+  height: 5.2px; /* 로고 높이 */
+  position: relative; /* 상대 위치 지정 */
+  top: -5.2px; /* 위로 이동 (조정 필요) */
+}
+
+/* //푸터에 사용됨 */
+.width-child { 
+  width: max-content;
+}
+
+.draggable-img {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  pointer-events: none;
+  /* 포인터 이벤트 비활성화 */
+}
+
+.loginlogo{
+  display: flex; /* Flexbox 사용 */
+  justify-content: center; /* 수평 중앙 정렬 */
+  align-items: center; /* 수직 중앙 정렬 */
+  height: 100%; /* 헤더의 높이에 맞춤 */
+}
+
+body{
+  font-family: "PretendardL", "함박눈", sans-serif;
+}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // useHistory 대신 useNavigate 사용
+import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
 const QuestionBoardPost = () => {
@@ -8,7 +8,7 @@ const QuestionBoardPost = () => {
   const [category, setCategory] = useState('');
   const [images, setImages] = useState([]); 
   const maxFileSize = 5 * 1024 * 1024; // 5MB
-  const navigate = useNavigate(); // useHistory 대신 useNavigate 사용
+  const navigate = useNavigate();
 
   // 이미지 추가
   const handleImageAdd = (event) => {
@@ -39,8 +39,13 @@ const QuestionBoardPost = () => {
 
   // 게시글 작성
   const handleSubmitPost = () => {
+    if (!category) {
+      Swal.fire("카테고리 선택해주세요", "", "warning");
+      return;
+    }
+
     const formData = new FormData();
-    formData.append("category", category);
+    formData.append("boardCategory", category);  // 카테고리 추가
     
     images.forEach((image) => {
       formData.append("images", image.file);
@@ -56,27 +61,26 @@ const QuestionBoardPost = () => {
       },
       body: formData,
     })
-    .then((response) => response.json())
+    .then((response) => response.json()) // 응답을 JSON으로 파싱
     .then((data) => {
-      console.log("응답 데이터:", data); // 응답 데이터를 확인
-      if (data.boardId) {
+      console.log("응답 데이터:", data);
+      if (data && data.boardId) {
         Swal.fire("게시글이 성공적으로 등록되었습니다!");
         navigate(`/board/${data.boardId}`); // boardId를 이용해 상세 페이지로 리다이렉트
       } else {
-        Swal.fire("오류 발생", "boardId를 찾을 수 없습니다.", "error");
+        Swal.fire("오류 발생", "게시글 등록 중 문제가 발생했습니다.", "error");
       }
     })
     .catch((error) => {
       console.error("API 요청 실패:", error);
+      Swal.fire("오류 발생", "API 요청 중 문제가 발생했습니다.", "error");
     });
-    
-    
   };
 
   return (
     <div style={container}>
       <h2 style={titleContainer}>
-        <span style={mainTitle}>면접 후기 게시판</span>
+        <span style={mainTitle}>면접 질문 게시판</span>
         <span style={{ margin: '0 5px -6px', fontSize: '18px'}}>|</span>
         <span style={subTitle}>게시글 작성</span>
       </h2>
@@ -86,9 +90,9 @@ const QuestionBoardPost = () => {
           {/* 카테고리 선택 */}
           <select value={category} onChange={(e) => setCategory(e.target.value)} style={titleInput}>
             <option value="">카테고리 선택</option>
-            <option value="BE">백엔드</option>
-            <option value="FE">프론트엔드</option>
-            <option value="CS">컴퓨터 과학</option>
+            <option value="BE">BE</option>
+            <option value="FE">FE</option>
+            <option value="CS">CS 과학</option>
           </select>
 
           {/* 제목 입력 */}

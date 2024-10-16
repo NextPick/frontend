@@ -1,0 +1,12 @@
+.footer {
+    display: flex;
+    flex-direction: column;
+    background-color: black;
+    width: 100vw;
+    color: white;
+    margin-top: auto; /* 푸터가 항상 하단에 위치하도록 설정 */
+}
+.footer-link {
+    color: white;
+    text-decoration-line: none;
+}
