@@ -66,6 +66,10 @@ const Header = () => {
 };
 
 const styles = {
+
+    body: {
+        fontFamily: 'Pretendard'
+    },
     header: {
         backgroundColor: '#f8f9fa',
         boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',

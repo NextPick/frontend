@@ -1,8 +1,10 @@
 .footer {
     display: flex;
+    justify-content : center;
     flex-direction: column;
-    background-color: black;
+    background-color: #f1f1f1;
     width: 100vw;
+    height:100px;
     color: white;
     margin-top: auto; /* 푸터가 항상 하단에 위치하도록 설정 */
 }
@@ -10,3 +12,8 @@
     color: white;
     text-decoration-line: none;
 }
+
+.footer>p { display:flex; align-items:center; }
+.footer img { width:120px; filter: grayscale(1); opacity:0.5; display:inline-block; margin-right:50px; }
+.footer>p p { padding:0 15px; margin:0; color:#aaa; transition:all .3s; }
+.footer>p p:hover { color:#000; cursor:pointer; }

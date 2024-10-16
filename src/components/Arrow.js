@@ -11,7 +11,7 @@ const bounce = keyframes`
 `;
 
 const Arrow = styled.div`
-  display: inline-block;
+  display: none;
     width: 0px;
     height: 0px;
     border-left: 35px solid transparent; /* 왼쪽 경계 투명 */
