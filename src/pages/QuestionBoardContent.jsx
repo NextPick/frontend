@@ -249,19 +249,11 @@ const PostDetail = () => {
         <span style={mainTitle}>{post.title}</span>
         <span style={subTitle}>작성자: {post.author}</span>
       </h2>
+      
       <hr style={{ ...divider, width: '900px' }} />
+      
       <div style={contentContainer}>
-        <div style={boardContainer}>
-          {/* 이미지 렌더링 */}
-          {post.imageUrls && post.imageUrls.length > 0 && (
-            <div style={imageContainer}>
-              {post.imageUrls.map((imageUrl, index) => (
-                <img key={index} src={imageUrl} alt={`게시글 이미지 ${index + 1}`} style={imageStyle} />
-              ))}
-            </div>
-          )}
-
-          <div style={boardInfoContainer}>
+      <div style={boardInfoContainer}>
             <div style={infoContainer}>
               <div style={authorContainer}>
                 <span style={author}>작성자: {post.author}</span>
@@ -272,6 +264,29 @@ const PostDetail = () => {
             <div style={postContentContainer}>
               <p>{post.content}</p>
             </div>
+
+        <div style={boardContainer}>
+          {/* 이미지 렌더링 */}
+          <div style={imageContainer}>
+  {post.imageUrls && post.imageUrls.length > 0 && (
+    post.imageUrls.map((imageUrl, index) => (
+      <img key={index} src={imageUrl} alt={`게시글 이미지 ${index + 1}`} style={imageStyle} />
+    ))
+  )}
+
+</div>
+
+          {/* <div style={boardInfoContainer}>
+            <div style={infoContainer}>
+              <div style={authorContainer}>
+                <span style={author}>작성자: {post.author}</span>
+              </div>
+              <span style={date}>작성일: {new Date(post.createdAt).toLocaleDateString()} | 조회수: {post.viewCount} | 수정일: {new Date(post.modifiedAt).toLocaleDateString()}</span>
+            </div>
+
+            <div style={postContentContainer}>
+              <p>{post.content}</p>
+            </div> */}
 
             {post.dtype === 'ReviewBoard' && post.boardCategory && (
               <p>카테고리: {post.boardCategory}</p>
@@ -355,6 +370,7 @@ const replyButton = {
 };
 
 const titleContainer = {
+  
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
@@ -399,27 +415,16 @@ const boardContainer = {
   boxSizing: 'border-box',
 };
 
-const imageContainer = {
-  marginBottom: '15px',
-  display: 'flex',
-  justifyContent: 'center',
-};
 
-const imageStyle = {
-  maxWidth: '80%',
-  maxHeight: '300px',
-  marginBottom: '10px',
-  borderRadius: '8px',
-  boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
-};
 
 const boardInfoContainer = {
+  paddingTop: '30px',
   margin: '0 40px 0 40px',
   padding: '10px',
   backgroundColor: '#f7f7f7',
 };
 
-const infoContainer = {
+  const infoContainer = {
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
@@ -443,6 +448,7 @@ const date = {
 };
 
 const postContentContainer = {
+  
   padding: '15px',
   backgroundColor: '#f9f9f9',
   marginBottom: '20px',
@@ -549,5 +555,23 @@ const deleteButton = {
   cursor: 'pointer',
   fontSize: '12px',
 };
+const imageContainer = {
+  marginBottom: '15px',
+  display: 'flex',
+  justifyContent: 'center',
+  flexWrap: 'wrap', // 여러 이미지가 있을 때 자동으로 줄 바꿈
+  overflow: 'hidden', // 이미지를 컨테이너 밖으로 넘지 않게 처리
+};
+
+const imageStyle = {
+  width: '100%', // 컨테이너 크기에 맞게 이미지가 조정됨
+  maxWidth: '800px', // 최대 크기 제한
+  maxHeight: '300px', // 최대 높이 제한
+  marginBottom: '10px',
+  borderRadius: '8px',
+  objectFit: 'contain', // 이미지를 자르지 않고 비율을 유지하면서 크기 조정
+  boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
+};
+
 
 export default PostDetail;
