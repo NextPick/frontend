@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import Line from '../components/Line';
-import { useMember } from '../hooks/MemberManager';
-import plusbutton from '../assets/plusbutton.png';
-import searchIcon from '../assets/search.png'; // 돋보기 아이콘 이미지 경로
 import AdminpageSide from '../components/AdminpageSide';
+import plusbutton from '../assets/plusbutton.png';
+import searchIcon from '../assets/search.png';
 
 const Administration = () => {
   const [questionData, setQuestionData] = useState([]);
   const [categories, setCategories] = useState([]);
   const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [type, setType] = useState("none");
   const [sort, setSort] = useState("recent");
   const [category, setCategory] = useState(-1);
@@ -29,59 +29,64 @@ const Administration = () => {
   };
 
   const handleSearchClick = () => {
-    axios.get(process.env.REACT_APP_API_URL + `questions?size=20&page=${page}&type=${type}&sort=${sort}&category=${category}&keyword=${keyword}`)
+    fetchQuestions();
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      fetchQuestions();
+    }
+  };
+
+  const fetchQuestions = () => {
+    axios.get(`${process.env.REACT_APP_API_URL}questions`, {
+      params: { size: 15, page, type, sort, category, keyword }
+    })
       .then(response => {
         const data = response.data.data;
         setQuestionData(data);
+        setTotalPages(response.data.pageInfo.totalPages);
       })
       .catch(error => {
-        console.error('검색 요청 오류:', error);
+        console.error('Error fetching questions:', error);
       });
   };
 
   useEffect(() => {
-    axios.get(process.env.REACT_APP_API_URL + `questions?size=20&page=${page}&type=${type}&sort=${sort}&category=${category}&keyword=${keyword}`)
-      .then(response => {
-        const data = response.data.data;
-        setQuestionData(data);
-      })
-      .catch(error => {
-        console.error('데이터 가져오기 오류:', error);
-      });
-  }, [page, sort, category, keyword]);
+    fetchQuestions();
+  }, [page, sort, category]);
 
   useEffect(() => {
-    axios.get(process.env.REACT_APP_API_URL + 'question/category')
+    axios.get(`${process.env.REACT_APP_API_URL}question/category`)
       .then(response => {
         setCategories(response.data.data);
       })
       .catch(error => {
-        console.error('카테고리 가져오기 오류:', error);
+        console.error('Error fetching categories:', error);
       });
   }, []);
 
   return (
     <Container>
-     <AdminpageSide/>
+      <AdminpageSide />
       <MainContent>
-        <Title>면접질문 관리
+        <Title>
+          면접질문 관리
           <img src={plusbutton} alt="plusbutton" style={{ width: '25px', height: '25px', marginLeft: '10px' }} />
         </Title>
         <SearchContainer>
-          <SearchInput
-            type="text"
-            placeholder="검색"
-            value={keyword}
-            onChange={handleSearchChange}
-          />
-          <SearchButton onClick={handleSearchClick}>
-            <img src={searchIcon} alt="Search Icon" />
-          </SearchButton>
-          <SortDropdown value={sort} onChange={handleSortChange}>
-            <option value="recent">최신순</option>
-            <option value="popularity">인기순</option>
-            <option value="difficulty">난이도순</option>
-          </SortDropdown>
+          <SearchWrapper>
+            <SearchInput
+              type="text"
+              placeholder="검색"
+              value={keyword}
+              onChange={handleSearchChange}
+              onKeyDown={handleKeyDown}
+            />
+            <SearchButton onClick={handleSearchClick}>
+              <img src={searchIcon} alt="Search Icon" />
+            </SearchButton>
+          </SearchWrapper>
           <SortDropdown value={category} onChange={handleCategoryChange}>
             <option value={-1}>전체</option>
             {categories.map((cat) => (
@@ -90,13 +95,18 @@ const Administration = () => {
               </option>
             ))}
           </SortDropdown>
+          <SortDropdown value={sort} onChange={handleSortChange}>
+            <option value="recent">최신순</option>
+            <option value="correct_percent_acs">정답률▼</option>
+            <option value="correct_percent_desc">정답률▲</option>
+          </SortDropdown>
         </SearchContainer>
         <TableContainer>
           <Table>
             <colgroup>
-              <col style={{ width: '14%' }} /> {/* 2:14% */}
-              <col style={{ width: '71%' }} /> {/* 10:71% */}
-              <col style={{ width: '15%' }} /> {/* 1:15% */}
+              <col style={{ width: '14%' }} />
+              <col style={{ width: '71%' }} />
+              <col style={{ width: '15%' }} />
             </colgroup>
             <thead>
               <tr>
@@ -106,24 +116,32 @@ const Administration = () => {
               </tr>
             </thead>
             <tbody>
-              {questionData.map((user) => (
-                <TableRow key={user.questionListId}>
-                  <TableData>{user.questionCategory.categoryName}</TableData>
-                  <TableDataQuestion>{user.question}</TableDataQuestion>
-                  <TableData>{user.correctRate}%</TableData>
+              {questionData.map((question) => (
+                <TableRow key={question.questionListId}>
+                  <TableData>{question.questionCategory.categoryName}</TableData>
+                  <TableDataQuestion>
+                    <StyledLink to={`/Admin/question/${question.questionListId}`}>
+                      {question.question}
+                    </StyledLink>
+                  </TableDataQuestion>
+                  <TableData>{question.correctRate}%</TableData>
                 </TableRow>
               ))}
             </tbody>
           </Table>
         </TableContainer>
         <Pagination>
-          {[1, 2, 3, 4].map((num) => (
-            <PaginationDot
-              key={num}
-              active={page === num}
-              onClick={() => setPage(num)}
-            />
+          <button onClick={() => setPage(page - 1)} disabled={page === 1}>이전</button>
+          {Array.from({ length: totalPages }, (_, index) => (
+            <button
+              key={index}
+              onClick={() => setPage(index + 1)}
+              style={index + 1 === page ? activePageStyle : {}}
+            >
+              {index + 1}
+            </button>
           ))}
+          <button onClick={() => setPage(page + 1)} disabled={page === totalPages}>다음</button>
         </Pagination>
       </MainContent>
     </Container>
@@ -165,19 +183,24 @@ const SearchContainer = styled.div`
   margin-bottom: 20px;
 `;
 
-const SearchInput = styled.input`
+const SearchWrapper = styled.div`
+  position: relative;
   flex: 1;
-  padding: 5px 35px 8px 10px;
+`;
+
+const SearchInput = styled.input`
+  width: 100%;
+  padding: 5px 35px 8px 10px; /* Adjust padding for the button */
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 14px;
-  position: relative;
-  margin-bottom: 0px;
 `;
 
 const SearchButton = styled.button`
   position: absolute;
-  right: 15px;
+  right: 10px; /* Position button inside input on the right */
+  top: 50%;
+  transform: translateY(-50%);
   background: none;
   border: none;
   padding: 0;
@@ -235,19 +258,26 @@ const TableDataQuestion = styled.td`
   text-align: left;
 `;
 
-const Pagination = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
+const StyledLink = styled(Link)`
+  color: #000;
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
 `;
 
-const PaginationDot = styled.span`
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  margin: 0 5px;
-  cursor: pointer;
-  background-color: ${({ active }) => (active ? '#000' : '#ccc')};
+const Pagination = styled.div`
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  font-size: 14px;
 `;
+
+const activePageStyle = {
+  fontWeight: 'bold',
+  backgroundColor: '#4b8da6',
+  color: 'white',
+};
 
 export default Administration;

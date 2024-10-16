@@ -19,6 +19,7 @@ import FeedbackS from '../pages/FeedbackS.js';
 import AdminPage from '../pages/AdminPage.js'
 import AdminPageQx from '../pages/AdminPageQ.jsx';
 import AdministrationX from '../pages/Administration.jsx';
+import AdminPageQadd from '../pages/AdminPageQadd.jsx';
 import Choice from '../pages/Choice.js';
 import InterviewFeedback from '../pages/InterviewFeedback.js';
 import QuestionBoard from '../pages/QuestionBoard.jsx';
@@ -48,33 +49,45 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path='/login' element={< Login />} />
                 <Route path='/signupOption' element={<SignupOption />} />
+                <Route path='/not' element={<Not />} />
+
+                {/* 회원가입 페이지 */}
                 <Route path='/agree' element={<Agree />} />
                 <Route path='/signup/:type' element={<Signup />} />
                 <Route path='/signupSuccess' element={<SignupSuccess />} />
+                
+                {/* 마이 페이지 */}
                 <Route path='/mypage' element={<Mypage />} />
                 <Route path='/feedbackT' element={<FeedbackT />} />
                 <Route path='/feedbackS' element={<FeedbackS />} />
                 <Route path='/cash' element={<Cash />} />
                 <Route path='/mynote' element={<MyNote />} />
-                <Route path='/not' element={<Not />} />
-                <Route path='/adminpageQ' element={<AdminPageQx />} />
-                <Route path='/admin/adminpage-service' element={<AdminPage />} />
+
+                {/* 관리자 페이지 */}
+                <Route path='/admin/question' element={<AdminPageQx />} />
+                <Route path='/admin/question/:questionId' element={<AdminPageQadd />} />
+                <Route path='/admin/service' element={<AdminPage />} />
+                <Route path='/admin' element={<AdministrationX />} />
+
+                {/* 화상면접 페이지 */}
                 <Route path='/choice' element={<Choice />} />
+                <Route path='/webrtc' element={<WebRTC />} />
+                <Route path='/interviewRoom' element={<InterviewRoom />} />
                 <Route path='/interviewfeedback' element={<InterviewFeedback />} />
+                
+                {/* AI면접 페이지 */}
                 <Route path='/aihome' element={<AiHome />} />
-                <Route path='/administration' element={<AdministrationX />} />
+                <Route path='/aiInterview' element={<AiInterview />} />
                 <Route path='/resultcheck' element={<ResultCheck />} />
                 <Route path='/resultpage' element={<ResultPage />} />
-                <Route path='/aiInterview' element={<AiInterview />} />
-                <Route path='/audio-recorder' element={<AudioRecorder />} />
+
+                {/* 게시판 페이지 */}
                 <Route path='/board/question' element={<QuestionBoard />} />
                 <Route path='/board/:boardId' element={<QuestionBoardDetails />} />
                 <Route path='/board/edit/:boardId' element={<EditBoardPage />} /> {/* 수정 페이지 경로 설정 */}
                 <Route path='/board/question/post' element={<QuestionBoardPost />} />
                 <Route path='/board/review/post' element={<ReviewBoardPost />} />
                 <Route path='/board/review' element={<ReviewBoard />} />
-                <Route path='/webrtc' element={<WebRTC />} />
-                <Route path='/interviewRoom' element={<InterviewRoom />} />
                 <Route path="/board/question" element={<QuestionBoard />} />
                 <Route path="/board/question/post" element={<QuestionBoardPost />} /> {/* 질문 게시판 작성 경로 */}
                 <Route path="/board/review/post" element={<ReviewBoardPost />} /> {/* 리뷰 게시판 작성 경로 */}

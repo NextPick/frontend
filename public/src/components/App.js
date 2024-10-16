@@ -56,13 +56,13 @@ function App() {
               <Route path='/feedbackS' element={<FeedbackS/>} />
               <Route path='/cash' element={<Cash/>} />
               <Route path='/mynote' element={<MyNote/>} />
-              <Route path='/adminpageQx' element={<AdminPageQx/>} />
-              <Route path='/adminpage-service' element={<AdminPage/>} />
-              <Route path='/administration' element={<Administration/>} />
+              <Route path='/admin/question' element={<AdminPageQx/>} />
+              <Route path='/admin/service' element={<AdminPage/>} />
+              <Route path='/admin' element={<Administration/>} />
               <Route path='/choice' element={<Choice/>} />
               <Route path='/interviewfeedback' element={<InterviewFeedback/>} />
               <Route path='/aihome' element={<AiHome/>} />
-              <Route path='/administrationx' element={<AdministrationX/>} />
+              <Route path='/adminx' element={<AdministrationX/>} />
               <Route path='/resultcheck' element={<ResultCheck/>} />
               <Route path='/resultpage' element={<ResultPage/>} />
               <Route path='/aiInterview' element={<AiInterview/>} />
