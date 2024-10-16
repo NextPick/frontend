@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHeaderMode } from '../hooks/HeaderManager';
-import { useNavigate } from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 import Box from '../components/Box';
 import '../styles/login.css';
 import Button from '../components/Button';
@@ -16,7 +16,8 @@ const InterviewFeedback = () => {
     const [userScore, setUserScore] = useState(0); // 사용자의 별점
     const [userReview, setUserReview] = useState(''); // 사용자의 리뷰
     const [submittedReviews, setSubmittedReviews] = useState([]); // 제출된 리뷰들
-    let roomId = 0; // 실제 값 할당 필요
+    const location = useLocation();
+    const roomId = location.state?.roomId || 0;
     let mentorId = 0; // 실제 값 할당 필요
     const [feedback, setFeedback] = useState('');
     const [mentorNickname, setMentorNickname] = useState('');
@@ -40,7 +41,7 @@ const InterviewFeedback = () => {
 
     const handleGetMenteeFeedback = async () => {
         try {
-            const response = await axios.get(process.env.REACT_APP_API_URL + roomId,
+            const response = await axios.get(process.env.REACT_APP_API_URL + "mentee/feedback/" + roomId,
                 {
                     headers: {
                         'Content-Type': 'application/json',
@@ -59,7 +60,7 @@ const InterviewFeedback = () => {
         try {
             const response = await axios.post(process.env.REACT_APP_API_URL + `mentee/feedback/${roomId}/${mentorId}`,
                 {
-                    content: feedback,
+                    content: userReview,
                     starRating: userScore,
                 },
                 {
@@ -84,12 +85,12 @@ const InterviewFeedback = () => {
             <Box height="100%" width="35vw" border="none" alignItems="flex-start" justify="flex-start" style={{ display: 'flex' }}>
                 <div style={{ marginBottom: '5px', width: '100%' }}>
                     <Font font="PretendardL" size="22px" color="#000000" margintop="5px" spacing="2px" paddingleft="13px" paddingtop="5px" marginbottom="8px">
-                        {mentorNickname} 피드백
+                        {mentorNickname}의 피드백
                     </Font>
                 </div>
                 <Box height="57vh" width="30vw" border="none" alignItems="center" justify="center" top="10px" bottom="10px" style={{ display: 'flex' }}>
                     <Font font="PretendardB" size="18px" color="#000000" margintop="5px" spacing="2px" paddingleft="13px" paddingtop="5px" marginbottom="8px">
-                        멘토링 후기를 작성해주세요!
+                        {content}
                     </Font>
                 </Box>
                 <Box height="28vh" width="30vw" border="none" alignItems="flex-start" justify="flex-start" top="10px" direction='column' bottom="10px" style={{ display: 'flex', flexDirection: 'column' }}>
