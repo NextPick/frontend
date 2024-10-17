@@ -87,25 +87,15 @@ const WebRTC = () => {
 
                 // ICE 후보 구독
                 stompClient.subscribe(`/topic/peer/iceCandidate/${myKey}/${roomUuid}`, candidate => {
-                    const key = JSON.parse(candidate.body).key; // 키 추출
-                    const message = JSON.parse(candidate.body).body; // 후보 메시지 추출
+                    const key = JSON.parse(candidate.body).key // 후보를 보낸 사용자 키
+                    const message = JSON.parse(candidate.body).body; // ICE 후보 메시지
 
-                    const pc = pcListMap.get(key); // 피어 연결 가져오기
-                    if (pc) {
-                        // 원격 설명이 설정되었는지 확인
-                        if (pc.remoteDescription) {
-                            pc.addIceCandidate(new RTCIceCandidate({
-                                candidate: message.candidate,
-                                sdpMLineIndex: message.sdpMLineIndex,
-                                sdpMid: message.sdpMid
-                            })).catch(error => {
-                                console.error('Error adding ICE candidate:', error); // 오류 처리
-                            });
-                        } else {
-                            console.warn('Remote description is not set yet, candidate will be added later.'); // 경고 메시지
-                            // 필요 시 후보를 저장해두고 원격 설명이 설정된 후에 추가할 수 있는 로직 추가 가능
-                        }
-                    }
+                    // 해당 키의 피어 연결에서 ICE 후보를 추가합니다.
+                    pcListMap.get(key).addIceCandidate(new RTCIceCandidate({
+                        candidate: message.candidate,
+                        sdpMLineIndex: message.sdpMLineIndex,
+                        sdpMid: message.sdpMid
+                    }));
                 });
 
                 // Offer 구독

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';  
 import '../styles/global.css';  
 import { useHeaderMode } from '../hooks/HeaderManager.js'; 
-import logo from '../assets/KakaoTalk_20241015_104803914_02.png'; // 로고 경로
+import logo from '../assets/mainlogo.png'; // 로고 경로
 
 const Header = () => {
     const { headerMode } = useHeaderMode();
@@ -66,6 +66,10 @@ const Header = () => {
 };
 
 const styles = {
+
+    body: {
+        fontFamily: 'Pretendard'
+    },
     header: {
         backgroundColor: '#f8f9fa',
         boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',

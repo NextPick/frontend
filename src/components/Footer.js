@@ -3,29 +3,32 @@ import '../styles/global.css';
 import { Link } from 'react-router-dom';  
 import '../styles/footer.css';
 import Font from './Font';
+import logo from '../assets/mainlogo.png'
 
 const Footer = () => {
     
 
     return (
         <div className='footer'>
+        
         <Font 
-        font="PretendardB"
+        font="Pretendard"
         size="16px"
         color="#FFFFFF"
         align="center"
-        paddingtop="20px"
+        // paddingtop="20px"
         >
-            <p style={{ margin: '7px 0' }}>
+            <img src={logo} className='draggable-img' alt='홈로고' />
+            <p>
                Home
             </p>
-            <p style={{ margin: '7px 0' }}>
+            <p>
             Our Team
             </p>
-            <p style={{ margin: '7px 0' }}>
+            <p>
             Contacts
             </p>
-            <p style={{ margin: '7px 0' }}>
+            <p>
             Social Media
             </p>
             

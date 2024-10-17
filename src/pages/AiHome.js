@@ -62,45 +62,27 @@ const AiHome = () => {
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-            <Box height="90vh" width="70vw" border="none" alignItems="flex-start" justify="flex-start">
-                <Font font="PretendardM" size="30px" color="#000000" margintop="5px" spacing="2px" paddingleft="13px" paddingtop="5px" marginbottom="8px">
-                    AI면접연습
-                </Font>
-                <SelectedSubcategoryBox>
-                    <CheckMark>{selectedSubcategory ? '✔' : ''}</CheckMark>
-                    {selectedSubcategory ? selectedSubcategory : '하위 카테고리를 선택하세요.'}
-                </SelectedSubcategoryBox>
-                <Box height="60vh" width="60vw" border="none" alignItems="flex-start" justify="flex-start">
-                    <div style={{ display: 'flex', flexDirection: 'row', height: '100%', alignSelf: 'flex-start', marginLeft: '40px' }}>
-                        <CategoryContainer>
-                            {categories.map((category) => (
-                                <CategoryButton
-                                    key={category.name}
-                                    onClick={() => handleCategoryClick(category.name)}
-                                    isSelected={selectedCategory === category.name}
-                                >
-                                    {category.name}
-                                </CategoryButton>
+           <Title>AI면접</Title>
+            <Subtitle>AI 면접을 진행할 카테고리를 선택해 주세요</Subtitle>
+            <CategoryContainer>
+                    {categories.map((category, index) => (
+                        <React.Fragment key={index}>
+                        <CategoryTitle>{category.name}</CategoryTitle>
+                        <SubcategoryContainer>
+                            {category.subcategories.map((subcategory, subIndex) => (
+                            <Subcategory
+                                key={subIndex}
+                                isSelected={selectedSubcategory === subcategory}
+                                onClick={() => setSelectedSubcategory(subcategory)}
+                            >
+                                {subcategory}
+                            </Subcategory>
                             ))}
-                        </CategoryContainer>
-                        <div style={{ flex: 1, paddingLeft: '20px', display: 'flex', flexDirection: 'column' }}>
-                            {selectedCategory && (
-                                <SubcategoryContainer>
-                                    {categories
-                                        .find(category => category.name === selectedCategory)
-                                        .subcategories.map((subcategory) => (
-                                            <SubcategoryItem
-                                                key={subcategory}
-                                                onClick={() => handleSubcategoryClick(subcategory)}
-                                            >
-                                                {subcategory}
-                                            </SubcategoryItem>
-                                        ))}
-                                </SubcategoryContainer>
-                            )}
-                        </div>
-                    </div>
-                </Box>
+                        </SubcategoryContainer>
+                        {index < categories.length - 1 && <Divider />}
+                        </React.Fragment>
+                    ))}
+            </CategoryContainer>
                 <ButtonContainer>
                     <Button
                       color="transparent"
@@ -117,18 +99,67 @@ const AiHome = () => {
                         AI 면접시작하기 →
                     </Button>
                 </ButtonContainer>
-            </Box>
         </div>
     );
 };
 
 // Styled-components 정의
+
 const CategoryContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 20vw;
-  background-color: transparent;
+  width: 70%;
+  margin: auto;
+  gap: 20px;
+  font-family: 'Pretendard', sans-serif;
 `;
+
+const CategoryTitle = styled.div`
+  font-weight: bold;
+  font-size: 24px;
+  margin-bottom: 10px;
+`;
+
+const Subcategory = styled.div`
+  font-size: 16px;
+  text-align: center;
+  padding: 10px;
+  cursor: pointer;
+  color: ${({ isSelected }) => (isSelected ? '#373f73' : 'rgb(132, 145, 167)')};
+  font-weight: ${({ isSelected }) => (isSelected ? '500' : 'normal')};
+  position: relative;
+  
+  &::after {
+    content: '';
+    display: block;
+    width: 80%;
+    height: 3px;
+    background-color: ${({ isSelected }) => (isSelected ? '#006AC1' : '#FFFFFF')};
+    margin: 0 auto;
+    margin-top: 5px;
+  }
+`;
+
+const Divider = styled.div`
+  width: 100%;
+  border-top: 2px solid black;
+  margin: 20px 0;
+`;
+
+const Title = styled.div`
+  margin-top: 50px;
+  font-size: 36px;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 10px;
+`;
+
+const Subtitle = styled.div`
+  font-size: 16px;
+  color: #7f8c8d;
+  margin-bottom: 20px;
+`;
+
 
 const CategoryButton = styled.button`
   padding: 15px;
