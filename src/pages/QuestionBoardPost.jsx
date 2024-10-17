@@ -67,7 +67,7 @@ const handleImageAdd = (event) => {
     formData.append("title", title);
     formData.append("content", content);
 
-    fetch(process.env.REACT_APP_API_URL + "boards/R", {
+    fetch(process.env.REACT_APP_API_URL + "boards/Q", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${localStorage.getItem('accessToken')}`,

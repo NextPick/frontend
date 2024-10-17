@@ -151,17 +151,29 @@ const ReviewBoard = () => {
       </div>
 
       <div style={styles.pagination}>
-        <button onClick={() => setPage(page - 1)} disabled={page === 1}>이전</button>
+        <button
+          onClick={() => setPage(page - 1)}
+          disabled={page === 1}
+          style={page === 1 ? { ...styles.pageButton, ...styles.disabledPageButton } : styles.pageButton}
+        >
+          이전
+        </button>
         {Array.from({ length: totalPages }, (_, index) => (
           <button
             key={index}
             onClick={() => setPage(index + 1)}
-            style={index + 1 === page ? styles.activePage : {}}
+            style={index + 1 === page ? { ...styles.pageButton, ...styles.activePageButton } : styles.pageButton}
           >
             {index + 1}
           </button>
         ))}
-        <button onClick={() => setPage(page + 1)} disabled={page === totalPages}>다음</button>
+        <button
+          onClick={() => setPage(page + 1)}
+          disabled={page === totalPages}
+          style={page === totalPages ? { ...styles.pageButton, ...styles.disabledPageButton } : styles.pageButton}
+        >
+          다음
+        </button>
       </div>
       <div style={styles.pageInfo}>
         총 {boards.length}개 항목 중 {page} 페이지
@@ -195,7 +207,7 @@ const styles = {
   searchSortContainer: {
     display: 'flex',
     width: '100%',
-    maxWidth: '800px',
+    maxWidth: '900px',
     marginBottom: '20px',
     gap: '20px',
     alignItems: 'center',
@@ -207,7 +219,7 @@ const styles = {
   },
   searchInput: {
     width: '100%',
-    Height: '15px',
+    height: '40px',
     padding: '12px',
     borderRadius: '10px',
     border: '1px solid #ccc',
@@ -227,11 +239,11 @@ const styles = {
     position: 'relative',
   },
   sortButton: {
-    padding: '10px 16px',  // 둥근 스타일 제거
+    padding: '10px 16px',
     width: '120px',
     border: '1px solid #ccc',
     backgroundColor: '#fff',
-    borderRadius: '5px',  // 둥근 스타일을 줄이고 얇게 만듦
+    borderRadius: '5px',
     cursor: 'pointer',
     fontSize: '16px',
     boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
@@ -272,7 +284,7 @@ const styles = {
   },
   listContainer: {
     width: '100%',
-    maxWidth: '800px',
+    maxWidth: '900px',
     backgroundColor: '#fff',
     borderRadius: '8px',
     border: '1px solid #ddd',
@@ -295,6 +307,9 @@ const styles = {
     fontSize: '14px',
     cursor: 'pointer',
     transition: 'background-color 0.2s',
+    '&:hover': {
+      backgroundColor: '#f9f9f9',
+    },
   },
   titleColumn: {
     flex: 3,
@@ -302,6 +317,7 @@ const styles = {
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     paddingRight: '12px',
+    marginLeft: '30px',
   },
   authorColumn: {
     flex: 1,
@@ -328,11 +344,28 @@ const styles = {
     display: 'flex',
     gap: '10px',
     fontSize: '14px',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  activePage: {
-    fontWeight: 'bold',
-    backgroundColor: '#4b8da6',
+  pageButton: {
+    padding: '10px 16px',
+    border: '1px solid #ddd',
+    borderRadius: '4px',
+    backgroundColor: '#fff',
+    cursor: 'pointer',
+    boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
+    transition: 'background-color 0.3s, color 0.3s',
+    color: '#333',
+  },
+  activePageButton: {
+    border: '1px solid #4c89fc',
+    backgroundColor: '#4c89fc',
     color: 'white',
+  },
+  disabledPageButton: {
+    backgroundColor: '#f0f0f0',
+    color: '#aaa',
+    cursor: 'not-allowed',
   },
   pageInfo: {
     marginTop: '10px',

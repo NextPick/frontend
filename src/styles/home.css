@@ -43,7 +43,7 @@
     align-items: center; /* 세로 중앙 정렬 */
     justify-content: center; /* 가로 중앙 정렬 */
 }.section1 {
-    background-color: #d4e5f0; /* 첫 번째 섹션 배경색 */
+    background-color: #b8ddfb; /* 첫 번째 섹션 배경색 */
     padding: 0 20px; /* 좌우 패딩 추가 (선택 사항) */
     display: flex; /* Flexbox 사용 */
     align-items: center; /* 세로 중앙 정렬 */
