@@ -100,7 +100,7 @@ const ReviewBoardPost = () => {
     formData.append("title", title);
     formData.append("content", content);
 
-    fetch("http://localhost:8080/boards/R/{게시글ID}", {  // 여기에 수정하려는 게시글 ID를 넣어야 함
+    fetch(process.env.REACT_APP_API_URL + `boards/R/{게시글ID}`, {  // 여기에 수정하려는 게시글 ID를 넣어야 함
       method: "PUT",
       headers: {
         Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
@@ -130,7 +130,7 @@ const ReviewBoardPost = () => {
       return;
     }
 
-    fetch(`http://localhost:8080/boards/{게시글ID}`, {  // 여기에 삭제하려는 게시글 ID를 넣어야 함
+    fetch(process.env.REACT_APP_API_URL + `boards/{게시글ID}`, {  // 여기에 삭제하려는 게시글 ID를 넣어야 함
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
