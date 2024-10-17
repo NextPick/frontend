@@ -30,11 +30,12 @@ background-color: ${(props) => props.color || '#579ef03a'} ;
     border-radius: ${(props) => props.radius|| '10px'};
     border: ${(props) => props.border || '0.2px solid rgb(80, 80, 80)'} ;
     overflow: ${(props) => props.overflow || 'visible'}; /* 필요시 overflow 추가 */
+    box-shadow: ${(props) => props.shadow}
 
 `;
 
 const Box = (props) => {
-    const {color, padding, alignitem, flex, justify, direction, maxwidth,  height, width, top, textalign,  bottom, left, radius, border, overflow, minwidth} = props;
+    const {color, padding, alignitem, flex, justify, direction, maxwidth,  height, width, top, textalign,  bottom, left, radius, border, overflow, minwidth, shadow} = props;
     return (
         <StyledBox
         color={color}
@@ -54,6 +55,7 @@ const Box = (props) => {
         radius={radius}
         border={border}
         overflow={overflow}  // overflow prop 추가
+        shadow={shadow}
         >
             {props.children}  {/* 내부 요소 렌더링 */}
         </StyledBox>

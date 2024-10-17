@@ -58,16 +58,21 @@ const MainContent = styled.main`
   padding: 20px;
   max-width: 800px;
   height: 100%;
-  background-color: #e7f0f9;
   border-radius: 15px;
   margin-left: 20px;
+  border: 0.5px solid #ccc;
+  background-color: #fff;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 4px;
 `;
 
 const Title = styled.h2`
   font-size: 24px;
-  margin-top: 0px;
+  margin-top: 10px;
   margin-bottom: 10px;
   text-align: left;
+  font-family: 'Pretendard', sans-serif;
+  color: #006AC1;
+  font-weight: bold;
 `;
 
 const ChartContainer = styled.div`
