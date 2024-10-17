@@ -46,7 +46,7 @@ const Choice = () => {
     const handleNavigate = async (occupation) => {
         setRoomOccupation(occupation); // 상태 업데이트
         await handleGetInterviewRoom(occupation);
-        console.log(roomUuid,title,roomId, occupation);
+        console.log(roomUuid,title,roomId, occupation, memberId);
         navigate('/webrtc', { state: { roomUuid: roomUuid, title: title, roomId: roomId, roomOccupation: occupation, memberId: memberId } }); // occupation을 인자로 전달
     }
 

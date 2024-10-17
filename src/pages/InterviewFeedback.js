@@ -17,8 +17,8 @@ const InterviewFeedback = () => {
     const [userReview, setUserReview] = useState(''); // 사용자의 리뷰
     const [submittedReviews, setSubmittedReviews] = useState([]); // 제출된 리뷰들
     const location = useLocation();
-    const roomId = location.state?.roomId || 0;
-    let mentorId = 0; // 실제 값 할당 필요
+    const {roomId} = location.state || 0;
+    const [mentorId, setMentorId] = useState('');
     const [feedback, setFeedback] = useState('');
     const [mentorNickname, setMentorNickname] = useState('');
     const [content, setContent] = useState('');
@@ -52,6 +52,7 @@ const InterviewFeedback = () => {
                 let data = response.data.data;
                 setContent(data.content);
                 setMentorNickname(data.mentorNickname);
+                setMentorId(data.mentorId);
             } else {
                 console.error("Received unexpected response structure:", response.data);
             }
@@ -63,7 +64,7 @@ const InterviewFeedback = () => {
 
     const handleMentorFeedback = async () => {
         try {
-            const response = await axios.post(process.env.REACT_APP_API_URL + `mentee/feedback/${roomId}/${mentorId}`,
+            const response = await axios.post(process.env.REACT_APP_API_URL + `mentor/feedback/${roomId}/${mentorId}`,
                 {
                     content: userReview,
                     starRating: userScore,
@@ -76,6 +77,7 @@ const InterviewFeedback = () => {
                 }
             );
             alert("멘토 피드백이 제출되었습니다!");
+            navigate("/");
         } catch (error) {
             alert("멘토 피드백 작성에 실패했습니다. 다시 시도해 주세요");
         }
@@ -118,9 +120,16 @@ const InterviewFeedback = () => {
                         </div>
                     </div>
 
-                    <ReviewForm onSubmitReview={handleSubmitReview} setUserReview={setUserReview} /> {/* ReviewForm 컴포넌트 사용 */}
-                    <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%' }}>
-                        <div style={{ height: "20px", width: "30px" }}></div>
+                    <div className="memo-area">
+                        <textarea
+                            value={userReview}
+                            onChange={(e) => setUserReview(e.target.value)}
+                            placeholder="리뷰를 입력해주세요..."
+                        />
+                    </div>
+                    <div
+                        style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%'}}>
+                        <div style={{height: "20px", width: "30px"}}></div>
                         <Button
                             right="5px"
                             margintbottom="3px"
