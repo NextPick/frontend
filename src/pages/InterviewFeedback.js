@@ -99,7 +99,10 @@ const InterviewFeedback = () => {
                 <Box height="57vh" width="30vw" border="none" alignItems="center" justify="start" top="10px" bottom="10px" style={{ display: 'flex' }}>
                     <Font font="PretendardB" size="18px" color="#000000" alignitem="flex-start" margintop="5px" spacing="2px" paddingtop="5px" marginbottom="8px">
                         <Box height="5vh" width="30vw" border="1px" alignItems="flex-start" justify="center" top="10px" bottom="10px" style={{ display: 'flex' }}>
-                            {content}
+                            안녕하세요
+                        </Box>
+                        <Box height="5vh" width="30vw" border="1px" alignItems="flex-start" justify="" top="10px" bottom="10px" style={{ display: 'flex' }}>
+                            안녕하세요
                         </Box>
                     </Font>
                 </Box>
