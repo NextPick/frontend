@@ -25,22 +25,20 @@ const Container = styled.div`
 `;
 
 const MainContent = styled.main`
-  flex: 1;
+   flex: 1;
   padding: 20px;
-  max-width: 800px;
-  height: 100%;
+  max-width: 42%;
+  background-color: #FFF;
   border-radius: 15px;
-  margin-left: 20px;
   text-align: center;
   border: 0.5px solid #ccc;
-  background-color: #fff;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 4px;
+  margin-left: 20px;
 `;
 
 const Title = styled.h2`
   font-size: 24px;
   margin-top: 10px;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
   text-align: left;
   font-family: 'Pretendard', sans-serif;
   color: #006AC1;
@@ -111,7 +109,7 @@ const Mypage = () => {
                 left="20px"
             >
                 <Title>내 프로필</Title>    
-                <div style={{ display: 'flex', alignItems: 'center', marginRight: "auto", marginLeft: "5px", marginBottom: "-5px" }}> {/* 수평 정렬을 위한 flexbox */}
+                <div style={{ display: 'flex', alignItems: 'center', marginRight: "auto", marginLeft: "5px" }}> {/* 수평 정렬을 위한 flexbox */}
                     <img src={one} alt="one" style={{ width: '33px', height: '34px' }} /> {/* 로고 이미지 */}
                     <Font
                         font="PretendardL"
@@ -128,7 +126,7 @@ const Mypage = () => {
                 </div>
                 <div class="line2"></div>
 
-                <div style={{ display: 'flex', alignItems: 'center', marginRight: "auto", marginLeft: "5px", marginBottom: "-5px" }}> {/* 수평 정렬을 위한 flexbox */}
+                <div style={{ display: 'flex', alignItems: 'center', marginRight: "auto", marginLeft: "5px" }}> {/* 수평 정렬을 위한 flexbox */}
                     <img src={two} alt="two" style={{ width: '33px', height: '34px' }} /> {/* 로고 이미지 */}
                     <Font
                         font="PretendardL"
@@ -145,8 +143,8 @@ const Mypage = () => {
                 </div>
                 <div class="line2"></div>
 
-                <div style={{ display: 'flex', alignItems: 'center', marginRight: "auto", marginLeft: "5px", marginBottom: "-5px" }}> {/* 수평 정렬을 위한 flexbox */}
-                    <img src={three} alt="three" style={{ width: '33px', height: '34px' }} /> {/* 로고 이미지 */}
+                <div style={{ display: 'flex', alignItems: 'center', marginRight: "auto", marginLeft: "5px"}}> {/* 수평 정렬을 위한 flexbox */}
+                    <img src={three} alt="three" style={{ width: '33px', height: '36px' }} /> {/* 로고 이미지 */}
                     <Font
                         font="PretendardL"
                         size="16px"
@@ -163,17 +161,14 @@ const Mypage = () => {
                 <div class="line2"></div>
                 <Button
                     color="transparent"
-                    width="11vw"
+                    width="100%"
                     textcolor="#000000"
                     height="35px"
                     hoverColor="#ffffff"
-                    margintop="-6px"
-                    paddingtop="7px"
-                    align="none"
+                    align="rigth"
                     justify="none"
                     left="auto"
-                    margintbottom="10px"
-                    marginright="12px"
+                    textalign="flex-end"
                 >
                     <Font
                         font="PretendardL"

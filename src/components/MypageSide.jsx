@@ -23,6 +23,7 @@ display: flex; // 플렉스 박스 설정
 const ProfileImage = styled.img`
     width: 65px; // 원하는 너비
     height: 68px; // 원하는 높이
+    background-color: #a2afb1;
     object-fit: cover; // 이미지 크기를 유지하며 잘림
     border-radius: 50%; // 원하는 경우 둥글게 만들기
     cursor: pointer; // 커서를 포인터로 변경

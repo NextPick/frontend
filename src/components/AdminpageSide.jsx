@@ -161,6 +161,7 @@ const ProfileImage = styled.img`
   border-radius: 50%;
   cursor: pointer;
   margin: 10px auto;
+  background-color: "#b3cbcf";
 `;
 
 const MenuItem = styled.p`

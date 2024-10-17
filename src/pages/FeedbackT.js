@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useHeaderMode } from '../hooks/HeaderManager';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Box from '../components/Box';
 import '../styles/login.css';
 import Font from '../components/Font';
@@ -8,7 +7,6 @@ import styled from 'styled-components';
 import defaultProfile from '../assets/img-non-login.png';
 import { useMember } from '../hooks/MemberManager'; // 회원 정보를 관리하는 훅
 import { FaStar } from 'react-icons/fa'; // 별점 표시를 위한 react-icons
-import ReviewForm from '../components/ReviewForm ';
 import MypageSide from '../components/MypageSide';
 import { Modal, Button as ModalButton } from 'react-bootstrap'; // Modal 컴포넌트 추가
 import 'bootstrap/dist/css/bootstrap.min.css'; // Bootstrap 스타일 추가
@@ -34,6 +32,7 @@ margin-top: 18px;
 padding: 5px;
 display: flex; // 플렉스 박스 설정
     align-items: flex-start; // 이미지가 박스 시작 부분에 정렬되도록 설정
+    
 `;
 
 
@@ -43,6 +42,7 @@ const ProfileImage = styled.img`
     object-fit: cover; // 이미지 크기를 유지하며 잘림
     border-radius: 50%; // 원하는 경우 둥글게 만들기
     cursor: pointer; // 커서를 포인터로 변경
+    background-color: #a2afb1;
 `;
 
 const ReviewContainer = styled.div`
@@ -50,7 +50,7 @@ const ReviewContainer = styled.div`
     display: flex; // 플렉스 박스 설정
     flex-direction: column; // 수직 정렬을 위한 플렉스 방향 설정
     overflow-y: auto; // 수직 스크롤 가능하도록 설정
-    max-height: 400px; // 원하는 최대 높이 설정 (조정 가능)
+    max-height: 200px; // 원하는 최대 높이 설정 (조정 가능)
     scrollbar-width: none; // 스크롤바 숨기기 (Firefox)
     -ms-overflow-style: none; // 스크롤바 숨기기 (Internet Explorer, Edge)
 
@@ -218,14 +218,15 @@ const FeedbackT = () => {
         <Container>
             <MypageSide />
             <Box
-                color="#e7f0f9"
-                height="90%"
+                color="#fff"
+                height="100%"
                 width="35vw"
                 border="none"
                 left="20px"
                 justify="space-between"
                 direction="column"
                 alignitem="center"
+                border = "0.5px solid #ccc"
                 padding="0px"
                 style={{ display: 'flex' }} // 자식 박스에서 정렬
             >
@@ -315,17 +316,14 @@ const FeedbackT = () => {
                     </Modal.Header>
                     <Modal.Body>
                         <ModalContent>
-                            <Font font="PretendardB" size="20px" color="#3f8cec" marginbottom="5px">
-                                {selectedReview?.userName || '익명'} {/* userName이 없을 경우 '익명'으로 표시 */}
+                        <Font font="PretendardL" size="13px" color="#A1A1A1" margintop="5px" spacing="2px">
+                                날짜: {selectedReview?.createdAt} {/* createdAt 날짜 표시 */}
                             </Font>
-                            <Font font="PretendardL" size="20px" color="#000000" margintop="5px">
-                                피드백: {selectedReview?.content} {/* content를 사용하여 피드백 내용 표시 */}
-                            </Font>
-                            <Font font="PretendardL" size="20px" color="#000000" margintop="5px">
+                            <Font font="PretendardL" size="10px" color="#000000" margintop="5px">
                                 점수: {selectedReview?.startRating || 'N/A'} {/* startRating 점수를 표시 */}
                             </Font>
-                            <Font font="PretendardL" size="10px" color="#A1A1A1" margintop="5px" spacing="2px">
-                                날짜: {selectedReview?.createdAt} {/* createdAt 날짜 표시 */}
+                            <Font font="PretendardL" size="15px" color="#000000" margintop="5px">
+                                피드백: {selectedReview?.content} {/* content를 사용하여 피드백 내용 표시 */}
                             </Font>
                         </ModalContent>
                     </Modal.Body>

@@ -10,7 +10,14 @@ import searchIcon from '../assets/search.png'; // 돋보기 아이콘 이미지 
 import MypageSide from '../components/MypageSide';
 
 
-
+// 버튼의 크기와 배치를 화면 크기에 맞게 조정
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  gap: 10px; /* 버튼 간 간격 조정 */
+  margin-bottom: 20px; /* 아래 컨텐츠와의 간격 */
+`;
 
 const Table = styled.table`
   width: 100%;
@@ -21,14 +28,19 @@ const Table = styled.table`
 const MainContent_ = styled.main`
   flex: 1;
   padding: 20px;
-  max-width: 800px;
-  height: 100%;
+  max-width: 40vw;  /* 전체 화면의 80% 너비로 조정 */
+  height: 74vh;
+  min-height: 60vh; /* 최소 높이를 설정 */
   border-radius: 15px;
-  margin-left: 20px;
   text-align: center;
   border: 0.5px solid #ccc;
   background-color: #fff;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 4px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  overflow: hidden;
+  margin-left: 20px;
 `;
 
 const Title = styled.h2`
@@ -61,12 +73,15 @@ const TableRow = styled.tr`
 `;
 
 const TableContainer = styled.div`
+  flex: 1; /* 남은 공간을 모두 차지하도록 설정 */
   border: 1px solid #eee;
   border-radius: 10px;
   padding: 10px;
-  height: 47vh;
   background-color: #fff;
-  overflow-y: auto;
+  overflow-y: auto; /* 필요할 때만 스크롤 표시 */
+  overflow-y: auto; /* 필요할 때만 스크롤 표시 */
+  min-height: 40vh; /* 내용이 없을 때도 기본적인 높이를 유지 */
+  max-height: 60vh; /* 최대 높이를 상위 컴포넌트의 비율에 맞춰 설정 */
 `;
 
 const SearchInput = styled.input`
@@ -83,6 +98,7 @@ const SearchInput = styled.input`
 const SearchContainer = styled.div`
   display: flex;
   align-items: center;
+  width: '50%';
 `;
 
 const SearchButton = styled.button`
@@ -105,14 +121,12 @@ const SearchButton = styled.button`
 `;
 
 const MainContent = styled.main`
-  flex: 1;
+ flex: 1;
   padding: 20px;
   max-width: 100%;
   background-color: #f1f7fd;
   border-radius: 15px;
-  margin-left: 20px;
   text-align: center;
-  overflow-y: auto;
   
 `;
 
@@ -324,10 +338,11 @@ const MyNote = () => {
       <SearchContainer>
         <MainContent_>
           <Title>정답/오답노트</Title>
-          <div style={{ display: 'flex', flexDirection: 'row' }}>
+          <ButtonContainer>
+          <div style={{ display: 'flex', flexDirection: 'row', justifyContent:'center' }}>
             <Button
-              height="40px"
-              width="16.5vw"
+              height="42px"
+              width= "16vw;"  /* 버튼 크기를 화면 너비의 15%로 설정 */
               border="none"
               radius="3px"
               top="none"
@@ -341,7 +356,6 @@ const MyNote = () => {
                 size="24px"
                 color="#000000"
                 margintop="0px"
-                paddingtop="7px"
                 spacing="2px"
                 align="center"
                 marginbottom="0px"
@@ -350,8 +364,8 @@ const MyNote = () => {
               </Font>
             </Button>
             <Button
-              height="40px"
-              width="16.5vw"
+              height="42px"
+              width="16vw"
               border="none"
               radius="3px"
               alignitem="flex-start"
@@ -367,7 +381,6 @@ const MyNote = () => {
                 size="24px"
                 color="#000000"
                 margintop="0px"
-                paddingtop="7px"
                 spacing="2px"
                 align="center"
                 marginbottom="0px"
@@ -376,6 +389,7 @@ const MyNote = () => {
               </Font>
             </Button>
           </div>
+          </ButtonContainer>
           {renderTabContent()}
         </MainContent_>
       </SearchContainer>
