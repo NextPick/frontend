@@ -63,7 +63,7 @@ const Menu = styled.div`
   text-align: center;
   margin-bottom: 20px;
   font-size: 16px;
-  font-family: '강원교육튼튼L';
+  font-family: 'Pretendard', sans-serif;
   width: 100%;
 `;
 

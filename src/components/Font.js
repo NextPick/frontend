@@ -18,11 +18,12 @@ const StyledFont = styled.p`
   line-height: ${(props) => props.height};
   justify-content: ${(props) => props.justify || 'center'}; /* 수평 정렬을 중앙으로 조정 */
   align-items: ${(props) => props.alignitem};
+  font-weight: ${(props) => props.weight};
 `;
 
 const Font = (props) => {
     // 1.props{} 안에 추가
-    const{font, size, color, align, children, margintop, marginleft, marginright, marginbottom,  paddingtop, paddingbottom, paddingleft, spacing, height, justify, alignitem} = props;
+    const{font, size, color, align, children, margintop, marginleft, marginright, marginbottom,  paddingtop, paddingbottom, paddingleft, spacing, height, justify, alignitem, weight} = props;
 
     return (
         // 3. 아래 props 받을 수 있도록 추가
@@ -42,6 +43,7 @@ const Font = (props) => {
         height={height}
         justify={justify}
         alignitem={alignitem}
+        weight={weight}
         >
             {children}
         </StyledFont>
