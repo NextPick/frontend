@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import Font from '../components/Font';
 
 const QuestionBoardPost = () => {
   const [title, setTitle] = useState('');
@@ -164,7 +165,11 @@ const handleImageAdd = (event) => {
 
       {/* 작성하기 버튼 */}
       <button style={submitButton} onClick={handleSubmitPost}>
+        <Font
+          font='PretendardL'
+        >
         작성하기
+        </Font>
       </button>
     </div>
   );
@@ -262,8 +267,9 @@ const imageAddButton = {
   border: '1px solid #d5e7fc',
   borderRadius: '4px',
   padding: '5px 10px',
-  backgroundColor: '#82bdf5',
+  backgroundColor: 'rgb(194 220 241)',
   cursor: 'pointer',
+  color:'black'
 };
 
 const fileInput = {
@@ -320,11 +326,11 @@ const submitButton = {
   fontSize: '14px',
   border: '1px solid #ccc',
   padding: '8px 22px',
-  backgroundColor: '#98c6ec',
+  backgroundColor: 'rgb(194 220 241)',
   marginTop: '20px',
   cursor: 'pointer',
-  fontWeight: 'bold'
-  
+  fontWeight: 'bold',
+
 };
 
 export default QuestionBoardPost;
