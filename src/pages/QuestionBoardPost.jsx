@@ -105,7 +105,7 @@ const handleImageAdd = (event) => {
             <option value="">카테고리 선택</option>
             <option value="BE">BE</option>
             <option value="FE">FE</option>
-            <option value="CS">CS 과학</option>
+            <option value="CS">CS</option>
           </select>
 
           {/* 제목 입력 */}
@@ -259,15 +259,16 @@ const imageSection = {
 const imageAddButton = {
   marginBottom: '10px',
   fontSize: '14px',
-  border: '1px solid #ccc',
+  border: '1px solid #d5e7fc',
   borderRadius: '4px',
   padding: '5px 10px',
-  backgroundColor: '#E0EBF5',
+  backgroundColor: '#82bdf5',
   cursor: 'pointer',
 };
 
 const fileInput = {
   display: 'none',
+
 };
 
 // const imageList = {
@@ -315,13 +316,15 @@ const imagePlaceholder = {
 
 
 const submitButton = {
+  color: 'black',
   fontSize: '14px',
   border: '1px solid #ccc',
-  borderRadius: '20px',
-  padding: '8px 16px',
-  backgroundColor: '#fff',
+  padding: '8px 22px',
+  backgroundColor: '#98c6ec',
   marginTop: '20px',
   cursor: 'pointer',
+  fontWeight: 'bold'
+  
 };
 
 export default QuestionBoardPost;
