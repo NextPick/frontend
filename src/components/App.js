@@ -13,7 +13,7 @@ import { ProfileProvider } from '../hooks/ProfileContext.js';
 import { MemberManager } from '../hooks/MemberManager.js';
 import MyNote from '../pages/MyNote.jsx';
 import Cash from '../pages/Cash.js';
-import AudioRecorder from '../pages/AudioRecorder.jsx';
+import Test from '../pages/test.jsx';
 import FeedbackT from '../pages/FeedbackT.js';
 import FeedbackS from '../pages/FeedbackS.js';
 import AdminPage from '../pages/AdminPage.js'
@@ -93,6 +93,7 @@ function App() {
                 <Route path="/board/question" element={<QuestionBoard />} />
                 <Route path="/board/question/post" element={<QuestionBoardPost />} /> {/* 질문 게시판 작성 경로 */}
                 <Route path="/board/review/post" element={<ReviewBoardPost />} /> {/* 리뷰 게시판 작성 경로 */}
+                <Route path="/test" element={<Test />} />
               </Routes>
             </HeaderManager>
           </div>

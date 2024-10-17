@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHeaderMode } from '../hooks/HeaderManager';
+import { useNavigate } from 'react-router-dom';
 import Box from '../components/Box';
 import Font from '../components/Font';
 import styled from 'styled-components';
@@ -8,6 +9,18 @@ import correct from '../assets/correct.png';
 import incorrect from '../assets/incorrect.png';
 
 // 모달 스타일 정의
+const OutlineContainer = styled.div`
+    position: relative;
+    height: 80vh;
+    width: 70vw;
+    margin-top: 30px;
+    border: 2px solid #EEE;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 4px;
+    border-radius: 10px;
+    padding: 20px 40px;
+    min-width: 1000px;
+`;
+
 const ModalOverlay = styled.div`
   position: fixed;
   top: 0;
@@ -38,12 +51,14 @@ const StyledH2 = styled.h2`
   font-size: 20px; 
   font-weight: bold;
   margin-bottom: 10px;
+  font-family: Pretendard;
 `;
 
 const Separator = styled.hr`
   border: none;
   border-top: 1px solid gray;
   margin: 10px 0;
+  font-family: Pretendard;
 `;
 
 const CloseButton = styled.button`
@@ -58,7 +73,7 @@ const CloseButton = styled.button`
 
 const ListBox = styled.div`
   width: 75%;
-  margin: 20px;
+  margin: 60px 20px 20px 60px;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -82,8 +97,37 @@ const StatusIcon = styled.img`
   margin-right: 10px;
 `;
 
+const Button = styled.div`
+    width: 170px;
+    height: 50px;
+    font-size: 20px;
+    border-radius: 15px;
+    color: #000;
+    font-family: 'Pretendard', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: color 0.3s ease, font-weight 0.3s ease;
+
+    &:hover {
+        color: #006AC1;
+        font-weight: bold;
+    }
+`;
+
+const ButtonContainer = styled.div`
+    position: absolute;
+    right: 20px; 
+    bottom: 20px; 
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+`;
+
 const ResultPage = () => {
   const { setHeaderMode } = useHeaderMode();
+  const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [items, setItems] = useState([]);
@@ -116,6 +160,10 @@ const ResultPage = () => {
     }
   };
 
+  const handleQuitClick = () => {
+    navigate('/aihome');
+  };
+
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedItem(null);
@@ -144,28 +192,8 @@ const ResultPage = () => {
         alignItems: 'flex-start',
       }}
     >
-      <Box
-        height="80vh"
-        width="70vw"
-        border="none"
-        left="20px"
-        justify="flex-start"
-        direction="column"
-        alignitem="center"
-        padding="0px"
-        top="30px"
-        style={{ display: 'flex' }}
-      >
-        <Font
-          font="PretendardL"
-          size="22px"
-          color="#000000"
-          margintop="5px"
-          spacing="2px"
-          paddingtop="5px"
-          paddingleft="13px"
-          marginbottom="2px"
-        >
+      <OutlineContainer>
+        <Font font="PretendardB" size="27px" color="#000000" margintop="30px" spacing="2px" paddingleft="13px" paddingtop="5px" marginbottom="8px">
           오늘 공부한 질문 List
         </Font>
 
@@ -173,7 +201,7 @@ const ResultPage = () => {
           {items.map((item) => (
             <ListItem key={item.solvesId} onClick={() => openModal(item)} correct={item.correct}>
               <StatusIcon src={item.correct ? correct : incorrect} alt={item.correct ? 'Correct' : 'Incorrect'} />
-              <span>{item.question}</span>
+              <span style={{fontFamily: 'Pretendard'}}>{item.question}</span>
             </ListItem>
           ))}
         </ListBox>
@@ -185,16 +213,22 @@ const ResultPage = () => {
             <ModalContent>
               <StyledH2>질문 : {selectedItem.question}</StyledH2>
               <Separator />
-              <p>결과 : {selectedItem.correct ? '정답' : '오답'}</p>
-              <p>정답 : {selectedItem.answer}</p>
-              <p>내 답변: {selectedItem.myAnswer}</p>
+              <p style={{fontFamily: 'Pretendard'}}>결과 : {selectedItem.correct ? '정답' : '오답'}</p>
+              <p style={{fontFamily: 'Pretendard'}}>정답 : {selectedItem.answer}</p>
+              <p style={{fontFamily: 'Pretendard'}}>내 답변: {selectedItem.myAnswer}</p>
               <CloseButtonContainer>
                 <CloseButton onClick={closeModal}>닫기</CloseButton>
               </CloseButtonContainer>
             </ModalContent>
           </ModalOverlay>
         )}
-      </Box>
+        
+        <ButtonContainer>
+          <Button onClick={handleQuitClick}>
+              닫기
+          </Button>
+        </ButtonContainer>
+      </OutlineContainer>
     </div>
   );
 };
