@@ -18,21 +18,22 @@ const AiHome = () => {
     const [selectedSubcategory, setSelectedSubcategory] = useState(null); // 선택된 하위 카테고리 상태
 
     useEffect(() => {
+        localStorage.removeItem('solveQuestion');
         setHeaderMode('main');
     }, [setHeaderMode]);
 
     const categories = [
         {
-            name: 'BE',
+            name: 'Back-End',
             subcategories: ['Java', 'Spring', 'Node.js', 'Express.js', 'Django', 'Flask', 'Ruby', 'PHP', 'GraphQL', 'MySQL']
         },
         {
-            name: 'CS',
-            subcategories: ['Networking', 'OS', 'Data Structure', 'Algorithms', 'Software Engineering', 'Design Patterns', 'Computer Architecture', 'Cybersecurity', 'Artificial Intelligence']
+            name: 'Front-End',
+            subcategories: ['React', 'Vue', 'Angular', 'HTML5', 'CSS3', 'JavaScript (ES6+)', 'TypeScript', 'SASS/SCSS', 'Webpack', 'Responsive Web Design']
         },
         {
-            name: 'FE',
-            subcategories: ['React', 'Vue', 'Angular', 'HTML5', 'CSS3', 'JavaScript (ES6+)', 'TypeScript', 'SASS/SCSS', 'Webpack', 'Responsive Web Design']
+            name: 'ComputerScience',
+            subcategories: ['Networking', 'OS', 'Data Structure', 'Algorithms', 'Software Engineering', 'Design Patterns', 'Computer Architecture', 'Cybersecurity', 'Artificial Intelligence']
         }
     ];
 
