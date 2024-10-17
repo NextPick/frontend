@@ -29,17 +29,20 @@ const Choice = () => {
     const handleNavigate = async (occupation) => {
         setRoomOccupation(occupation);
         await handleGetInterviewRoom(occupation);
-        navigate('/webrtc', { state: { roomUuid, title, roomId, roomOccupation: occupation, memberId } });
+        navigate('/webrtc', { state: { roomUuid, title, roomId, roomOccupation: occupation, memberId: memberId } });
     };
 
     const handleCloseAddModal = () => setShowAddModal(false);
 
     const handlePostInterviewRoom = async () => {
-        if (!roomTitle.trim() || !roomOccupation.trim()) {
+        if (roomTitle.trim() === '' || roomOccupation.trim() === '') {
             Swal.fire({
                 icon: 'warning',
                 title: '모든 필드를 입력해주세요.',
                 confirmButtonText: '확인'
+            }).then(() => {
+                setRoomTitle(''); // 방 제목 초기화
+                setRoomOccupation(''); // 방 직군 초기화
             });
             return;
         }
@@ -54,16 +57,16 @@ const Choice = () => {
                 title: '방이 성공적으로 생성되었습니다.',
                 confirmButtonText: '확인'
             }).then(() => {
-                const data = response.data.data;
+                let data = response.data.data;
                 roomUuid = data.roomUuid;
                 title = data.title;
                 roomId = data.roomId;
                 memberId = data.memberId;
                 setShowAddModal(false);
-                navigate('/webrtc', { state: { roomUuid, title, roomId, roomOccupation, memberId } });
+                navigate('/webrtc', { state: { roomUuid: roomUuid, title: title, roomId: roomId, roomOccupation: roomOccupation, memberId: memberId }  }); // 방 생성 후 이동
             });
         } catch (error) {
-            Swal.fire({
+            await Swal.fire({
                 icon: 'error',
                 title: '방 만드는 중 오류가 발생했습니다.',
                 confirmButtonText: '확인'
@@ -76,12 +79,12 @@ const Choice = () => {
             const response = await axios.get(`${process.env.REACT_APP_API_URL}rooms/${occupation}`, {
                 headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` },
             });
-            const data = response.data.data;
+            let data = response.data.data;
             roomUuid = data.roomUuid;
             title = data.title;
             roomId = data.roomId;
         } catch {
-            Swal.fire({ icon: 'error', title: '직군의 남은 방이 없습니다.' });
+            await Swal.fire({icon: 'error', title: '직군의 남은 방이 없습니다.'});
         }
     };
 
@@ -90,20 +93,20 @@ const Choice = () => {
     }, [setHeaderMode]);
 
     return (
-        <div 
+        <div
             style={{
-                display: 'flex', 
-                justifyContent: 'center', 
-                alignItems: 'center', 
-                height: '100vh', 
-                gap: '30px', 
-                width: '100%', 
-                backgroundColor: '#f5f5f5', 
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100vh',
+                gap: '30px',
+                width: '100%',
+                backgroundColor: '#f5f5f5',
                 fontFamily: 'Pretendard, sans-serif',
                 padding: '20px'
             }}
         >
-            <div 
+            <div
                 style={{
                     backgroundColor: '#ffffff',
                     borderRadius: '12px',
@@ -115,44 +118,44 @@ const Choice = () => {
                 <h1 style={{ marginBottom: '20px', color: '#333', fontSize: '24px' }}>직군을 선택하세요</h1>
                 {type === 'MENTOR' ? (
                     <>
-                        <button 
+                        <button
                             style={{
-                                backgroundColor: '#ffffff', 
-                                border: '1px solid #ddd', 
-                                borderRadius: '8px', 
-                                padding: '15px', 
-                                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)', 
-                                transition: 'transform 0.2s ease, box-shadow 0.2s ease', 
-                                width: '250px', 
-                                height: '200px', 
-                                fontSize: '20px', 
-                                fontWeight: 'bold', 
+                                backgroundColor: '#ffffff',
+                                border: '1px solid #ddd',
+                                borderRadius: '8px',
+                                padding: '15px',
+                                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+                                transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+                                width: '250px',
+                                height: '200px',
+                                fontSize: '20px',
+                                fontWeight: 'bold',
                                 color: '#333',
                                 cursor: 'pointer',
                                 margin: '10px', // 여백 추가
-                            }} 
+                            }}
                             onClick={handleShowAddModalFE}
                             onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
                             onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
                         >
                             프론트엔드
                         </button>
-                        <button 
+                        <button
                             style={{
-                                backgroundColor: '#ffffff', 
-                                border: '1px solid #ddd', 
-                                borderRadius: '8px', 
-                                padding: '15px', 
-                                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)', 
-                                transition: 'transform 0.2s ease, box-shadow 0.2s ease', 
-                                width: '250px', 
-                                height: '200px', 
-                                fontSize: '20px', 
-                                fontWeight: 'bold', 
+                                backgroundColor: '#ffffff',
+                                border: '1px solid #ddd',
+                                borderRadius: '8px',
+                                padding: '15px',
+                                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+                                transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+                                width: '250px',
+                                height: '200px',
+                                fontSize: '20px',
+                                fontWeight: 'bold',
                                 color: '#333',
                                 cursor: 'pointer',
                                 margin: '10px', // 여백 추가
-                            }} 
+                            }}
                             onClick={handleShowAddModalBE}
                             onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
                             onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
@@ -162,44 +165,44 @@ const Choice = () => {
                     </>
                 ) : type === 'MENTEE' ? (
                     <>
-                        <button 
+                        <button
                             style={{
-                                backgroundColor: '#ffffff', 
-                                border: '1px solid #ddd', 
-                                borderRadius: '8px', 
-                                padding: '15px', 
-                                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)', 
-                                transition: 'transform 0.2s ease, box-shadow 0.2s ease', 
-                                width: '250px', 
-                                height: '200px', 
-                                fontSize: '20px', 
-                                fontWeight: 'bold', 
+                                backgroundColor: '#ffffff',
+                                border: '1px solid #ddd',
+                                borderRadius: '8px',
+                                padding: '15px',
+                                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+                                transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+                                width: '250px',
+                                height: '200px',
+                                fontSize: '20px',
+                                fontWeight: 'bold',
                                 color: '#333',
                                 cursor: 'pointer',
                                 margin: '10px', // 여백 추가
-                            }} 
+                            }}
                             onClick={() => handleNavigate("FE")}
                             onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
                             onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
                         >
                             프론트엔드
                         </button>
-                        <button 
+                        <button
                             style={{
-                                backgroundColor: '#ffffff', 
-                                border: '1px solid #ddd', 
-                                borderRadius: '8px', 
-                                padding: '15px', 
-                                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)', 
-                                transition: 'transform 0.2s ease, box-shadow 0.2s ease', 
-                                width: '250px', 
-                                height: '200px', 
-                                fontSize: '20px', 
-                                fontWeight: 'bold', 
+                                backgroundColor: '#ffffff',
+                                border: '1px solid #ddd',
+                                borderRadius: '8px',
+                                padding: '15px',
+                                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+                                transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+                                width: '250px',
+                                height: '200px',
+                                fontSize: '20px',
+                                fontWeight: 'bold',
                                 color: '#333',
                                 cursor: 'pointer',
                                 margin: '10px', // 여백 추가
-                            }} 
+                            }}
                             onClick={() => handleNavigate("BE")}
                             onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
                             onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
@@ -210,6 +213,7 @@ const Choice = () => {
                 ) : null}
             </div>
 
+            {/* 방 만들기 모달 */}
             <Modal show={showAddModal} onHide={handleCloseAddModal}>
                 <Modal.Header closeButton>
                     <Modal.Title>방 만들기</Modal.Title>
