@@ -83,6 +83,7 @@ const Home = () => {
         align="center"
         paddingtop="5px"
         >
+
     <p style={{ margin: '7px 0' }}>누적 면접 촬영 건수 10,000,000건</p>
     <p style={{ margin: '7px 0' }}>FE/BE/CS 총 질문 10,000+</p>
     <p style={{ margin: '7px 0' }}>관리자가 엄선한 튜터의 프라이빗한</p> 

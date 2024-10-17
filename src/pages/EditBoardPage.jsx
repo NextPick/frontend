@@ -8,15 +8,14 @@ const EditBoardPage = () => {
   const [post, setPost] = useState({
     title: '',
     content: '',
-    imageUrls: [], // 기존 이미지 URL 저장
+    imageUrls: [],
   });
-  const [newImages, setNewImages] = useState([]); // 새로 추가된 이미지 파일 저장
-  const [deleteImages, setDeleteImages] = useState([]); // 삭제할 이미지 URL 저장
-  const [imagePreviews, setImagePreviews] = useState([]); // 새로 추가된 이미지 미리보기 URL 저장
+  const [newImages, setNewImages] = useState([]);
+  const [deleteImages, setDeleteImages] = useState([]);
+  const [imagePreviews, setImagePreviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // 게시물 데이터를 가져옴
   useEffect(() => {
     const fetchPost = async () => {
       try {
@@ -35,7 +34,6 @@ const EditBoardPage = () => {
     fetchPost();
   }, [boardId]);
 
-  // 제목 및 내용 변경 핸들러
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setPost({
@@ -44,23 +42,19 @@ const EditBoardPage = () => {
     });
   };
 
-  // 이미지 파일 변경 핸들러
   const handleFileChange = (e) => {
     const filesArray = Array.from(e.target.files);
     const previewUrls = filesArray.map(file => URL.createObjectURL(file));
 
-    setNewImages((prevImages) => [...prevImages, ...filesArray]); // 기존 이미지에 추가된 이미지를 추가
-    setImagePreviews((prevPreviews) => [...prevPreviews, ...previewUrls]); // 미리보기 URL 추가
+    setNewImages((prevImages) => [...prevImages, ...filesArray]);
+    setImagePreviews((prevPreviews) => [...prevPreviews, ...previewUrls]);
   };
 
-  // 이미지 삭제 핸들러
   const handleDeleteImage = (imageUrl, index, isPreview) => {
     if (isPreview) {
-      // 새로 추가한 이미지 삭제
       setImagePreviews(imagePreviews.filter((_, idx) => idx !== index));
       setNewImages(newImages.filter((_, idx) => idx !== index));
     } else {
-      // 기존 이미지 삭제
       setDeleteImages([...deleteImages, imageUrl]);
       setPost({
         ...post,
@@ -69,7 +63,6 @@ const EditBoardPage = () => {
     }
   };
 
-  // 게시글 삭제 핸들러 추가
   const handleDeletePost = async () => {
     try {
       await axios.delete(`http://localhost:8080/boards/${boardId}`, {
@@ -78,15 +71,13 @@ const EditBoardPage = () => {
         },
       });
 
-      // 게시물 삭제 후, dtype에 따라 리다이렉트
       const redirectPath = post.dtype === 'QuestionBoard' ? '/boards/questions' : '/boards/reviews';
-      navigate(redirectPath); // dType에 따라 게시판 리스트 페이지로 이동
+      navigate(redirectPath);
     } catch (error) {
       setError('게시글 삭제 중 오류가 발생했습니다.');
     }
   };
 
-  // 폼 제출 핸들러
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -94,12 +85,10 @@ const EditBoardPage = () => {
     formData.append('title', post.title);
     formData.append('content', post.content);
 
-    // 새 이미지 추가
     newImages.forEach((file) => {
       formData.append('newImages', file);
     });
 
-    // 삭제할 이미지 URL 추가
     deleteImages.forEach((imageUrl) => {
       formData.append('imagesToDelete', imageUrl);
     });
@@ -111,7 +100,7 @@ const EditBoardPage = () => {
           'Content-Type': 'multipart/form-data',
         },
       });
-      navigate(`/board/${boardId}`); // 수정 후 상세 페이지로 이동
+      navigate(`/board/${boardId}`);
     } catch (err) {
       setError('게시글 수정 중 오류가 발생했습니다.');
     }
@@ -122,10 +111,10 @@ const EditBoardPage = () => {
 
   return (
     <div style={container}>
-      <h2>게시글 수정</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>제목</label>
+      <h2 style={titleStyle}>게시글 수정</h2>
+      <form onSubmit={handleSubmit} style={formStyle}>
+        <div style={formGroup}>
+          <label style={labelStyle}>제목</label>
           <input
             type="text"
             name="title"
@@ -134,8 +123,8 @@ const EditBoardPage = () => {
             style={inputStyle}
           />
         </div>
-        <div>
-          <label>내용</label>
+        <div style={formGroup}>
+          <label style={labelStyle}>내용</label>
           <textarea
             name="content"
             value={post.content}
@@ -143,33 +132,31 @@ const EditBoardPage = () => {
             style={textareaStyle}
           />
         </div>
-        <div>
-          <label>기존 이미지 및 새 이미지 미리보기</label>
+        <div style={formGroup}>
+          <label style={labelStyle}>기존 이미지 및 새 이미지 미리보기</label>
           <div style={imageContainer}>
-            {/* 기존 이미지 미리보기 */}
             {post.imageUrls.map((imageUrl, index) => (
               <div key={index} style={imageItemStyle}>
                 <img src={imageUrl} alt={`이미지 ${index + 1}`} style={imageStyle} />
-                <button type="button" onClick={() => handleDeleteImage(imageUrl, index, false)}>삭제</button>
+                <button type="button" onClick={() => handleDeleteImage(imageUrl, index, false)} style={deleteImageButton}>삭제</button>
               </div>
             ))}
-            {/* 새로 추가된 이미지 미리보기 */}
             {imagePreviews.map((imageUrl, index) => (
               <div key={index} style={imageItemStyle}>
                 <img src={imageUrl} alt={`새 이미지 ${index + 1}`} style={imageStyle} />
-                <button type="button" onClick={() => handleDeleteImage(imageUrl, index, true)}>삭제</button>
+                <button type="button" onClick={() => handleDeleteImage(imageUrl, index, true)} style={deleteImageButton}>삭제</button>
               </div>
             ))}
           </div>
         </div>
-        <div>
-          <label>새 이미지 추가</label>
-          <input type="file" multiple onChange={handleFileChange} style={inputStyle} />
+        <div style={formGroup}>
+          <label style={labelStyle}>새 이미지 추가</label>
+          <input type="file" id="file-input" multiple onChange={handleFileChange} style={{ display: 'none' }} />
+          <label htmlFor="file-input" style={fileInputLabelStyle}>이미지 선택</label>
         </div>
         <button type="submit" style={buttonStyle}>수정 완료</button>
       </form>
 
-      {/* 게시글 삭제 버튼 추가 */}
       <button onClick={handleDeletePost} style={deleteButtonStyle}>게시글 삭제</button>
     </div>
   );
@@ -177,62 +164,122 @@ const EditBoardPage = () => {
 
 // 스타일 정의
 const container = {
+ 
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  padding: '20px',
+  padding: '30px',
+  backgroundColor: '#f5f7fa',
+  maxWidth: '800px',
+  margin: '0 auto',
+  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+  borderRadius: '10px',
+};
+const titleStyle = {
+  marginTop: '0px',
+  fontSize: '24px',
+  color: '#006AC1',
+  fontWeight: 'bold',
+  marginBottom: '20px',
+};
+
+const formStyle = {
+  width: '100%',
+};
+
+const formGroup = {
+  marginBottom: '20px',
+};
+
+const labelStyle = {
+  display: 'block',
+  fontSize: '16px',
+  fontWeight: '500',
+  color: '#333',
+  marginBottom: '10px',
 };
 
 const inputStyle = {
   width: '100%',
-  padding: '10px',
-  margin: '10px 0',
+  padding: '12px',
+  fontSize: '16px',
+  borderRadius: '5px',
+  border: '1px solid #ddd',
+  marginBottom: '10px',
+  boxSizing: 'border-box',
 };
 
 const textareaStyle = {
   width: '100%',
-  height: '200px',
-  padding: '10px',
-  margin: '10px 0',
+  height: '150px',
+  padding: '12px',
+  fontSize: '16px',
+  borderRadius: '5px',
+  border: '1px solid #ddd',
+  boxSizing: 'border-box',
 };
 
 const imageContainer = {
   display: 'flex',
   flexWrap: 'wrap',
-  gap: '10px',
+  gap: '15px',
+  marginBottom: '20px',
 };
 
 const imageItemStyle = {
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
+  position: 'relative',
 };
 
 const imageStyle = {
-  maxWidth: '200px',
-  maxHeight: '200px',
-  borderRadius: '8px',
-  marginBottom: '10px',
+  width: '150px',
+  height: '150px',
+  objectFit: 'cover',
+  borderRadius: '10px',
+  border: '2px solid #ddd',
 };
 
-const buttonStyle = {
-  padding: '10px 20px',
-  backgroundColor: '#4CAF50',
-  color: '#fff',
-  border: 'none',
-  borderRadius: '5px',
-  cursor: 'pointer',
-  marginTop: '20px',
-};
-
-const deleteButtonStyle = {
-  padding: '10px 20px',
+const deleteImageButton = {
+  position: 'absolute',
+  top: '5px',
+  right: '5px',
   backgroundColor: '#FF6347',
   color: '#fff',
   border: 'none',
   borderRadius: '5px',
   cursor: 'pointer',
-  marginTop: '20px',
+  padding: '5px',
+  fontSize: '12px',
+};
+
+const buttonStyle = {
+  padding: '12px 30px',
+  backgroundColor: '#006AC1',
+  color: '#fff',
+  border: 'none',
+  borderRadius: '5px',
+  cursor: 'pointer',
+  fontSize: '16px',
+  fontWeight: 'bold',
+  transition: 'background-color 0.3s',
+};
+
+const deleteButtonStyle = {
+  ...buttonStyle,
+  backgroundColor: '#FF6347',
+  marginTop: '10px',
+};
+
+const fileInputLabelStyle = {
+  padding: '10px 20px',
+  backgroundColor: '#006AC1',
+  color: '#fff',
+  borderRadius: '5px',
+  cursor: 'pointer',
+  fontSize: '16px',
+  textAlign: 'center',
+  fontWeight: 'bold',
+  display: 'inline-block',
+  transition: 'background-color 0.3s',
 };
 
 export default EditBoardPage;
