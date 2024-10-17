@@ -26,6 +26,7 @@ background-color: ${(props) => props.color || '#579ef03a'} ;
     margin-left: ${(props) => props.left};
     text-align:${(props) => props.textalign};
     max-width:${(props) => props.maxwidth};
+    min-width:${(props) => props.mixwidth};
     border-radius: ${(props) => props.radius|| '10px'};
     border: ${(props) => props.border || '0.2px solid rgb(80, 80, 80)'} ;
     overflow: ${(props) => props.overflow || 'visible'}; /* 필요시 overflow 추가 */
@@ -33,13 +34,14 @@ background-color: ${(props) => props.color || '#579ef03a'} ;
 `;
 
 const Box = (props) => {
-    const {color, padding, alignitem, flex, justify, direction, maxwidth,  height, width, top, textalign,  bottom, left, radius, border, overflow} = props;
+    const {color, padding, alignitem, flex, justify, direction, maxwidth,  height, width, top, textalign,  bottom, left, radius, border, overflow, minwidth} = props;
     return (
         <StyledBox
         color={color}
         padding={padding}
         flex={flex}
         maxwidth={maxwidth}
+        minwidth={minwidth}
         alignitem={alignitem}
         justify={justify}
         direction={direction}
