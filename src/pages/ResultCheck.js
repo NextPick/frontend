@@ -28,7 +28,7 @@ const ResultCheck = () => {
     useEffect(() => {
         if (questionListId) {
             // API 요청으로 정답과 정답률 가져오기
-            axios.get(`${process.env.REACT_APP_API_URL}/questions/${questionListId}`)
+            axios.get(`${process.env.REACT_APP_API_URL}questions/${questionListId}`)
                 .then(response => {
                     const data = response.data.data;
                     console.log(data);
@@ -57,14 +57,15 @@ const ResultCheck = () => {
     return (
         <ContainerWrapper>
             <Box
-                height="90vh"
+                height="80vh"
                 width="70vw"
                 border="none"
                 alignItems="flex-start"
                 justify="flex-start"
+                top="30px"
             >
                 <Font
-                    font="PretendardM"
+                    font="Pretendard"
                     size="27px"
                     color="#000000"
                     margintop="5px"
@@ -87,8 +88,8 @@ const ResultCheck = () => {
                     <DetailsWrapper>
                         <AnswerContainer>
                             <Font
-                                font="PretendardL"
-                                size="24px"
+                                font="Pretendard"
+                                size="20px"
                                 color="#000000"
                                 margintop="5px"
                                 spacing="2px"
@@ -99,8 +100,8 @@ const ResultCheck = () => {
                                 정답
                             </Font>
                             <Font
-                                font="PretendardL"
-                                size="22px"
+                                font="Pretendard"
+                                size="18px"
                                 color="#000000"
                                 margintop="5px"
                                 spacing="2px"
@@ -112,12 +113,12 @@ const ResultCheck = () => {
                             </Font>
                         </AnswerContainer>
                         <QuestionBubble>
-                            <Font font="PretendardM" size="18px" color="#000000">
+                            <Font font="Pretendard" size="18px" color="#000000">
                                 {correctAnswer || '정답을 불러오고 있습니다..'}
                             </Font>
                         </QuestionBubble>
                         <Font
-                            font="PretendardL"
+                            font="Pretendard"
                             size="20px"
                             color="#000000"
                             margintop="5px"
@@ -148,7 +149,8 @@ const ResultCheck = () => {
                         fontsize="22px"
                         radius="15px"
                         color="#f4fdff"
-                        style={{ marginLeft: '10px' }} // 버튼 간의 간격
+                        right="20px"
+                        // style={{ marginLeft: '10px' }} // 버튼 간의 간격
                         onClick={handleStartInterviewClick} // 클릭 핸들러 추가
                     >
                         다음문제풀기
@@ -159,7 +161,8 @@ const ResultCheck = () => {
                         fontsize="22px"
                         radius="15px"
                         color="#f4fdff"
-                        style={{ marginLeft: '10px' }} // 버튼 간의 간격
+                        left="20px"
+                        // style={{ marginLeft: '10px' }} // 버튼 간의 간격
                         onClick={handleQuitClick} // Added onClick handler
                     >
                         그만풀기
@@ -275,7 +278,6 @@ const InputField = styled.input`
 const ButtonContainer = styled.div`
     display: flex;
     align-items: center;  /* 수직 정렬을 가운데로 설정 */
-    margin-top: 45px;  /* 필요 시 여백 조정 */
 `;
 
 export default ResultCheck;

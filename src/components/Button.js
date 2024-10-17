@@ -25,6 +25,7 @@ width: ${(props) => props.width};
     padding: ${(props) => props.padding};
     display: ${(props) => props.display};
     color: ${(props) => props.fontcolor || "black"};
+    text-align: ${(props) => props.textalign};
 
   &:hover {
     background-color: ${(props) => props.hoverColor || '#0077ff96'};
@@ -35,7 +36,7 @@ width: ${(props) => props.width};
 
 const Button = (props) => {
   // 1. props {} 안에 추가
-  const {    hoverTextColor, active, color, fontcolor, width, children, textcolor, margintop, margintbottom, marginleft, marginright, height, right, radius, border, hoverColor, fontsize, fontfamily, onClick, align, justify, left, padding, display } = props;
+  const {    hoverTextColor, active, color,textalign, fontcolor, width, children, textcolor, margintop, margintbottom, marginleft, marginright, height, right, radius, border, hoverColor, fontsize, fontfamily, onClick, align, justify, left, padding, display } = props;
   return (
     // 3 아래 props 받을 수 있도록 추가
     <StyledButton
@@ -44,6 +45,7 @@ const Button = (props) => {
       fontcolor={fontcolor}
       hoverTextColor={hoverTextColor} 
       width={width}
+      textalign={textalign}
       textcolor={textcolor}
       margintop={margintop}
       margintbottom={margintbottom}

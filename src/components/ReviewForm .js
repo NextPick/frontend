@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import Button from './Button'; // Button 컴포넌트 임포트
 import Font from './Font'; // Font 컴포넌트 임포트
-import Input from '../components/Input'
+import Input from '../components/Input';
 
-const ReviewForm = ({ onSubmitReview }) => {
+const ReviewForm = ({ onSubmitReview, setUserReview }) => {
     const [userScore, setUserScore] = useState(0); // 사용자 점수 상태
-    const [userReview, setUserReview] = useState(''); // 사용자 리뷰 상태
+    const [userReview, setUserReviewLocal] = useState(''); // 사용자 리뷰 상태
 
     const handleSubmitReview = () => {
         // 새로운 리뷰와 점수를 제출
@@ -15,8 +15,8 @@ const ReviewForm = ({ onSubmitReview }) => {
                 userComment: userReview,
             };
             onSubmitReview(newReview); // 부모 컴포넌트로 리뷰 전송
-            setUserReview(''); // 리뷰 입력 필드 초기화
-            setUserScore(0); // 별점 초기화
+            setUserReviewLocal(''); // 리뷰 입력 필드 초기화
+            setUserReview(0); // 별점 초기화
         }
     };
 
@@ -24,12 +24,13 @@ const ReviewForm = ({ onSubmitReview }) => {
     const handleChange = (e) => {
         const inputText = e.target.value;
         if (inputText.length <= 70) { // 글자 수가 70자 이하인 경우에만 업데이트
-            setUserReview(inputText);
+            setUserReviewLocal(inputText);
         }
     };
+
     return (
         <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', marginBottom: '10px' }}> {/* 수평 정렬 */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', marginBottom: '10px' }}>
                 <Input
                     $w_fontSize="18px"
                     type="text"
@@ -44,10 +45,8 @@ const ReviewForm = ({ onSubmitReview }) => {
                     style={{ flex: 1, padding: '13px', border: '1px solid #ccc' }}
                 />
             </div>
-
-
+            <Button onClick={handleSubmitReview}>제출</Button>
         </div>
-
     );
 };
 

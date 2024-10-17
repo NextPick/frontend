@@ -64,7 +64,7 @@ const Administration = () => {
                 <TableHeader>이름</TableHeader>
                 <TableHeader>이메일</TableHeader>
                 <TableHeader>직군</TableHeader>
-                <TableHeader>신청일</TableHeader>
+                {/* <TableHeader>신청일</TableHeader> */}
                 <TableHeader>처리</TableHeader>
               </tr>
             </thead>
@@ -74,7 +74,7 @@ const Administration = () => {
                   <TableData>{user.name}</TableData>
                   <TableData>{user.email}</TableData>
                   <TableData>{user.occupation}</TableData>
-                  <TableData>{user.createdAt}</TableData>
+                  {/* <TableData>{user.createdAt}</TableData> */}
                   <TableData>
                     <ActionButton onClick={() => handleAccept(user.memberId)}>수락</ActionButton>
                     <ActionButton onClick={() => handleReject(user.memberId)}>거절</ActionButton>
@@ -118,7 +118,7 @@ const MainContent = styled.main`
   padding: 20px;
   max-width: 800px;
   height: 100%;
-  background-color: #f1f7fd;
+  background-color: #e7f0f9;
   border-radius: 15px;
   margin-left: 20px;
   text-align: center;

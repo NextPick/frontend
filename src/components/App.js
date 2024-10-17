@@ -19,7 +19,8 @@ import FeedbackS from '../pages/FeedbackS.js';
 import AdminPage from '../pages/AdminPage.js'
 import AdminPageQx from '../pages/AdminPageQ.jsx';
 import AdministrationX from '../pages/Administration.jsx';
-import AdminPageQadd from '../pages/AdminPageQadd.jsx';
+import AdminPageQadd from '../pages/AdminQuestionDetail.jsx';
+import AdminQuestionAdd from '../pages/AdminQuestionAdd.jsx';
 import Choice from '../pages/Choice.js';
 import InterviewFeedback from '../pages/InterviewFeedback.js';
 import QuestionBoard from '../pages/QuestionBoard.jsx';
@@ -66,6 +67,7 @@ function App() {
                 {/* 관리자 페이지 */}
                 <Route path='/admin/question' element={<AdminPageQx />} />
                 <Route path='/admin/question/:questionId' element={<AdminPageQadd />} />
+                <Route path='/admin/question/add' element={<AdminQuestionAdd />} />
                 <Route path='/admin/service' element={<AdminPage />} />
                 <Route path='/admin' element={<AdministrationX />} />
 

@@ -147,7 +147,7 @@ const AdminpageSide = () => {
 
   return (
     <Box
-      height="100%"
+      height="90%"
       width="250px"
       padding="20px"
       border="none"
