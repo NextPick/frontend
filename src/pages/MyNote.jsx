@@ -18,6 +18,28 @@ const Table = styled.table`
   margin-bottom: 20px;
 `;
 
+const MainContent_ = styled.main`
+  flex: 1;
+  padding: 20px;
+  max-width: 800px;
+  height: 100%;
+  border-radius: 15px;
+  margin-left: 20px;
+  text-align: center;
+  border: 0.5px solid #ccc;
+  background-color: #fff;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 4px;
+`;
+
+const Title = styled.h2`
+  font-size: 24px;
+  margin-top: 10px;
+  margin-bottom: 40px;
+  text-align: left;
+  font-family: 'Pretendard', sans-serif;
+  color: #006AC1;
+  font-weight: bold;
+`;
 
 const TableData = styled.td`
   padding: 5px;
@@ -61,8 +83,6 @@ const SearchInput = styled.input`
 const SearchContainer = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
-  
 `;
 
 const SearchButton = styled.button`
@@ -302,20 +322,11 @@ const MyNote = () => {
     <Container>
       <MypageSide />
       <SearchContainer>
-        <Box
-          padding="0px"
-          height="100%"
-          width="33vw"
-          border="none"
-          color="#f1f7fd"
-          justify="space-between"
-          radius="15px"
-          left="20px"
-          overflow="hidden"
-        >
+        <MainContent_>
+          <Title>정답/오답노트</Title>
           <div style={{ display: 'flex', flexDirection: 'row' }}>
             <Button
-              height="11vh"
+              height="40px"
               width="16.5vw"
               border="none"
               radius="3px"
@@ -339,7 +350,7 @@ const MyNote = () => {
               </Font>
             </Button>
             <Button
-              height="11vh"
+              height="40px"
               width="16.5vw"
               border="none"
               radius="3px"
@@ -366,7 +377,7 @@ const MyNote = () => {
             </Button>
           </div>
           {renderTabContent()}
-        </Box>
+        </MainContent_>
       </SearchContainer>
 
     </Container>
