@@ -29,6 +29,7 @@ const Choice = () => {
     const handleNavigate = async (occupation) => {
         setRoomOccupation(occupation);
         await handleGetInterviewRoom(occupation);
+        navigate('/webrtc', { state: { roomUuid: roomUuid, title: title, roomId: roomId, roomOccupation: occupation, memberId: memberId } });
     };
 
     const handleCloseAddModal = () => setShowAddModal(false);
@@ -66,20 +67,18 @@ const Choice = () => {
                 title: '방이 성공적으로 생성되었습니다.',
                 confirmButtonText: '확인',
             }).then(() => {
-                const data = response.data.data;
-                const roomUuid = data.roomUuid;
-                const title = data.title;
-                const roomId = data.roomId;
-                const memberId = data.memberId;
+                let data = response.data.data;
+                roomUuid = data.roomUuid;
+                title = data.title;
+                roomId = data.roomId;
+                memberId = data.memberId;
 
                 // 모달 닫기
                 setShowAddModal(false);
 
                 // 화면 전환 후 바로 적용될 수 있도록 navigate를 명시적으로 호출
                 setTimeout(() => {
-                    navigate('/webrtc', {
-                        state: { roomUuid, title, roomId, roomOccupation, memberId },
-                    });
+                    navigate('/webrtc', { state: { roomUuid: roomUuid, title: title, roomId: roomId, roomOccupation: roomOccupation, memberId: memberId }  }); // 방 생성 후 이동
                 }, 100); // 짧은 지연을 추가하여 상태가 변경된 후 navigate 호출
             });
         } catch (error) {
@@ -107,9 +106,7 @@ const Choice = () => {
 
             // 화면 전환 후 바로 적용될 수 있도록 navigate를 명시적으로 호출
             setTimeout(() => {
-                navigate('/webrtc', {
-                    state: { roomUuid, title, roomId, roomOccupation, memberId },
-                });
+                navigate('/webrtc', { state: { roomUuid: roomUuid, title: title, roomId: roomId, roomOccupation: occupation, memberId: memberId }  }); // 방 생성 후 이동
             }, 100); // 짧은 지연을 추가하여 상태가 변경된 후 navigate 호출
         } catch {
             await Swal.fire({icon: 'error', title: '직군의 남은 방이 없습니다.'});
