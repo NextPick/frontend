@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHeaderMode } from '../hooks/HeaderManager';
 import { useNavigate } from 'react-router-dom';
-import Box from '../components/Box';
-import Font from '../components/Font';
 import styled from 'styled-components';
-import { useMember } from '../hooks/MemberManager'; // 회원 정보를 관리하는 훅
 import Button from '../components/Button';
 
 
@@ -41,19 +38,6 @@ const AiHome = () => {
         setSelectedSubcategory(null); // 하위 카테고리는 초기화
     }, []);
 
-    const handleCategoryClick = (categoryName) => {
-        if (selectedCategory === categoryName) {
-            setSelectedCategory(null);
-            setSelectedSubcategory(null);
-        } else {
-            setSelectedCategory(categoryName);
-            setSelectedSubcategory(null);
-        }
-    };
-
-    const handleSubcategoryClick = (subcategory) => {
-        setSelectedSubcategory(subcategory);
-    };
 
     // "AI 면접 시작하기" 버튼 클릭 핸들러
     const handleStartInterviewClick = () => {
@@ -83,23 +67,24 @@ const AiHome = () => {
                         {index < categories.length - 1 && <Divider />}
                         </React.Fragment>
                     ))}
-            </CategoryContainer>
-                <ButtonContainer>
-                    <Button
+                       <Button
                       color="transparent"
-                      width="12vw"
+                      width="100%"
                       textcolor="#000000"
                       height="52px"
+                      textalign="right"
+                      margintop='10px'
                       hoverColor="#ffffff"
                       margintbottom="10px"
-                      fontsize="20px"
-                      marginright="15px"
+                      marginleft="15px"
+                      fontsize="22px"
                       hoverTextColor="black"
                       onClick={handleStartInterviewClick} // 클릭 핸들러 추가
                     >
                         AI 면접시작하기 →
                     </Button>
-                </ButtonContainer>
+            </CategoryContainer>
+                 
         </div>
     );
 };
@@ -109,7 +94,7 @@ const AiHome = () => {
 const CategoryContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 70%;
+  width: 45%;
   margin: auto;
   gap: 20px;
   font-family: 'Pretendard', sans-serif;
@@ -162,30 +147,6 @@ const Subtitle = styled.div`
 `;
 
 
-const CategoryButton = styled.button`
-  padding: 15px;
-  border: 0px solid #ccc;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 65px;
-  font-family: 함박눈;
-  text-align: left;
-  background-color: transparent;
-  margin-bottom: 15px;
-  margin-top: 10px;
-  width: 120px;
-
-  &:hover {
-      background-color: white;
-      transition: background-color 0.3s;
-  }
-
-  ${({ isSelected }) => isSelected && `
-      background-color: black;
-      transition: background-color 0.3s;
-  `}
-`;
-
 const SubcategoryContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -193,37 +154,6 @@ const SubcategoryContainer = styled.div`
   margin-top: 20px;
 `;
 
-const SubcategoryItem = styled.div`
-  width: 30%;
-  padding: 8px;
-  border: 0px solid #ddd;
-  border-radius: 4px;
-  text-align: center;
-  font-size: 22px;
-  background-color: transparent;
-  margin-bottom: 10px;
-  cursor: pointer;
-
-  &:hover {
-      transform: scale(1.1);
-      transition: transform 0.2s;
-  }
-`;
-
-const SelectedSubcategoryBox = styled.div`
-  margin-top: 25px;
-  padding: 5px;
-  font-size: 23px;
-  text-align: left;
-  font-family: PretendardB;
-  display: flex;
-  align-items: center;
-`;
-
-const CheckMark = styled.span`
-  margin-right: 5px;
-  font-size: 23px;
-`;
 
 const ButtonContainer = styled.div`
   display: flex;
