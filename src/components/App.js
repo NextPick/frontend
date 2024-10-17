@@ -35,6 +35,7 @@ import WebRTC from "../pages/WebRTC";
 import ReviewBoardPost from "../pages/ReviewBoardPost.jsx";
 import EditBoardPage from '../pages/EditBoardPage.jsx'; 
 import InterviewRoom from "../pages/InterviewRoom"
+import AdminRoute from '../router/AdminRoute.jsx';
 import '../styles/global.css';
 import Not from '../pages/Not.js';
 
@@ -65,12 +66,11 @@ function App() {
                 <Route path='/mynote' element={<MyNote />} />
 
                 {/* 관리자 페이지 */}
-                <Route path='/admin/question' element={<AdminPageQx />} />
-                <Route path='/admin/question/:questionId' element={<AdminPageQadd />} />
-                <Route path='/admin/question/add' element={<AdminQuestionAdd />} />
-                <Route path='/admin/service' element={<AdminPage />} />
-                <Route path='/admin' element={<AdministrationX />} />
-
+                <Route path="/admin" element={<AdminRoute><AdministrationX /></AdminRoute>} />
+        <Route path="/admin/question" element={<AdminRoute><AdminPageQx /></AdminRoute>} />
+        <Route path="/admin/question/:questionId" element={<AdminRoute><AdminPageQadd /></AdminRoute>} />
+        <Route path="/admin/question/add" element={<AdminRoute><AdminQuestionAdd /></AdminRoute>} />
+        <Route path="/admin/service" element={<AdminRoute><AdminPage /></AdminRoute>} />
                 {/* 화상면접 페이지 */}
                 <Route path='/choice' element={<Choice />} />
                 <Route path='/webrtc' element={<WebRTC />} />

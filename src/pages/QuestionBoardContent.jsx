@@ -178,7 +178,6 @@ const PostDetail = () => {
             padding: '15px',
             borderRadius: '8px',
             backgroundColor: '#F8F9FA',
-            
             border: '1px solid #E0E0E0',
           }}>
             <div style={{
@@ -188,7 +187,7 @@ const PostDetail = () => {
               borderRadius: '50%',
               marginRight: '10px',
             }}></div>
-            <div style={{ flex: 1, fontSize: '14px', color: '#333' }}>
+            <div style={{ flex: 1, fontSize: '16px', color: '#333' }}>
               <div style={{
                 display: 'flex',
                 justifyContent: 'space-between',
@@ -200,14 +199,14 @@ const PostDetail = () => {
                     fontWeight: 'bold',
                   } : {
                     fontWeight: 'bold',
-                    fontSize: '14px',
+                    fontSize: '16px',
                     color: '#333',
                   }}
                 >
                   {comment.nickname}
                 </span>
                 <span style={{
-                  fontSize: '12px',
+                  fontSize: '14px',
                   color: '#888',
                   paddingRight: '5px'
                 }}>
@@ -217,7 +216,9 @@ const PostDetail = () => {
                     <span style={{ marginLeft: '10px' }}>
                       <button
                         style={{
-                          backgroundColor: 'transparent', color: '#888', border: 'none', padding: '4px 8px', cursor: 'pointer', fontSize: '12px',
+                          backgroundColor: 'transparent', color: '#888', border: 'none', padding: '4px 8px',
+                          cursor: 'pointer',
+                          fontSize: '14px',
                           marginLeft: '5px',
                         }}
                         onClick={() => handleUpdateComment(comment.boardCommentId, prompt('댓글 수정', comment.content))}
@@ -226,7 +227,9 @@ const PostDetail = () => {
                       </button>
                       <button
                         style={{
-                          backgroundColor: 'transparent', color: '#888', border: 'none', padding: '4px 8px', cursor: 'pointer', fontSize: '12px',
+                          backgroundColor: 'transparent', color: '#888', border: 'none', padding: '4px 8px',
+                          cursor: 'pointer',
+                          fontSize: '14px',
                         }}
                         onClick={() => handleDeleteComment(comment.boardCommentId)}
                       >
@@ -236,7 +239,7 @@ const PostDetail = () => {
                   )}
                 </span>
               </div>
-              <p style={{ marginTop: '8px', fontSize: '14px', color: '#333' }}>{comment.content}</p>
+              <p style={{ marginTop: '8px', fontSize: '16px', color: '#333' }}>{comment.content}</p>
 
               {!parentId && (
                 <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px', marginBottom: '15px' }}>
@@ -251,16 +254,16 @@ const PostDetail = () => {
                       borderRadius: '8px',
                       border: '1px solid #E0E0E0',
                       marginRight: '10px',
-                      fontSize: '13px',
+                      fontSize: '14px',
                     }}
                   />
                   <button
                     style={{
-                      backgroundColor: '#006AC1', color: '#fff', border: 'none',
+                      backgroundColor: '#428bc7', color: '#fff', border: 'none',
                       padding: '6px 12px',
                       borderRadius: '6px',
                       cursor: 'pointer',
-                      fontSize: '12px',
+                      fontSize: '14px',
                       marginLeft: '8px',
                     }}
                     onClick={() => handleReplySubmit(comment.boardCommentId)}
@@ -289,7 +292,6 @@ const PostDetail = () => {
       backgroundColor: '#F0F2F5',
       padding: '20px',
       borderRadius: '10px',
-      
     }}>
       <h2 style={{
         display: 'flex',
@@ -302,7 +304,7 @@ const PostDetail = () => {
       }}>
         <span style={{
           fontWeight: 'bold',
-          fontSize: '28px',
+          fontSize: '30px',
           color: '#333',
         }}>{post.title}</span>
       </h2>
@@ -314,9 +316,8 @@ const PostDetail = () => {
         flexDirection: 'column',
         backgroundColor: '#FFFFFF',
         alignItems: 'center',
-        width: '65%',
+        width: '48%',
         padding: '20px',
-        
         borderRadius: '8px',
       }}>
         <div style={{ paddingTop: '15px', width: '100%' }}>
@@ -330,24 +331,27 @@ const PostDetail = () => {
           }}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <span style={{
-                fontSize: '15px',
+                fontSize: '17px',
                 fontWeight: 'bold',
                 color: '#555',
               }}>작성자: {post.author}</span>
             </div>
             <span style={{
-              fontSize: '13px',
+              fontSize: '15px',
               color: '#888',
             }}>작성일: {new Date(post.createdAt).toLocaleDateString()} | 조회수: {post.viewCount} | 수정일: {new Date(post.modifiedAt).toLocaleDateString()}
               {currentUserNickname === post.author && (
                 <span style={{ marginLeft: '8px' }}>
                   <button onClick={handleEditPost} style={{
-                    backgroundColor: 'transparent', color: '#006AC1', border: 'none', padding: '4px 8px', cursor: 'pointer', fontSize: '13px', marginRight: '5px',
+                    backgroundColor: 'transparent', color: '#4882d8', border: 'none', padding: '4px 8px',
+                    cursor: 'pointer',
+                    fontSize: '15px',
+                    marginRight: '5px',
                   }}>수정</button>
                   <button onClick={handleDeletePost} style={{
-                    backgroundColor: 'transparent', color: '#FF6B6B', border: 'none', padding: '4px 8px',
+                    backgroundColor: 'transparent', color: '#ff0000', border: 'none', padding: '4px 8px',
                     cursor: 'pointer',
-                    fontSize: '13px',
+                    fontSize: '15px',
                   }}>삭제</button>
                 </span>
               )}
@@ -360,9 +364,8 @@ const PostDetail = () => {
             marginBottom: '20px',
             borderRadius: '8px',
             border: '1px solid #E0E0E0',
-            
           }}>
-            <p style={{ fontSize: '15px', lineHeight: '1.5', color: '#333' }}>{post.content}</p>
+            <p style={{ fontSize: '16px', lineHeight: '1.5', color: '#333' }}>{post.content}</p>
           </div>
 
           <div style={{
@@ -381,14 +384,13 @@ const PostDetail = () => {
                   marginBottom: '15px',
                   borderRadius: '8px',
                   objectFit: 'contain',
-                  
                 }} />
               ))
             )}
           </div>
 
           {post.dtype === 'ReviewBoard' && post.boardCategory && (
-            <p style={{ fontSize: '15px', color: '#555' }}>카테고리: {post.boardCategory}</p>
+            <p style={{ fontSize: '16px', color: '#555' }}>카테고리: {post.boardCategory}</p>
           )}
 
           <div style={{
@@ -396,17 +398,17 @@ const PostDetail = () => {
             gap: '10px',
             marginTop: '20px',
             alignItems: 'center',
-            fontSize: '15px',
+            fontSize: '16px',
             fontWeight: 'bold',
             color: '#333',
             marginBottom: '30px'
           }}>
             <div onClick={handleLike} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
-              <span role="img" aria-label="like" style={{ fontSize: '18px' }}>👍</span>
+              <span role="img" aria-label="like" style={{ fontSize: '20px' }}>👍</span>
               <span style={{ marginLeft: '6px' }}>{likesCount}</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center' }}>
-              <span role="img" aria-label="comments" style={{ fontSize: '18px' }}>💬</span>
+              <span role="img" aria-label="comments" style={{ fontSize: '20px' }}>💬</span>
               <span style={{ marginLeft: '6px' }}>{comments.length}</span>
             </div>
           </div>
@@ -427,7 +429,7 @@ const PostDetail = () => {
                 borderRadius: '8px',
                 border: '1px solid #E0E0E0',
                 marginRight: '10px',
-                fontSize: '14px',
+                fontSize: '16px',
               }}
               value={newComment}
               onChange={(e) => setNewComment(e.target.value)}
@@ -440,6 +442,7 @@ const PostDetail = () => {
               borderRadius: '5px',
               cursor: 'pointer',
               fontWeight: 'bold',
+              fontSize: '16px',
             }} onClick={handleCommentSubmit}>댓글 달기</button>
           </div>
         </div>
