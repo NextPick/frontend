@@ -195,6 +195,7 @@ const styles = {
   tab: {
     flex: 1,
     padding: '10px',
+    border: '0',
     textAlign: 'center',
     cursor: 'pointer',
     fontSize: '24px',
@@ -204,6 +205,7 @@ const styles = {
   },
   activeTab: {
     color: '#373f73',
+    border: '0',
     borderBottom: '3px solid #006AC1',
     fontWeight: '700',
     width: '90%', // 밑줄 길이를 줄이기 위해 너비 설정
