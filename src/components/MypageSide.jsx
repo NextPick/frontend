@@ -8,7 +8,7 @@ import defaultProfile from '../assets/img-non-login.png';
 import { useMember } from '../hooks/MemberManager'; // 회원 정보를 관리하는 훅
 import axios from 'axios';
 // import Swal from 'sweetalert2';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom'; // 수정된 부분
 
 
 const ProfileImgArea = styled.div`
@@ -35,12 +35,12 @@ const MenuItem = styled.p`
   padding: 10px;
   cursor: pointer;
   transition: background-color 0.3s ease, color 0.3s ease;
-  background-color: ${({ active }) => (active ? '#137df696' : 'transparent')};
-  color: ${({ active }) => (active ? '#ffffff' : '#000')};
+  color: ${({ active }) => (active ? '#006AC1' : '#ccc')};
+  font-weight: ${({ active }) => (active ? 'bold' : 'normal')};
 
   &:hover {
-    background-color: #0077ff96;
-    color: #ffffff;
+    background-color: #F7F7F7;
+    color: #0060B0;
   }
 `;
 
@@ -50,11 +50,11 @@ const LogoutButton = styled.button`
   color: #333;
   cursor: pointer;
   margin-top: 20px;
-  font-family: '강원교육튼튼L';
+  font-family: 'Pretendard', sans-serif;
 
   &:hover {
-    background-color: #0077ff96;
-    color: #ffffff;
+    background-color: #F7F7F7;
+    color: #0060B0;
   }
 `;
 
@@ -73,8 +73,23 @@ const Menu = styled.div`
 const MypageSide = () => {
     const { profileUrl, setProfileUrl, nickname,  setNickname,  email,  setEmail, type, setType } = useMember();
     const fileInputRef = useRef(null); // 파일 입력을 참조할 ref 생성
+    const location = useLocation();
     const [activeMenu, setActiveMenu] = useState('마이페이지'); // 활성화된 메뉴 상태
     const navigate = useNavigate(); // navigate 정의
+
+
+    useEffect(() => {
+        // URL 기준으로 activeMenu 값 설정
+        if (location.pathname.includes('/feedbackS')) {
+          setActiveMenu('받은 피드백');
+        } else if (location.pathname.includes('/mynote')) {
+          setActiveMenu('마이노트');
+        } else if (location.pathname === '/mypage') {
+          setActiveMenu('마이페이지');
+        } else if (location.pathname === '/cash') {
+        setActiveMenu('결제관리');
+        }
+      }, [location.pathname]); // 경로가 변경될 때마다 실행
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -137,11 +152,9 @@ const handleMynoteClick = () => {
 };
 
 const handleCashClick = () => {
-    handleMenuClick('결제창'); // 메뉴 클릭 처리
+    handleMenuClick('결제관리'); // 메뉴 클릭 처리
     navigate('/cash'); // 마이페이지로 이동
 };
-
-
     // 메뉴 항목 클릭 시 활성화 상태 변경
     const handleMenuClick = (menuName) => {
         setActiveMenu(menuName); // 클릭한 메뉴 이름을 활성화 상태로 설정
@@ -164,15 +177,17 @@ const handleCashClick = () => {
 
   return (
     <Box
-    height="90%"
+    height="100%"
     width="250px"
     padding="20px"
-    border="none"
+    border="0.5px solid #ccc"
     alignItems="flex-start"
     justify="flex-start"
     textalign="center"
-    color="#e7f0f9"
+    color="#FFF"
     radius="15px"
+    top="0px"
+    shadow= "rgba(0, 0, 0, 0.1) 0px 2px 4px;"
             >
                 <ProfileImgArea>
                     <ProfileImage
@@ -197,7 +212,7 @@ const handleCashClick = () => {
                 <MenuItem active={activeMenu === '마이페이지'} onClick={() => handleMypageClick('마이페이지')}>마이페이지</MenuItem>
                 <MenuItem active={activeMenu === '마이노트'} onClick={() => handleMynoteClick('마이노트')}>정답/오답노트</MenuItem>
                 <MenuItem active={activeMenu === '받은 피드백'} onClick={() => handleFeedbackClick('받은 피드백')}>받은 피드백</MenuItem>
-                <MenuItem active={activeMenu === '결제창'} onClick={() => handleCashClick('결제창')}>결제관리</MenuItem>
+                <MenuItem active={activeMenu === '결제관리'} onClick={() => handleCashClick('결제관리')}>결제관리</MenuItem>
                 </Menu>
                 <Line
                     marginbottom="10px"

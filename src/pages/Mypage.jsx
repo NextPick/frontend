@@ -24,6 +24,28 @@ const Container = styled.div`
   font-family: Arial, sans-serif;
 `;
 
+const MainContent = styled.main`
+  flex: 1;
+  padding: 20px;
+  max-width: 800px;
+  height: 100%;
+  border-radius: 15px;
+  margin-left: 20px;
+  text-align: center;
+  border: 0.5px solid #ccc;
+  background-color: #fff;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 4px;
+`;
+
+const Title = styled.h2`
+  font-size: 24px;
+  margin-top: 10px;
+  margin-bottom: 40px;
+  text-align: left;
+  font-family: 'Pretendard', sans-serif;
+  color: #006AC1;
+  font-weight: bold;
+`;
 
 
 
@@ -78,7 +100,7 @@ const Mypage = () => {
     return (
         <Container>
             <MypageSide/>
-                      <Box
+                <MainContent    
                 padding="0px"
                 height="50%"
                 width="33vw"
@@ -88,29 +110,7 @@ const Mypage = () => {
                 radius="15px"
                 left="20px"
             >
-                <Box
-                    height="7vh"
-                    width="33vw"
-                    border="none"
-                    alignitem="flex-start"
-                    justify="flex-start"
-                    top="none"
-                    color="#0372f33a"
-                >
-                    <Font
-                        font="PretendardB"
-                        size="18px"
-                        color="#000000"
-                        margintop="0px"
-                        marginbottom="0px"
-                        paddingtop="9px"
-                        marginleft="10px"
-                        spacing="3px"
-                    >
-                        내 프로필
-                    </Font>
-                </Box>
-
+                <Title>내 프로필</Title>    
                 <div style={{ display: 'flex', alignItems: 'center', marginRight: "auto", marginLeft: "5px", marginBottom: "-5px" }}> {/* 수평 정렬을 위한 flexbox */}
                     <img src={one} alt="one" style={{ width: '33px', height: '34px' }} /> {/* 로고 이미지 */}
                     <Font
@@ -187,7 +187,7 @@ const Mypage = () => {
                         회원정보 수정하러가기 →
                     </Font>
                 </Button>
-            </Box>
+            </MainContent>
         </Container>
     );
 }
