@@ -88,24 +88,27 @@ const InterviewFeedback = () => {
     }, [])
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-start' }}>
-            <Box height="100%" width="35vw" border="none" alignItems="flex-start" justify="flex-start" style={{ display: 'flex' }}>
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+            <Box color="#fff" height="100%" width="35vw" alignItems="flex-start" justify="flex-start" border="1px solid rgb(221, 221, 221)" radius="20px"
+                 style={{ display: 'flex', boxShadow:'0px 4px 8px rgba(0, 0, 0, 0.5'}}>
                 <div style={{ marginBottom: '5px', width: '100%' }}>
                     <Font font="PretendardL" size="22px" color="#000000" margintop="5px" spacing="2px" paddingleft="13px" paddingtop="5px" marginbottom="8px">
                         {mentorNickname}의 피드백
                     </Font>
                 </div>
-                <Box height="57vh" width="30vw" border="none" alignItems="center" justify="center" top="10px" bottom="10px" style={{ display: 'flex' }}>
-                    <Font font="PretendardB" size="18px" color="#000000" margintop="5px" spacing="2px" paddingleft="13px" paddingtop="5px" marginbottom="8px">
-                        {content}
+                <Box height="57vh" width="30vw" border="none" alignItems="center" justify="start" top="10px" bottom="10px" style={{ display: 'flex' }}>
+                    <Font font="PretendardB" size="18px" color="#000000" alignitem="flex-start" margintop="5px" spacing="2px" paddingtop="5px" marginbottom="8px">
+                        <Box height="5vh" width="30vw" border="1px" alignItems="flex-start" justify="center" top="10px" bottom="10px" style={{ display: 'flex' }}>
+                            {content}
+                        </Box>
                     </Font>
                 </Box>
                 <Box height="28vh" width="30vw" border="none" alignItems="flex-start" justify="flex-start" top="10px" direction='column' bottom="10px" style={{ display: 'flex', flexDirection: 'column' }}>
                     <div style={{ marginBottom: '0px', width: '100%' }}>
                         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <Font font="PretendardB" size="18px" color="#000000" margintop="5px" spacing="2px" paddingleft="13px" paddingtop="5px" marginbottom="8px">
-                                멘토링 후기를 작성해주세요!
-                            </Font>
+                                <Font font="PretendardB" size="18px" color="#000000" margintop="5px" spacing="2px" paddingleft="13px" paddingtop="5px" marginbottom="8px" >
+                                    멘토링 후기를 작성해주세요!
+                                </Font>
                             <div style={{ display: 'flex', marginLeft: '8px' }}>
                                 {Array.from({ length: 5 }, (_, index) => (
                                     <FaStar
@@ -120,29 +123,23 @@ const InterviewFeedback = () => {
                         </div>
                     </div>
 
-                    <div className="memo-area">
+                    <div style={{flexDirection: "column", justifyContent:"center"}}>
                         <textarea
                             value={userReview}
                             onChange={(e) => setUserReview(e.target.value)}
                             placeholder="리뷰를 입력해주세요..."
+                            style={{ marginTop: '1rem',height:'16vh', width: '20vw', borderRadius: '8px', marginLeft: '4vw'}}
                         />
-                    </div>
-                    <div
-                        style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%'}}>
-                        <div style={{height: "20px", width: "30px"}}></div>
                         <Button
-                            right="5px"
-                            margintbottom="3px"
-                            margintop="5px"
                             onClick={handleSubmitReview}
                             fontsize="20px"
                             radius="5px"
+                            marginleft="25vw"
+                            width="3vw"
+                            margintop="5px"
                         >
                             제출
                         </Button>
-                    </div>
-
-                    <div>
                     </div>
                 </Box>
             </Box>

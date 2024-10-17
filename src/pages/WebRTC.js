@@ -4,6 +4,8 @@ import Stomp from 'stompjs';
 import "../styles/WebRTC.css";
 import {useLocation, useNavigate} from "react-router-dom";
 import axios from "axios";
+import placeholderImage from '../assets/mainlogo.png';
+import Swal from "sweetalert2";
 
 const WebRTC = () => {
     // 로컬 비디오 스트림을 참조하기 위한 ref
@@ -44,11 +46,12 @@ const WebRTC = () => {
         if (stompClient) {
             stompClient.disconnect();
         }
-        if (localStream) {
-            localStream.getTracks().forEach(track => track.stop()); // 로컬 스트림 중지
+        if (memberType === 'MENTOR') {
+            navigate("/");
+        } else {
+            // 다른 페이지로 이동
+            navigate("/InterviewFeedback", {state: {roomId: roomId, mentorId: memberId}}) // 이동할 페이지 경로로 변경
         }
-        // 다른 페이지로 이동
-        navigate("/InterviewFeedback", {state: {roomId: roomId, mentorId: memberId}}) // 이동할 페이지 경로로 변경
     };
 
     // 카메라 시작 함수
@@ -82,8 +85,6 @@ const WebRTC = () => {
                 email: memberEmail, // 회원 이메일
             },  () => {
                 console.log('Connected to WebRTC server');
-                console.log(myKey);
-
 
                 // ICE 후보 구독
                 stompClient.subscribe(`/topic/peer/iceCandidate/${myKey}/${roomUuid}`, candidate => {
@@ -338,9 +339,13 @@ const WebRTC = () => {
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${accessToken}` // 인증 헤더 설정
-                }
+                },
             });
-
+            await Swal.fire({
+                icon: 'success',
+                title: '피드백을 생성했습니다.',
+                confirmButtonText: '확인'
+            })
         } catch (error) {
             alert("피드백 생성에 실패했습니다.");
         }
@@ -358,7 +363,11 @@ const WebRTC = () => {
                     Authorization: `Bearer ${accessToken}` // 인증 헤더 설정
                 }
             });
-
+            await Swal.fire({
+                icon: 'success',
+                title: '피드백을 생성했습니다.',
+                confirmButtonText: '확인'
+            })
         } catch (error) {
             alert("피드백 생성에 실패했습니다.");
         }
@@ -376,7 +385,11 @@ const WebRTC = () => {
                     Authorization: `Bearer ${accessToken}` // 인증 헤더 설정
                 }
             });
-
+            await Swal.fire({
+                icon: 'success',
+                title: '피드백을 생성했습니다.',
+                confirmButtonText: '확인'
+            })
         } catch (error) {
             alert("피드백 생성에 실패했습니다.");
         }
@@ -384,13 +397,12 @@ const WebRTC = () => {
 
     const handleGetQuestions = async () => {
         try {
-            const response = await axios.get(process.env.REACT_APP_API_URL + `questions?page=1&size=20&category=-1&keyword&type=none&sort=recent`, {
+            const response = await axios.get(process.env.REACT_APP_API_URL + `questions?page=1&size=10&category=-1&keyword&type=none&sort=recent`, {
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${accessToken}` // 필요한 경우 인증 헤더 추가
                 }
             });
-
             // 응답 구조 확인
             let dataList = response.data // 데이터가 data 속성에 있는지 확인
             setQuestions(dataList.data);
@@ -400,13 +412,14 @@ const WebRTC = () => {
     };
 
     // 컴포넌트 렌더링
+    // 컴포넌트 렌더링
     return (
         <div className="container">
             <div className="video-section">
                 <h2>{title}</h2>
                 <div className="video-grid">
                     <div className="video-placeholder">
-                        <video ref={localStreamElement} id="localStream" autoPlay playsInline controls style={{ width: '100%', height: '100%', display: "none"}}/>
+                        <video ref={localStreamElement} id="localStream" autoPlay playsInline controls muted style={{ width: '100%', height: '100%', display: "none" }} />
                     </div>
                     <div className="video-placeholder">
                         <div id="remoteStreamDiv1"></div>
@@ -418,42 +431,49 @@ const WebRTC = () => {
                         <div id="remoteStreamDiv3"></div>
                     </div>
                 </div>
-                <button onClick={handleEnterButtonClick}>입장하기</button>
-                <button onClick={handleLeaveRoom}>나가기</button> {/* 나가기 버튼 추가 */}
+                <div className="button-container">
+                    <button onClick={handleEnterButtonClick} className="action-button enter-button">입장하기</button>
+                    <button onClick={handleLeaveRoom} className="action-button leave-button">나가기</button>
+                </div>
             </div>
 
             <div className="input-section">
                 {memberType === 'MENTOR' ? (
                     <div className="mentor-section">
                         <h2>질문 리스트</h2>
+                        <ul>
                             {questions.map(item => (
                                 <li key={item.questionListId}>{item.question}</li>
                             ))}
+                        </ul>
                         <h3>튜터 피드백</h3>
                         <div className="tutor-feedback">
                             <div className="tutor-input">
                                 <input
+                                    className="input-field"
                                     placeholder="1번 튜터"
                                     value={tutor1}
                                     onChange={(e) => setTutor1(e.target.value)}
                                 />
-                                <button value={otherMembers.otherMember1} onClick={() => {handlePostButtonClick1(otherMembers.otherMember1)}}>제출</button>
+                                <button onClick={() => handlePostButtonClick1(otherMembers.otherMember1)} className="submit-button">제출</button>
                             </div>
                             <div className="tutor-input">
                                 <input
+                                    className="input-field"
                                     placeholder="2번 튜터"
                                     value={tutor2}
                                     onChange={(e) => setTutor2(e.target.value)}
                                 />
-                                <button value={otherMembers.otherMember2} onClick={() => {handlePostButtonClick2(otherMembers.otherMember2)}}>제출</button>
+                                <button onClick={() => handlePostButtonClick2(otherMembers.otherMember2)} className="submit-button">제출</button>
                             </div>
                             <div className="tutor-input">
                                 <input
+                                    className="input-field"
                                     placeholder="3번 튜터"
                                     value={tutor3}
                                     onChange={(e) => setTutor3(e.target.value)}
                                 />
-                                <button value={otherMembers.otherMember3} onClick={() => {handlePostButtonClick3(otherMembers.otherMember3)}}>제출</button>
+                                <button onClick={() => handlePostButtonClick3(otherMembers.otherMember3)} className="submit-button">제출</button>
                             </div>
                         </div>
                     </div>
@@ -461,6 +481,7 @@ const WebRTC = () => {
                     <div className="memo-area">
                         <h2>나의 메모장</h2>
                         <textarea
+                            className="textarea"
                             value={memo}
                             onChange={(e) => setMemo(e.target.value)}
                             placeholder="여기에 메모를 입력하세요..."
@@ -471,4 +492,5 @@ const WebRTC = () => {
         </div>
     );
 };
+
 export default WebRTC;

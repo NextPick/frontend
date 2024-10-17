@@ -29,7 +29,6 @@ const Choice = () => {
     const handleNavigate = async (occupation) => {
         setRoomOccupation(occupation);
         await handleGetInterviewRoom(occupation);
-        navigate('/webrtc', { state: { roomUuid, title, roomId, roomOccupation: occupation, memberId: memberId } });
     };
 
     const handleCloseAddModal = () => setShowAddModal(false);
@@ -83,6 +82,7 @@ const Choice = () => {
             roomUuid = data.roomUuid;
             title = data.title;
             roomId = data.roomId;
+            navigate('/webrtc', { state: { roomUuid, title, roomId, roomOccupation: occupation, memberId: memberId } });
         } catch {
             await Swal.fire({icon: 'error', title: '직군의 남은 방이 없습니다.'});
         }
