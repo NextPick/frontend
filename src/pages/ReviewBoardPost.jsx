@@ -152,7 +152,7 @@ const ReviewBoardPost = () => {
   return (
     <div style={container}>
       <h2 style={titleContainer}>
-        <span style={mainTitle}>질문 게시판</span>
+        <span style={mainTitle}>면접 후기 게시판</span>
         <span style={{ margin: '0 5px -6px', fontSize: '18px'}}>|</span>
         <span style={subTitle}>게시글 작성</span>
       </h2>
