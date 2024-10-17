@@ -85,8 +85,6 @@ function App() {
                 <Route path='/board/question' element={<QuestionBoard />} />
                 <Route path='/board/:boardId' element={<QuestionBoardDetails />} />
                 <Route path='/board/edit/:boardId' element={<EditBoardPage />} /> {/* 수정 페이지 경로 설정 */}
-                <Route path='/board/question/post' element={<QuestionBoardPost />} />
-                <Route path='/board/review/post' element={<ReviewBoardPost />} />
                 <Route path='/board/review' element={<ReviewBoard />} />
                 <Route path="/board/question" element={<QuestionBoard />} />
                 <Route path="/board/question/post" element={<QuestionBoardPost />} /> {/* 질문 게시판 작성 경로 */}

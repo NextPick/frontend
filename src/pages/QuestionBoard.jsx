@@ -30,7 +30,7 @@ const ReviewBoard = () => {
           params.keyword = searchKeyword;
         }
 
-        const response = await axios.get(process.env.REACT_APP_API_URL + 'boards/R', {
+        const response = await axios.get(process.env.REACT_APP_API_URL + 'boards/Q', {
           params,
           headers: {
             Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
@@ -62,7 +62,7 @@ const ReviewBoard = () => {
   };
 
   const handleCreatePost = () => {
-    navigate('/board/review/post');
+    navigate('/board/question/post');
   };
 
   const handleSearch = () => {
@@ -88,8 +88,8 @@ const ReviewBoard = () => {
 
   return (
     <div style={styles.container}>
-      <h1 style={styles.title} onClick={handleHeaderClick}>면접 후기 게시판</h1>
-      <div style={styles.subtitle}>소중한 면접 경험을 공유해주세요</div>
+      <h1 style={styles.title} onClick={handleHeaderClick}>질문 게시판</h1>
+      <div style={styles.subtitle}>궁금한 질문들을 공유해주세요</div>
       <div style={styles.searchSortContainer}>
         <div style={styles.searchContainer}>
           <input
@@ -122,6 +122,7 @@ const ReviewBoard = () => {
 
       <div style={styles.listContainer}>
         <div style={styles.tableHeader}>
+          <span style={styles.categoryColumn}>카테고리</span> {/* 카테고리 추가 */}
           <span style={styles.titleColumn}>제목</span>
           <span style={styles.authorColumn}>작성자</span>
           <span style={styles.dateColumn}>작성일</span>
@@ -139,6 +140,7 @@ const ReviewBoard = () => {
               style={styles.row}
               onClick={() => handlePostClick(board.boardId)}
             >
+              <span style={styles.categoryColumn}>{board.boardCategory}</span> {/* 카테고리 추가 */}
               <span style={styles.titleColumn}>{board.title}</span>
               <span style={styles.authorColumn}>{board.author}</span>
               <span style={styles.dateColumn}>{new Date(board.createdAt).toLocaleDateString()}</span>
@@ -150,6 +152,7 @@ const ReviewBoard = () => {
         )}
       </div>
 
+     
       <div style={styles.pagination}>
         <button
           onClick={() => setPage(page - 1)}
@@ -207,7 +210,7 @@ const styles = {
   searchSortContainer: {
     display: 'flex',
     width: '100%',
-    maxWidth: '900px',
+    maxWidth: '800px',
     marginBottom: '20px',
     gap: '20px',
     alignItems: 'center',
@@ -219,8 +222,8 @@ const styles = {
   },
   searchInput: {
     width: '100%',
-    height: '40px',
-    padding: '12px',
+    height: '50px',
+    padding: '10px',
     borderRadius: '10px',
     border: '1px solid #ccc',
     fontSize: '16px',
@@ -228,7 +231,7 @@ const styles = {
   },
   searchButton: {
     position: 'absolute',
-    right: '12px',
+    right: '10px',
     backgroundColor: 'transparent',
     border: 'none',
     cursor: 'pointer',
@@ -237,13 +240,15 @@ const styles = {
   },
   dropdownContainer: {
     position: 'relative',
+    marginLeft: '10px',
   },
   sortButton: {
-    padding: '10px 16px',
+    padding: '10px 16px',  // 둥근 스타일 제거
     width: '120px',
+    color: 'black ',
     border: '1px solid #ccc',
     backgroundColor: '#fff',
-    borderRadius: '5px',
+    borderRadius: '5px',  // 둥근 스타일을 줄이고 얇게 만듦
     cursor: 'pointer',
     fontSize: '16px',
     boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
@@ -269,22 +274,22 @@ const styles = {
   },
   createPostButton: {
     padding: '12px 24px',
-    backgroundColor: '#4c89fc',
+    backgroundColor: '#006AC1',
     color: 'white',
     borderRadius: '10px',
     border: 'none',
     cursor: 'pointer',
     fontSize: '16px',
-    marginLeft: 'auto',
     boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)',
     transition: 'background-color 0.3s',
+    marginLeft: '15px',
     '&:hover': {
       backgroundColor: '#0e2f47',
     },
   },
   listContainer: {
     width: '100%',
-    maxWidth: '900px',
+    maxWidth: '900px', // 게시판 넓이를 넓게 설정
     backgroundColor: '#fff',
     borderRadius: '8px',
     border: '1px solid #ddd',
@@ -298,6 +303,8 @@ const styles = {
     borderBottom: '2px solid #ddd',
     padding: '12px 0',
     fontSize: '16px',
+    textAlign: 'center', // 헤더 중앙 정렬
+    paddingLeft: '15px', // 헤더의 왼쪽 패딩 추가
   },
   row: {
     display: 'flex',
@@ -307,37 +314,40 @@ const styles = {
     fontSize: '14px',
     cursor: 'pointer',
     transition: 'background-color 0.2s',
-    '&:hover': {
-      backgroundColor: '#f9f9f9',
-    },
+    textAlign: 'center', // 데이터 중앙 정렬
+  },
+  categoryColumn: {
+    flex: 1.5, // 카테고리 열 크기를 더 넓게 조정
+    textAlign: 'center', // 중앙 정렬
+    paddingLeft: '-5px', // 왼쪽 패딩 추가
   },
   titleColumn: {
-    flex: 3,
+    flex: 3, // 제목 열을 넓게 설정
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
-    paddingRight: '12px',
-    marginLeft: '30px',
+    textAlign: 'left', // 왼쪽 정렬
+    paddingLeft: '35px', // 제목 왼쪽에 약간의 패딩 추가
   },
   authorColumn: {
-    flex: 1,
-    textAlign: 'center',
+    flex: 1.5, // 작성자 열
+    textAlign: 'center', // 중앙 정렬
   },
   dateColumn: {
-    flex: 1,
-    textAlign: 'center',
+    flex: 1.5, // 작성일 열
+    textAlign: 'center', // 중앙 정렬
   },
   viewColumn: {
-    flex: 1,
-    textAlign: 'center',
+    flex: 1.5, // 조회수 열
+    textAlign: 'center', // 중앙 정렬
   },
   likeColumn: {
-    flex: 1,
-    textAlign: 'center',
+    flex: 1.5, // 좋아요 열
+    textAlign: 'center', // 중앙 정렬
   },
   commentCount: {
-    flex: 1,
-    textAlign: 'center',
+    flex: 1.5, // 댓글 수 열
+    textAlign: 'center', // 중앙 정렬
   },
   pagination: {
     marginTop: '20px',
@@ -348,8 +358,9 @@ const styles = {
     alignItems: 'center',
   },
   pageButton: {
-    padding: '6px 12px',
+    padding: '10px 16px',
     border: '1px solid #ddd',
+    borderRadius: '4px',
     backgroundColor: '#fff',
     cursor: 'pointer',
     boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
@@ -357,7 +368,7 @@ const styles = {
     color: '#333',
   },
   activePageButton: {
-    border: '1px solid #4c89fc',
+    border: '1px solid #6a8dcf',
     backgroundColor: '#4c89fc',
     color: 'white',
   },

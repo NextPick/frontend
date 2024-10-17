@@ -100,7 +100,7 @@ const ReviewBoard = () => {
             style={styles.searchInput}
           />
           <button onClick={handleSearch} style={styles.searchButton}>
-            <FaSearch /> {/* 돋보기 아이콘 추가 */}
+            <FaSearch style={styles.searchIcon} /> {/* 돋보기 아이콘 오른쪽으로 옮김 */}
           </button>
         </div>
         <div style={styles.dropdownContainer}>
@@ -219,8 +219,8 @@ const styles = {
   },
   searchInput: {
     width: '100%',
-    height: '40px',
-    padding: '12px',
+    height: '50px',
+    padding: '10px',
     borderRadius: '10px',
     border: '1px solid #ccc',
     fontSize: '16px',
@@ -228,12 +228,15 @@ const styles = {
   },
   searchButton: {
     position: 'absolute',
-    right: '12px',
+    right: '10px',
     backgroundColor: 'transparent',
     border: 'none',
     cursor: 'pointer',
     fontSize: '18px',
     color: '#2c3e50',
+  },
+  searchIcon: {
+    marginLeft: '5px',
   },
   dropdownContainer: {
     position: 'relative',
@@ -241,8 +244,9 @@ const styles = {
   sortButton: {
     padding: '10px 16px',
     width: '120px',
+    color: 'black',
     border: '1px solid #ccc',
-    backgroundColor: '#fff',
+    backgroundColor: '#ffffff',
     borderRadius: '5px',
     cursor: 'pointer',
     fontSize: '16px',
@@ -269,7 +273,7 @@ const styles = {
   },
   createPostButton: {
     padding: '12px 24px',
-    backgroundColor: '#4c89fc',
+    backgroundColor: '#006AC1',
     color: 'white',
     borderRadius: '10px',
     border: 'none',
@@ -358,7 +362,7 @@ const styles = {
     color: '#333',
   },
   activePageButton: {
-    border: '1px solid #4c89fc',
+    border: '1px solid #6a8dcf',
     backgroundColor: '#4c89fc',
     color: 'white',
   },
