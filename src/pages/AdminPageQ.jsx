@@ -70,10 +70,12 @@ const Administration = () => {
     <Container>
       <AdminpageSide />
       <MainContent>
-        <Title>
-          면접질문 관리
-          <img src={plusbutton} alt="plusbutton" style={{ width: '25px', height: '25px', marginLeft: '10px' }} />
-        </Title>
+        <Header>
+          <Title>면접질문 관리</Title>
+          <Link to="/admin/question/add">
+            <PlusButton src={plusbutton} alt="plusbutton" />
+          </Link>
+        </Header>
         <SearchContainer>
           <SearchWrapper>
             <SearchInput
@@ -170,11 +172,23 @@ const MainContent = styled.main`
   text-align: center;
 `;
 
+const Header = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+`;
+
 const Title = styled.h2`
   font-size: 24px;
-  margin-top: 0px;
-  margin-bottom: 10px;
+  margin: 0;
   text-align: left;
+`;
+
+const PlusButton = styled.img`
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
 `;
 
 const SearchContainer = styled.div`
@@ -190,7 +204,7 @@ const SearchWrapper = styled.div`
 
 const SearchInput = styled.input`
   width: 100%;
-  padding: 5px 35px 8px 10px; /* Adjust padding for the button */
+  padding: 5px 35px 8px 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 14px;
@@ -198,7 +212,7 @@ const SearchInput = styled.input`
 
 const SearchButton = styled.button`
   position: absolute;
-  right: 10px; /* Position button inside input on the right */
+  right: 10px;
   top: 50%;
   transform: translateY(-50%);
   background: none;
