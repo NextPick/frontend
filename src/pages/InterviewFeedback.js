@@ -88,7 +88,7 @@ const InterviewFeedback = () => {
     }, [])
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
             <Box color="#fff" height="100%" width="35vw" alignItems="flex-start" justify="flex-start" border="1px solid rgb(221, 221, 221)" radius="20px"
                  style={{ display: 'flex', boxShadow:'0px 4px 8px rgba(0, 0, 0, 0.5'}}>
                 <div style={{ marginBottom: '5px', width: '100%' }}>
@@ -99,10 +99,10 @@ const InterviewFeedback = () => {
                 <Box height="57vh" width="30vw" border="none" alignItems="center" justify="start" top="10px" bottom="10px" style={{ display: 'flex' }}>
                     <Font font="PretendardB" size="18px" color="#000000" alignitem="flex-start" margintop="5px" spacing="2px" paddingtop="5px" marginbottom="8px">
                         <Box height="5vh" width="30vw" border="1px" alignItems="flex-start" justify="center" top="10px" bottom="10px" style={{ display: 'flex' }}>
-                            안녕하세요
+                            목소리가 작네요.
                         </Box>
                         <Box height="5vh" width="30vw" border="1px" alignItems="flex-start" justify="" top="10px" bottom="10px" style={{ display: 'flex' }}>
-                            안녕하세요
+                            자신감이 없어요.
                         </Box>
                     </Font>
                 </Box>
