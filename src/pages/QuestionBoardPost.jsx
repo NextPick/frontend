@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import Font from '../components/Font';
 
 const QuestionBoardPost = () => {
   const [title, setTitle] = useState('');
@@ -105,7 +106,7 @@ const handleImageAdd = (event) => {
             <option value="">카테고리 선택</option>
             <option value="BE">BE</option>
             <option value="FE">FE</option>
-            <option value="CS">CS 과학</option>
+            <option value="CS">CS</option>
           </select>
 
           {/* 제목 입력 */}
@@ -164,7 +165,11 @@ const handleImageAdd = (event) => {
 
       {/* 작성하기 버튼 */}
       <button style={submitButton} onClick={handleSubmitPost}>
+        <Font
+          font='PretendardL'
+        >
         작성하기
+        </Font>
       </button>
     </div>
   );
@@ -259,15 +264,17 @@ const imageSection = {
 const imageAddButton = {
   marginBottom: '10px',
   fontSize: '14px',
-  border: '1px solid #ccc',
+  border: '1px solid #d5e7fc',
   borderRadius: '4px',
   padding: '5px 10px',
-  backgroundColor: '#E0EBF5',
+  backgroundColor: 'rgb(194 220 241)',
   cursor: 'pointer',
+  color:'black'
 };
 
 const fileInput = {
   display: 'none',
+
 };
 
 // const imageList = {
@@ -315,13 +322,15 @@ const imagePlaceholder = {
 
 
 const submitButton = {
+  color: 'black',
   fontSize: '14px',
   border: '1px solid #ccc',
-  borderRadius: '20px',
-  padding: '8px 16px',
-  backgroundColor: '#fff',
+  padding: '8px 22px',
+  backgroundColor: 'rgb(194 220 241)',
   marginTop: '20px',
   cursor: 'pointer',
+  fontWeight: 'bold',
+
 };
 
 export default QuestionBoardPost;

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import Button from '../components/Button.js';
+import styled from 'styled-components';
 import {
   emailValidation,
   nameValidation,
@@ -20,6 +20,9 @@ const Signup = () => {
   const [verificationCode, setVerificationCode] = useState('');
   const [showVerificationInput, setShowVerificationInput] = useState(false);
   const [passwordsMatch, setPasswordsMatch] = useState(true);
+  const [passwordValidationMessage, setPasswordValidationMessage] = useState('');
+  const [isVerificationSent, setIsVerificationSent] = useState(false);
+  const [passwordMismatchMessage, setPasswordMismatchMessage] = useState('');
 
   const [formData, setFormData] = useState({
     이름: '',
@@ -45,7 +48,8 @@ const Signup = () => {
         nameValidation(value);
         break;
       case '비밀번호':
-        passwordValidation(value);
+        const validationMessage = passwordValidation(value);
+        setPasswordValidationMessage(validationMessage ? '비밀번호에는 숫자, 문자, 특수문자가 포함되어야 합니다.' : '');
         break;
       case '닉네임':
         nicknameValidation(value);
@@ -129,6 +133,7 @@ const Signup = () => {
           confirmButtonText: '확인',
         });
         setShowVerificationInput(true);
+        setIsVerificationSent(true);
       }
     } catch (error) {
       Swal.fire({
@@ -169,6 +174,7 @@ const Signup = () => {
           confirmButtonText: '확인',
         });
         setIsEmailVerified(true);
+        setShowVerificationInput(false);
       }
     } catch (error) {
       Swal.fire({
@@ -185,6 +191,7 @@ const Signup = () => {
 
     if (name === '비밀번호' || name === '비밀번호확인') {
       setPasswordsMatch(formData.비밀번호 === value || formData.비밀번호확인 === value);
+      setPasswordMismatchMessage(formData.비밀번호 !== value && formData.비밀번호확인 !== '' ? '비밀번호가 일치하지 않습니다.' : '');
     }
   };
 
@@ -280,33 +287,16 @@ const Signup = () => {
               disabled={isEmailVerified}
             />
             {!isEmailVerified && (
-              <Button
-                color="#007BFF"
-                width="100px"
-                height="40px"
-                fontcolor="white"
-                radius="4px"
-                onClick={() => handleVerify('이메일')}
+              <StyledSmallButton
+                onClick={() => isEmailChecked ? handleEmailVerification() : handleVerify('이메일')}
+                disabled={isVerificationSent}
+                verificationSent={isVerificationSent}
               >
-                중복검사
-              </Button>
+                {isVerificationSent ? '인증 코드 재발송' : (isEmailChecked ? '인증 코드 발송' : '중복 확인')}
+              </StyledSmallButton>
             )}
           </div>
         </div>
-        {!isEmailVerified && (
-          <div style={styles.inputGroup}>
-            <Button
-              color="#007BFF"
-              width="150px"
-              height="40px"
-              fontcolor="white"
-              radius="4px"
-              onClick={handleEmailVerification}
-            >
-              인증 코드 발송
-            </Button>
-          </div>
-        )}
         {showVerificationInput && (
           <div style={styles.inputGroup}>
             <label style={styles.label}>인증 코드를 입력하세요</label>
@@ -318,18 +308,12 @@ const Signup = () => {
                 style={styles.input}
                 placeholder="인증 코드를 입력하세요"
               />
-              <Button
-                color="#28A745"
-                width="100px"
-                height="40px"
-                fontcolor="white"
-                radius="4px"
-                onClick={handleEmailCodeVerification}
-              >
-                인증 확인
-              </Button>
+              <StyledSmallButton onClick={handleEmailCodeVerification}>인증 확인</StyledSmallButton>
             </div>
           </div>
+        )}
+        {isEmailVerified && (
+          <span style={styles.successText}>이메일 인증이 완료된 이메일입니다.</span>
         )}
         <div style={styles.inputGroup}>
           <div style={styles.inputContainer}>
@@ -340,9 +324,13 @@ const Signup = () => {
                 name="비밀번호"
                 value={formData.비밀번호}
                 onChange={handleInputChange}
+                onBlur={handleBlur}
                 style={{ ...styles.input, width: '95%' }}
                 placeholder="비밀번호를 입력하세요"
               />
+              {passwordValidationMessage && (
+                <span style={styles.errorText}>{passwordValidationMessage}</span>
+              )}
             </div>
             <div style={{ flex: '1', marginLeft: '20px' }}>
               <label style={styles.label}>비밀번호 확인</label>
@@ -354,10 +342,65 @@ const Signup = () => {
                 style={{ ...styles.input, width: '95%' }}
                 placeholder="비밀번호를 다시 입력하세요"
               />
-              {!passwordsMatch && (
-                <span style={styles.errorText}>비밀번호가 일치하지 않습니다.</span>
-              )}
             </div>
+          </div>
+          {passwordMismatchMessage && (
+            <span style={styles.errorText}>{passwordMismatchMessage}</span>
+          )}
+        </div>
+      </div>
+
+      {/* 개인정보 */}
+      <div style={styles.sectionContainer}>
+        <h3 style={styles.sectionTitle}>개인정보</h3>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '20px' }}>
+          <div>
+            <label style={styles.label}>이름</label>
+            <input
+              type="text"
+              name="이름"
+              value={formData.이름}
+              onChange={handleInputChange}
+              style={styles.input}
+              placeholder="이름을 입력하세요"
+            />
+          </div>
+          <div>
+            <label style={styles.label}>닉네임</label>
+            <div style={styles.inputContainer}>
+              <input
+                type="text"
+                name="닉네임"
+                value={formData.닉네임}
+                onChange={handleInputChange}
+                style={styles.input}
+                placeholder="닉네임을 입력하세요"
+              />
+              <StyledSmallButton onClick={() => handleVerify('닉네임')}>중복검사</StyledSmallButton>
+            </div>
+          </div>
+          <div>
+            <label style={styles.label}>전화번호</label>
+            <input
+              type="text"
+              name="전화번호"
+              value={formData.전화번호}
+              onChange={handleInputChange}
+              style={styles.input}
+              placeholder="전화번호를 입력하세요"
+            />
+          </div>
+          <div>
+            <label style={styles.label}>성별</label>
+            <select
+              name="성별"
+              value={formData.성별}
+              onChange={handleInputChange}
+              style={styles.input}
+            >
+              <option value="M">남성</option>
+              <option value="F">여성</option>
+            </select>
           </div>
         </div>
       </div>
@@ -365,149 +408,128 @@ const Signup = () => {
       {/* 관심분야 */}
       <div style={styles.sectionContainer}>
         <h3 style={styles.sectionTitle}>관심분야</h3>
-        <div style={styles.inputGroup}>
-          <label style={styles.label}>직군</label>
-          <select
-            name="직군"
-            value={formData.직군}
-            onChange={handleInputChange}
-            style={styles.select}
-          >
-            <option value="BE">BE</option>
-            <option value="FE">FE</option>
-          </select>
-        </div>
-        <div style={styles.inputGroup}>
-          <label style={styles.label}>경력사항</label>
-          <select
-            name="경력"
-            value={formData.경력}
-            onChange={handleInputChange}
-            style={styles.select}
-          >
-            <option value="ZEROTOONE">0~1년차</option>
-            <option value="TWOTOTHREE">2~3년차</option>
-            <option value="FOUROROVER">4년차 이상</option>
-          </select>
-        </div>
-      </div>
-
-      {/* 개인정보 */}
-      <div style={styles.sectionContainer}>
-        <h3 style={styles.sectionTitle}>개인정보</h3>
-        <div style={styles.inputGroup}>
-          <label style={styles.label}>이름</label>
-          <input
-            type="text"
-            name="이름"
-            value={formData.이름}
-            onChange={handleInputChange}
-            style={styles.input}
-            placeholder="이름을 입력하세요"
-          />
-        </div>
-        <div style={styles.inputGroup}>
-          <label style={styles.label}>닉네임</label>
-          <div style={styles.inputContainer}>
-            <input
-              type="text"
-              name="닉네임"
-              value={formData.닉네임}
+        <div style={{ display: 'flex', gap: '20px', marginBottom: '20px' }}>
+          <div style={{ flex: '1' }}>
+            <label style={styles.label}>직군</label>
+            <select
+              name="직군"
+              value={formData.직군}
               onChange={handleInputChange}
-              style={styles.input}
-              placeholder="닉네임을 입력하세요"
-            />
-            <Button
-              color="#007BFF"
-              width="100px"
-              height="40px"
-              fontcolor="white"
-              radius="4px"
-              onClick={() => handleVerify('닉네임')}
+              style={styles.select}
             >
-              중복검사
-            </Button>
+              <option value="BE">BE</option>
+              <option value="FE">FE</option>
+            </select>
           </div>
-        </div>
-        <div style={styles.inputGroup}>
-          <label style={styles.label}>전화번호</label>
-          <input
-            type="text"
-            name="전화번호"
-            value={formData.전화번호}
-            onChange={handleInputChange}
-            style={styles.input}
-            placeholder="전화번호를 입력하세요"
-          />
-        </div>
-        <div style={styles.inputGroup}>
-          <label style={styles.label}>성별</label>
-          <select
-            name="성별"
-            value={formData.성별}
-            onChange={handleInputChange}
-            style={styles.select}
-          >
-            <option value="M">남성</option>
-            <option value="F">여성</option>
-          </select>
+          <div style={{ flex: '1' }}>
+            <label style={styles.label}>경력사항</label>
+            <select
+              name="경력"
+              value={formData.경력}
+              onChange={handleInputChange}
+              style={styles.select}
+            >
+              <option value="ZEROTOONE">0~1년차</option>
+              <option value="TWOTOTHREE">2~3년차</option>
+              <option value="FOUROROVER">4년차 이상</option>
+            </select>
+          </div>
         </div>
       </div>
 
       {/* 회원가입 버튼 */}
       <div style={{ textAlign: 'center', marginTop: '30px' }}>
-        <Button
-          color="#007BFF"
-          width="180px"
-          height="50px"
-          fontcolor="white"
-          radius="4px"
-          onClick={handleSignup}
-        >
-          회원가입
-        </Button>
+        <StyledButton onClick={handleSignup}>회원가입</StyledButton>
       </div>
     </div>
   );
 };
+
+const StyledButton = styled.div`
+  width: 200px;
+  height: 55px;
+  font-size: 18px;
+  color: #000;
+  font-family: 'Pretendard', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  background-color: #006AC1;
+  color: white;
+  border-radius: 8px;
+  transition: color 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    color: #ddd;
+    background-color: #338FD6;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+  }
+`;
+
+const StyledSmallButton = styled.div`
+  width: 180px;
+  height: 44px;
+  font-size: 16px;
+  color: #000;
+  font-family: 'Pretendard', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  background-color: ${(props) => (props.verificationSent ? '#A9A9A9' : '#006AC1')};
+  color: white;
+  border-radius: 8px;
+  transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    background-color: ${(props) => (props.verificationSent ? '#A9A9A9' : '#338FD6')};
+    color: #fff;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+  }
+`;
 
 const styles = {
   container: {
     marginTop: '50px',
     maxWidth: '800px',
     margin: '0 auto',
-    padding: '20px',
-    backgroundColor: '#fff',
-    borderRadius: '8px',
-    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+    padding: '30px',
+    backgroundColor: '#f9f9f9',
+    borderRadius: '12px',
+    boxShadow: '0 6px 18px rgba(0, 0, 0, 0.2)',
   },
   titleContainer: {
     textAlign: 'center',
-    marginBottom: '30px',
+    marginBottom: '40px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
   },
   mainTitle: {
-    fontSize: '28px',
+    fontSize: '32px',
     fontWeight: 'bold',
     color: '#333',
   },
   subTitle: {
-    fontSize: '16px',
+    fontSize: '18px',
     color: '#888',
     marginLeft: '10px',
   },
   divider: {
-    fontSize: '24px',
+    fontSize: '28px',
     color: '#888',
     marginLeft: '10px',
   },
   sectionContainer: {
     marginBottom: '40px',
+    padding: '20px',
+    backgroundColor: '#fff',
+    borderRadius: '8px',
+    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
   },
   sectionTitle: {
-    fontSize: '20px',
+    fontSize: '22px',
     fontWeight: 'bold',
     marginBottom: '20px',
     color: '#333',
@@ -518,7 +540,7 @@ const styles = {
   label: {
     display: 'block',
     marginBottom: '8px',
-    fontSize: '14px',
+    fontSize: '16px',
     color: '#555',
   },
   inputContainer: {
@@ -527,11 +549,17 @@ const styles = {
     gap: '10px',
   },
   input: {
-    flex: '1',
-    padding: '10px',
+    width: '100%',
+    padding: '12px',
     border: '1px solid #ccc',
-    borderRadius: '4px',
-    fontSize: '14px',
+    fontSize: '16px',
+    color: '#333',
+  },
+  longSelect: {
+    width: '100%',
+    padding: '12px',
+    border: '1px solid #ccc',
+    fontSize: '16px',
     color: '#333',
   },
   disabledInput: {
@@ -540,16 +568,27 @@ const styles = {
   },
   select: {
     width: '100%',
-    padding: '10px',
+    padding: '12px',
     border: '1px solid #ccc',
-    borderRadius: '4px',
-    fontSize: '14px',
+    fontSize: '16px',
     color: '#333',
   },
   errorText: {
     color: 'red',
-    fontSize: '12px',
+    fontSize: '14px',
     marginTop: '5px',
+    display: 'block',
+  },
+  successText: {
+    color: 'green',
+    fontSize: '16px',
+    marginTop: '10px',
+  },
+  infoText: {
+    display: 'block',
+    fontSize: '14px',
+    color: '#888',
+    marginTop: '8px',
   },
 };
 

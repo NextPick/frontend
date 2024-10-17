@@ -170,29 +170,64 @@ const PostDetail = () => {
     return comments
       .filter(comment => comment.parentCommentId === parentId)
       .map(comment => (
-        <div key={comment.boardCommentId} style={{ marginLeft: parentId ? '40px' : '0px' }}>
-          <div style={commentItem}>
-            <div style={avatar}></div>
-            <div style={commentContent}>
-              <div style={commentHeader}>
+        <div key={comment.boardCommentId} style={{ marginLeft: parentId ? '20px' : '0px', marginBottom: '20px' }}>
+          <div style={{
+            display: 'flex',
+            alignItems: 'flex-start',
+            marginBottom: '10px',
+            padding: '15px',
+            borderRadius: '8px',
+            backgroundColor: '#F8F9FA',
+            
+            border: '1px solid #E0E0E0',
+          }}>
+            <div style={{
+              width: '40px',
+              height: '40px',
+              backgroundColor: '#ccc',
+              borderRadius: '50%',
+              marginRight: '10px',
+            }}></div>
+            <div style={{ flex: 1, fontSize: '14px', color: '#333' }}>
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}>
                 <span
-                  style={currentUserNickname === comment.nickname ? currentUserNicknameStyle : commentAuthor}
+                  style={currentUserNickname === comment.nickname ? {
+                    color: '#006AC1',
+                    fontWeight: 'bold',
+                  } : {
+                    fontWeight: 'bold',
+                    fontSize: '14px',
+                    color: '#333',
+                  }}
                 >
                   {comment.nickname}
                 </span>
-                <span style={commentDate}>
+                <span style={{
+                  fontSize: '12px',
+                  color: '#888',
+                  paddingRight: '5px'
+                }}>
                   {new Date(comment.createdAt).toLocaleDateString()}
 
                   {currentUserNickname === comment.nickname && (
-                    <span style={commentActions}>
+                    <span style={{ marginLeft: '10px' }}>
                       <button
-                        style={editButton}
+                        style={{
+                          backgroundColor: 'transparent', color: '#888', border: 'none', padding: '4px 8px', cursor: 'pointer', fontSize: '12px',
+                          marginLeft: '5px',
+                        }}
                         onClick={() => handleUpdateComment(comment.boardCommentId, prompt('댓글 수정', comment.content))}
                       >
                         수정
                       </button>
                       <button
-                        style={deleteButton}
+                        style={{
+                          backgroundColor: 'transparent', color: '#888', border: 'none', padding: '4px 8px', cursor: 'pointer', fontSize: '12px',
+                        }}
                         onClick={() => handleDeleteComment(comment.boardCommentId)}
                       >
                         삭제
@@ -201,19 +236,33 @@ const PostDetail = () => {
                   )}
                 </span>
               </div>
-              <p style={commentText}>{comment.content}</p>
+              <p style={{ marginTop: '8px', fontSize: '14px', color: '#333' }}>{comment.content}</p>
 
               {!parentId && (
-                <div style={{ display: 'flex', alignItems: 'center' }}>
+                <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px', marginBottom: '15px' }}>
                   <input
                     type="text"
                     placeholder="답글 달기"
                     value={newReply[comment.boardCommentId] || ''}
                     onChange={(e) => handleReplyChange(comment.boardCommentId, e.target.value)}
-                    style={replyInput}
+                    style={{
+                      flex: 1,
+                      padding: '10px',
+                      borderRadius: '8px',
+                      border: '1px solid #E0E0E0',
+                      marginRight: '10px',
+                      fontSize: '13px',
+                    }}
                   />
                   <button
-                    style={replyButton}
+                    style={{
+                      backgroundColor: '#006AC1', color: '#fff', border: 'none',
+                      padding: '6px 12px',
+                      borderRadius: '6px',
+                      cursor: 'pointer',
+                      fontSize: '12px',
+                      marginLeft: '8px',
+                    }}
                     onClick={() => handleReplySubmit(comment.boardCommentId)}
                   >
                     답글 달기
@@ -233,309 +282,170 @@ const PostDetail = () => {
   if (!post) return <p>게시글이 존재하지 않습니다.</p>;
 
   return (
-    <div style={container}>
-      <h2 style={titleContainer}>
-        <span style={mainTitle}>{post.title}</span>
-        <span style={subTitle}>작성자: {post.author}</span>
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      backgroundColor: '#F0F2F5',
+      padding: '20px',
+      borderRadius: '10px',
+      
+    }}>
+      <h2 style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%',
+        textAlign: 'center',
+        marginBottom: '10px',
+      }}>
+        <span style={{
+          fontWeight: 'bold',
+          fontSize: '28px',
+          color: '#333',
+        }}>{post.title}</span>
       </h2>
-      
-      <hr style={{ ...divider, width: '1000px' }} />
-      
-      <div style={contentContainer}>
-        <div style={boardInfoContainer}>
-          <div style={infoContainer}>
-            <div style={authorContainer}>
-              <span style={author}>작성자: {post.author}</span>
+
+      <hr style={{ borderTop: '1px solid #A0A0A0', marginBottom: '20px', width: '70%' }} />
+
+      <div style={{
+        justifyContent: 'center',
+        flexDirection: 'column',
+        backgroundColor: '#FFFFFF',
+        alignItems: 'center',
+        width: '65%',
+        padding: '20px',
+        
+        borderRadius: '8px',
+      }}>
+        <div style={{ paddingTop: '15px', width: '100%' }}>
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: '15px',
+            borderBottom: '1px solid #E0E0E0',
+            paddingBottom: '10px',
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <span style={{
+                fontSize: '15px',
+                fontWeight: 'bold',
+                color: '#555',
+              }}>작성자: {post.author}</span>
             </div>
-            <span style={date}>작성일: {new Date(post.createdAt).toLocaleDateString()} | 조회수: {post.viewCount} | 수정일: {new Date(post.modifiedAt).toLocaleDateString()}</span>
+            <span style={{
+              fontSize: '13px',
+              color: '#888',
+            }}>작성일: {new Date(post.createdAt).toLocaleDateString()} | 조회수: {post.viewCount} | 수정일: {new Date(post.modifiedAt).toLocaleDateString()}
+              {currentUserNickname === post.author && (
+                <span style={{ marginLeft: '8px' }}>
+                  <button onClick={handleEditPost} style={{
+                    backgroundColor: 'transparent', color: '#006AC1', border: 'none', padding: '4px 8px', cursor: 'pointer', fontSize: '13px', marginRight: '5px',
+                  }}>수정</button>
+                  <button onClick={handleDeletePost} style={{
+                    backgroundColor: 'transparent', color: '#FF6B6B', border: 'none', padding: '4px 8px',
+                    cursor: 'pointer',
+                    fontSize: '13px',
+                  }}>삭제</button>
+                </span>
+              )}
+            </span>
           </div>
 
-          <div style={postContentContainer}>
-            <p>{post.content}</p>
+          <div style={{
+            padding: '20px',
+            backgroundColor: '#FFF',
+            marginBottom: '20px',
+            borderRadius: '8px',
+            border: '1px solid #E0E0E0',
+            
+          }}>
+            <p style={{ fontSize: '15px', lineHeight: '1.5', color: '#333' }}>{post.content}</p>
           </div>
 
-          <div style={imageContainer}>
+          <div style={{
+            marginBottom: '20px',
+            display: 'flex',
+            justifyContent: 'center',
+            flexWrap: 'wrap',
+            overflow: 'hidden',
+          }}>
             {post.imageUrls && post.imageUrls.length > 0 && (
               post.imageUrls.map((imageUrl, index) => (
-                <img key={index} src={imageUrl} alt={`게시글 이미지 ${index + 1}`} style={imageStyle} />
+                <img key={index} src={imageUrl} alt={`게시글 이미지 ${index + 1}`} style={{
+                  width: '100%',
+                  maxWidth: '800px',
+                  maxHeight: '350px',
+                  marginBottom: '15px',
+                  borderRadius: '8px',
+                  objectFit: 'contain',
+                  
+                }} />
               ))
             )}
           </div>
 
           {post.dtype === 'ReviewBoard' && post.boardCategory && (
-            <p>카테고리: {post.boardCategory}</p>
+            <p style={{ fontSize: '15px', color: '#555' }}>카테고리: {post.boardCategory}</p>
           )}
 
-          <div style={interactionContainer}>
-            <span onClick={handleLike} style={{ cursor: 'pointer' }}>👍</span>
-            <span>{likesCount}</span>
-            <span>💬 {comments.length}</span>
-          </div>
-
-          {currentUserNickname === post.author && (
-            <div style={{ marginTop: '20px', textAlign: 'left' }}>
-              <button onClick={handleEditPost} style={commentButton}>
-                수정
-              </button>
-              <button onClick={handleDeletePost} style={deleteButton}>
-                삭제
-              </button>
+          <div style={{
+            display: 'flex',
+            gap: '10px',
+            marginTop: '20px',
+            alignItems: 'center',
+            fontSize: '15px',
+            fontWeight: 'bold',
+            color: '#333',
+            marginBottom: '30px'
+          }}>
+            <div onClick={handleLike} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
+              <span role="img" aria-label="like" style={{ fontSize: '18px' }}>👍</span>
+              <span style={{ marginLeft: '6px' }}>{likesCount}</span>
             </div>
-          )}
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <span role="img" aria-label="comments" style={{ fontSize: '18px' }}>💬</span>
+              <span style={{ marginLeft: '6px' }}>{comments.length}</span>
+            </div>
+          </div>
 
           {renderComments()}
 
-          <div style={commentInputContainer}>
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            marginTop: '20px',
+          }}>
             <input
               type="text"
               placeholder="댓글 작성"
-              style={commentInput}
+              style={{
+                flex: 1,
+                padding: '15px',
+                borderRadius: '8px',
+                border: '1px solid #E0E0E0',
+                marginRight: '10px',
+                fontSize: '14px',
+              }}
               value={newComment}
               onChange={(e) => setNewComment(e.target.value)}
             />
-            <button style={commentButton} onClick={handleCommentSubmit}>댓글 달기</button>
+            <button style={{
+              backgroundColor: '#006AC1',
+              color: '#fff',
+              border: 'none',
+              padding: '10px 20px',
+              borderRadius: '5px',
+              cursor: 'pointer',
+              fontWeight: 'bold',
+            }} onClick={handleCommentSubmit}>댓글 달기</button>
           </div>
         </div>
       </div>
     </div>
   );
-};
-
-// 스타일 정의
-const container = {
-  display: 'flex',
-  flexDirection: 'column',
-  marginTop: '5vh',
-  alignItems: 'center',
-  backgroundColor: '#F8F9FA',
-  padding: '30px',
-  borderRadius: '10px',
-  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-};
-
-const currentUserNicknameStyle = {
-  color: '#006AC1',
-  fontWeight: 'bold',
-};
-
-const editButton = {
-  backgroundColor: '#006AC1',
-  color: '#fff',
-  border: 'none',
-  padding: '4px 8px',
-  borderRadius: '3px',
-  cursor: 'pointer',
-  fontSize: '12px',
-  marginLeft: '5px',
-};
-
-const replyButton = {
-  backgroundColor: '#4CAF50',
-  color: '#fff',
-  border: 'none',
-  padding: '6px 12px',
-  borderRadius: '5px',
-  cursor: 'pointer',
-  fontSize: '12px',
-  marginLeft: '10px',
-};
-
-const titleContainer = {
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
-  width: '1000px',
-};
-
-const mainTitle = {
-  fontWeight: 'bold',
-  fontSize: '30px',
-  color: '#333',
-};
-
-const subTitle = {
-  fontSize: '18px',
-  marginTop: '10px',
-  color: '#888',
-};
-
-const divider = {
-  borderTop: '1px solid #A0A0A0',
-  marginBottom: '40px',
-  width: '100%',
-};
-
-const contentContainer = {
-  justifyContent: 'center',
-  flexDirection: 'column',
-  backgroundColor: '#FFF',
-  alignItems: 'center',
-  width: '1000px',
-  padding: '30px',
-  boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
-  borderRadius: '10px',
-};
-
-const boardInfoContainer = {
-  paddingTop: '20px',
-  margin: '0 40px',
-  padding: '10px',
-};
-
-const infoContainer = {
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  marginBottom: '5px',
-};
-
-const authorContainer = {
-  display: 'flex',
-  alignItems: 'center',
-};
-
-const author = {
-  fontSize: '16px',
-  fontWeight: 'bold',
-  color: '#333',
-};
-
-const date = {
-  fontSize: '14px',
-  color: '#888',
-  marginTop: '5px',
-};
-
-const postContentContainer = {
-  padding: '20px',
-  backgroundColor: '#FFF',
-  marginBottom: '20px',
-  borderRadius: '8px',
-  border: '1px solid #E0E0E0',
-  boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.05)',
-};
-
-const interactionContainer = {
-  display: 'flex',
-  gap: '15px',
-  marginTop: '20px',
-  alignItems: 'center',
-};
-
-const commentItem = {
-  display: 'flex',
-  alignItems: 'flex-start',
-  marginBottom: '10px',
-  padding: '15px',
-  borderRadius: '8px',
-  backgroundColor: '#F8F9FA',
-  boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.05)',
-  border: '1px solid #E0E0E0',
-};
-
-const avatar = {
-  width: '40px',
-  height: '40px',
-  backgroundColor: '#ccc',
-  borderRadius: '50%',
-  marginRight: '10px',
-};
-
-const commentContent = {
-  flex: 1,
-  fontSize: '14px',
-  color: '#333',
-};
-
-const commentHeader = {
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-};
-
-const commentAuthor = {
-  fontWeight: 'bold',
-  fontSize: '14px',
-  color: '#333',
-};
-
-const commentDate = {
-  fontSize: '12px',
-  color: '#888',
-  paddingRight: '5px'
-};
-
-const commentActions = {
-  marginLeft: '10px',
-};
-
-const commentText = {
-  marginTop: '5px',
-  fontSize: '14px',
-  color: '#333',
-};
-
-const replyInput = {
-  flex: 1,
-  padding: '10px',
-  borderRadius: '8px',
-  border: '1px solid #E0E0E0',
-  marginRight: '10px',
-  fontSize: '14px',
-};
-
-const commentInputContainer = {
-  display: 'flex',
-  alignItems: 'center',
-  marginTop: '20px',
-};
-
-const commentInput = {
-  flex: 1,
-  padding: '15px',
-  borderRadius: '8px',
-  border: '1px solid #E0E0E0',
-  marginRight: '10px',
-  fontSize: '14px',
-};
-
-const commentButton = {
-  backgroundColor: '#006AC1',
-  color: '#fff',
-  border: 'none',
-  padding: '10px 20px',
-  borderRadius: '5px',
-  cursor: 'pointer',
-  fontWeight: 'bold',
-};
-
-const deleteButton = {
-  backgroundColor: '#FF6B6B',
-  color: '#fff',
-  border: 'none',
-  padding: '4px 8px',
-  borderRadius: '3px',
-  cursor: 'pointer',
-  fontSize: '12px',
-};
-
-const imageContainer = {
-  marginBottom: '20px',
-  display: 'flex',
-  justifyContent: 'center',
-  flexWrap: 'wrap',
-  overflow: 'hidden',
-};
-
-const imageStyle = {
-  width: '100%',
-  maxWidth: '900px',
-  maxHeight: '400px',
-  marginBottom: '15px',
-  borderRadius: '8px',
-  objectFit: 'contain',
-  boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
 };
 
 export default PostDetail;
