@@ -2,12 +2,11 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useHeaderMode } from '../hooks/HeaderManager';
 import { useNavigate, useLocation } from 'react-router-dom';
-import Box from '../components/Box';
 import Font from '../components/Font';
 import styled from 'styled-components';
-import Button from '../components/Button';
 import AiCoach from '../assets/AiCoach.png';
 import mic from '../assets/mic.png';
+import micOn from '../assets/mic_on.png';
 import { ReactMediaRecorder } from 'react-media-recorder';
 
 const AiInterview = () => {
@@ -20,9 +19,7 @@ const AiInterview = () => {
     const [questionListId, setQuestionListId] = useState(null);
     const [isRecording, setIsRecording] = useState(false);
     const [mediaBlobUrl, setMediaBlobUrl] = useState(null);
-    const [resp, setResp] = useState('');
 
-    // 녹음된 파일을 WebM 형식으로 직접 업로드
     const uploadRecordedAudio = async () => {
         if (!mediaBlobUrl) {
             alert('녹음된 파일이 없습니다.');
@@ -39,7 +36,7 @@ const AiInterview = () => {
                 },
             });
             alert('녹음 파일 업로드 성공');
-            setUserResponse(res.data); // 서버 응답을 userResponse에 설정
+            setUserResponse(res.data); 
         } catch (error) {
             console.error('업로드 오류:', error);
             alert('에러가 발생했습니다: ' + error.message);
@@ -47,82 +44,46 @@ const AiInterview = () => {
     };
 
     const changeSubcategoryToCategoryId = (e) => {
-        if(e >= 1 && e <= 29){
-            return e;
-        }
+        if(e >= 1 && e <= 29) return e;
         switch(e){
-            case 'Java': 
-                return 1;
-            case 'Spring': 
-                return 2;
-            case 'Node.js': 
-                return 3;
-            case 'Express.js': 
-                return 4;
-            case 'Django': 
-                return 5;
-            case 'Flask': 
-                return 6;
-            case 'Ruby': 
-                return 7;
-            case 'PHP': 
-                return 8;
-            case 'GraphQL': 
-                return 9;
-            case 'MySQL':
-                return 10;
-            case 'Networking': 
-                return 11;
-            case 'OS': 
-                return 12;
-            case 'Data Structure': 
-                return 13;
-            case 'Algorithms': 
-                return 14;
-            case 'Software Engineering': 
-                return 15;
-            case 'Design Patterns': 
-                return 16;
-            case 'Computer Architecture': 
-                return 17;
-            case 'Cybersecurity': 
-                return 18;
-            case 'Artificial Intelligence':
-                return 19;
-            case 'React': 
-                return 20;
-            case 'Vue': 
-                return 21;
-            case 'Angular': 
-                return 22;
-            case 'HTML5': 
-                return 23;
-            case 'CSS3': 
-                return 24;
-            case 'JavaScript (ES6+)': 
-                return 25;
-            case 'TypeScript': 
-                return 26;
-            case 'SASS/SCSS': 
-                return 27;
-            case 'Webpack': 
-                return 28;
-            case 'Responsive Web Design':
-                return 29;
-            default:
-                return -1;
+            case 'Java': return 1;
+            case 'Spring': return 2;
+            case 'Node.js': return 3;
+            case 'Express.js': return 4;
+            case 'Django': return 5;
+            case 'Flask': return 6;
+            case 'Ruby': return 7;
+            case 'PHP': return 8;
+            case 'GraphQL': return 9;
+            case 'MySQL': return 10;
+            case 'Networking': return 11;
+            case 'OS': return 12;
+            case 'Data Structure': return 13;
+            case 'Algorithms': return 14;
+            case 'Software Engineering': return 15;
+            case 'Design Patterns': return 16;
+            case 'Computer Architecture': return 17;
+            case 'Cybersecurity': return 18;
+            case 'Artificial Intelligence': return 19;
+            case 'React': return 20;
+            case 'Vue': return 21;
+            case 'Angular': return 22;
+            case 'HTML5': return 23;
+            case 'CSS3': return 24;
+            case 'JavaScript (ES6+)': return 25;
+            case 'TypeScript': return 26;
+            case 'SASS/SCSS': return 27;
+            case 'Webpack': return 28;
+            case 'Responsive Web Design': return 29;
+            default: return -1;
         }
-    }
+    };
 
     useEffect(() => {
-        if (mediaBlobUrl) {
-            uploadRecordedAudio();
-        }
+        if (mediaBlobUrl) uploadRecordedAudio();
     }, [mediaBlobUrl]);
 
-    useEffect(() => {
-        setHeaderMode('main');
-    }, [setHeaderMode]);
+    useEffect(() => setHeaderMode('main'), [setHeaderMode]);
 
     useEffect(() => {
         axios.get(`${process.env.REACT_APP_API_URL}questions`, {
@@ -142,23 +103,16 @@ const AiInterview = () => {
                 setQuestionListId(questionData[0].questionListId);
             }
         })
-        .catch(error => {
-            console.error('예시 질문 가져오기 오류:', error);
-        });
+        .catch(error => console.error('예시 질문 가져오기 오류:', error));
     }, [selectedSubcategory]);
 
     const toggleRecording = (startRecording, stopRecording) => {
-        if (isRecording) {
-            stopRecording();
-        } else {
-            startRecording();
-        }
+        if (isRecording) stopRecording();
+        else startRecording();
         setIsRecording(!isRecording);
     };
 
-    const handleInputChange = (event) => {
-        setUserResponse(event.target.value);
-    };
+    const handleInputChange = (event) => setUserResponse(event.target.value);
 
     const handleSubmit = async () => {
         const accessToken = localStorage.getItem('accessToken');
@@ -166,32 +120,18 @@ const AiInterview = () => {
             const response = await axios.post(
                 `${process.env.REACT_APP_API_URL}questions/${questionListId}/score`,
                 { answer: userResponse },
-                {
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`,
-                    },
-                }
+                { headers: { Authorization: `Bearer ${accessToken}` } }
             );
-            console.log('data : ' + response.data.data.solvesId)
-            console.log('data : ' + response.data.data.result)
-            console.log('data : ' + response.data)
-            let correct = ''
-            if (response.data.data.result === true) {
-                correct = true;
-            } else {
-                correct = false;
-            }
-            if(localStorage.getItem('solveQuestion') === null)
-                localStorage.setItem('solveQuestion', response.data.data.solvesId);
-            else
-                localStorage.setItem('solveQuestion', localStorage.getItem('solveQuestion') + '/' + response.data.data.solvesId);
-
+            let correct = response.data.data.result === true;
+            localStorage.setItem('solveQuestion', localStorage.getItem('solveQuestion') ? 
+                `${localStorage.getItem('solveQuestion')}/${response.data.data.solvesId}` : response.data.data.solvesId);
+            
             navigate('/resultcheck', {
                 state: {
-                    questionListId: questionListId,
-                    userResponse: userResponse,
-                    selectedSubcategory: selectedSubcategory,
-                    correct: correct,
+                    questionListId,
+                    userResponse,
+                    selectedSubcategory,
+                    correct,
                 },
             });
         } catch (error) {
@@ -202,142 +142,176 @@ const AiInterview = () => {
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-            <Box height="80vh" width="70vw" border="none" alignItems="flex-start" justify="flex-start" top="30px">
-                <Font font="Pretendard" size="27px" color="#000000" margintop="5px" spacing="2px" paddingleft="13px" paddingtop="5px" marginbottom="8px">
+            <OutlineContainer>
+                <Font font="PretendardB" size="27px" color="#000000" margintop="30px" spacing="2px" paddingleft="13px" paddingtop="5px" marginbottom="8px">
                     AI코치가 묻는 질문에 대답해주세요
                 </Font>
 
                 <Container>
-                    <img src={AiCoach} alt="Ai" style={{ width: '360px', height: '400px', marginLeft: "20px" }} />
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', marginLeft: '10px' }}>
-                        <QuestionBubble>
+                    <img src={AiCoach} alt="Ai" style={{ width: '360px',  marginLeft: "20px" }} />
+                    <ChatContainer>
+                        <ChatBubble align="left">
                             <Font font="Pretendard" size="18px" color="#000000">
                                 {exampleQuestion}
                             </Font>
-                        </QuestionBubble>
-                        <ResponseBubble>
+                        </ChatBubble>
+                        <ChatBubble align="right">
                             <TextareaField 
                                 value={userResponse} 
                                 onChange={handleInputChange}
-                                placeholder={"대답을 입력하세요..."}
+                                placeholder="대답을 입력하세요..."
                             />
-                        </ResponseBubble>
-                    </div>
+                        </ChatBubble>
+                    </ChatContainer>
                 </Container>
 
                 <BottomContainer>
                     <ReactMediaRecorder
                         audio
-                        onStop={(blobUrl) => {
-                            setMediaBlobUrl(blobUrl);
-                        }}
+                        onStop={(blobUrl) => setMediaBlobUrl(blobUrl)}
                         render={({ startRecording, stopRecording }) => (
                             <MicrophoneContainer>
-                                <Button color="#FFFFFF" onClick={() => toggleRecording(startRecording, stopRecording)}>
-                                    <img src={mic} alt="Mic" style={{ width: '35px', height: '40px' }} />
-                                </Button>
-                                <Font font="Pretendard" size="20px" color="#000000" margintop="5px" spacing="2px" paddingleft="13px" paddingtop="5px" marginbottom="8px">
+                                <Font font="Pretendard" size="20px" color="#AAA" margintop="5px" spacing="2px" paddingright="20px" paddingtop="5px" marginbottom="8px">
                                     {isRecording ? "녹음 중..." : "마이크를 눌러 대답을 시작하세요"}
                                 </Font>
+                                <MicButton onClick={() => toggleRecording(startRecording, stopRecording)} isRecording={isRecording} />
                             </MicrophoneContainer>
                         )}
                     />
-
                     <Button
-                        width="130px"
-                        height="50px"
-                        fontsize="27px"
-                        radius="15px"
-                        color="#f4fdff"
-                        left="20px"
-                        style={{ marginLeft: '10px' }}
+                        style={{ marginLeft: '50px', marginRight: '40px'}}
                         onClick={handleSubmit}
                     >
                         제출하기
                     </Button>
                 </BottomContainer>
-            </Box>
+            </OutlineContainer>
         </div>
     );
 };
 
-// Styled-components 정의
+// Components
+const MicButton = ({ onClick, isRecording }) => (
+    <MicWrapper onClick={onClick}>
+        <MicImage src={mic} alt="Mic" isRecording={!isRecording} />
+        <MicImage src={micOn} alt="Mic On" isRecording={isRecording} />
+    </MicWrapper>
+);
 
-const BottomContainer = styled.div`
-  display: flex;
-  justify-content: space-between; /* 요소들 간의 여백을 균등하게 */
-  align-items: center; /* 수직 가운데 정렬 */
+const MicWrapper = styled.div`
+    position: relative;
+    width: 35px;
+    height: 40px;
+    cursor: pointer;
 `;
-const MicrophoneContainer = styled.div`
+
+const MicImage = styled.img`
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+    transition: opacity 0.3s ease;
+    opacity: ${({ isRecording }) => (isRecording ? 1 : 0)};
+`;
+
+// Styled Components
+const Button = styled.div`
+    width: auto;
+    height: 50px;
+    font-size: 20px;
+    border-radius: 15px;
+    color: #000;
+    font-family: 'Pretendard', sans-serif;
     display: flex;
+    justify-content: center;
     align-items: center;
+    cursor: pointer;
+    transition: color 0.3s ease, font-weight 0.3s ease;
+    &:hover {
+        color: #006AC1;
+        font-weight: bold;
+    }
+`;
+
+const OutlineContainer = styled.div`
+    position: relative;
+    height: 80vh;
+    width: 70vw;
+    margin-top: 30px;
+    border: 2px solid #EEE;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 4px;
+    border-radius: 10px;
+    padding: 20px 40px;
+    min-width: 1000px;
 `;
 
 const Container = styled.div`
     display: flex;
     align-items: flex-start;
     margin-top: 90px;
+    gap: 20px;
 `;
 
-const QuestionBubble = styled.div`
-    background-color: #ffffff;
+const ChatContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+`;
+
+const ChatBubble = styled.div`
+    background-color: rgb(248, 249, 250);
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 4px;
     border-radius: 15px;
     padding: 10px 15px;
-    width: 32vw;
-    height: 20vh;
+    width: 50vw;
     max-width: 40vw;
-    margin-bottom: 20px;
-    margin-left: -90px;
-    position: relative;
-
-    &::after {
-        content: '';
-        position: absolute;
-        top: 50%;
-        left: -16px;
-        border-right: 16px solid #ffffff;
-        border-top: 10px solid transparent;
-        border-bottom: 10px solid transparent;
-        transform: translateY(-50%);
-    }
-`;
-
-const ResponseBubble = styled.div`
-    background-color: #ffffff;
-    border-radius: 15px;
-    padding: 10px 15px;
-    width: 32vw;
     height: 20vh;
-    margin-bottom: 20px;
-    margin-left: -40px;
     position: relative;
-
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin-left: ${({ align }) => (align === 'left' ? '-50px' : '50px')};
+    margin-${({ align }) => (align === 'left' ? 'bottom' : 'top')}: 20px;
     &::after {
         content: '';
         position: absolute;
         top: 50%;
-        right: -16px;
-        border-left: 16px solid #FFFFFF;
+        ${({ align }) => (align === 'left' ? 'left: -16px;' : 'right: -16px;')}
+        border-${({ align }) => (align === 'left' ? 'right' : 'left')}: 16px solid #ffffff;
         border-top: 10px solid transparent;
         border-bottom: 10px solid transparent;
         transform: translateY(-50%);
     }
 `;
 
-// 기존 InputField를 대체할 TextareaField 정의
+const BottomContainer = styled.div`
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: auto;
+`;
+
+const MicrophoneContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
 const TextareaField = styled.textarea`
     width: 100%;
     height: 100%;
     border: none;
     outline: none;
+    background-color: rgb(248, 249, 250);
     font-family: 'PretendardM', sans-serif;
     font-size: 18px;
     padding: 10px;
     border-radius: 15px;
-    resize: none; /* 사용자가 크기 조절을 하지 못하도록 설정 */
-    overflow-y: auto; /* 내용이 많아지면 세로 스크롤 */
-    word-wrap: break-word; /* 긴 단어가 있을 경우 줄바꿈 */
-    white-space: pre-wrap; /* 줄바꿈과 공백을 유지하며 자동 줄바꿈 */
+    resize: none;
+    overflow-y: auto;
 `;
 
 export default AiInterview;
