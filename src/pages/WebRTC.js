@@ -25,11 +25,12 @@ const WebRTC = () => {
     const [questions, setQuestions] = useState([]);
 
     // 다른 회원 정보를 저장하기 위한 객체
-    const otherMembers = {
+    // 상태로 otherMembers 선언
+    const [otherMembers, setOtherMembers] = useState({
         otherMember1: null,
         otherMember2: null,
         otherMember3: null,
-    };
+    });
 
     // 메모 및 튜터 피드백을 위한 상태 관리
     const [memo, setMemo] = useState('');
@@ -47,7 +48,7 @@ const WebRTC = () => {
             localStream.getTracks().forEach(track => track.stop()); // 로컬 스트림 중지
         }
         // 다른 페이지로 이동
-        navigate("/InterviewFeedback", {state: {roomId: roomId}}) // 이동할 페이지 경로로 변경
+        navigate("/InterviewFeedback", {state: {roomId: roomId, mentorId: memberId}}) // 이동할 페이지 경로로 변경
     };
 
     // 카메라 시작 함수
@@ -72,7 +73,7 @@ const WebRTC = () => {
     const connectSocket = async () => {
         const socket = new SockJS(process.env.REACT_APP_API_URL + 'signaling'); // SockJS 소켓 생성
         stompClient = Stomp.over(socket); // STOMP 클라이언트 생성
-        // stompClient.debug = null; // 디버그 메시지 비활성화
+        stompClient.debug = null; // 디버그 메시지 비활성화
 
         stompClient.connect(
             {
@@ -86,17 +87,15 @@ const WebRTC = () => {
 
                 // ICE 후보 구독
                 stompClient.subscribe(`/topic/peer/iceCandidate/${myKey}/${roomUuid}`, candidate => {
-                    const key = JSON.parse(candidate.body).key; // 키 추출
-                    const message = JSON.parse(candidate.body).body; // 후보 메시지 추출
+                    const key = JSON.parse(candidate.body).key // 후보를 보낸 사용자 키
+                    const message = JSON.parse(candidate.body).body; // ICE 후보 메시지
 
-                    const pc = pcListMap.get(key); // 피어 연결 가져오기
-                    if (pc) {
-                        pc.addIceCandidate(new RTCIceCandidate({
-                            candidate: message.candidate,
-                            sdpMLineIndex: message.sdpMLineIndex,
-                            sdpMid: message.sdpMid
-                        })); // ICE 후보 추가
-                    }
+                    // 해당 키의 피어 연결에서 ICE 후보를 추가합니다.
+                    pcListMap.get(key).addIceCandidate(new RTCIceCandidate({
+                        candidate: message.candidate,
+                        sdpMLineIndex: message.sdpMLineIndex,
+                        sdpMid: message.sdpMid
+                    }));
                 });
 
                 // Offer 구독
@@ -318,23 +317,22 @@ const WebRTC = () => {
         }
     };
 
-    // 다른 멤버 정보 테스트
-    const handleMemberId = async () => {
+    // handleMemberId 함수 수정
+    const handleMemberId = () => {
+        const newMembers = { ...otherMembers }; // 기존 상태 복사
         otherMemberIdList.forEach((memberId, index) => {
-            if (index < otherMemberIdList.length) {
-                if (otherMembers[`otherMember${index + 1}`] == null) {
-                    otherMembers[`otherMember${index + 1}`] = memberId; // 다른 멤버 정보 저장
-                }
+            if (index < 3 && newMembers[`otherMember${index + 1}`] == null) {
+                newMembers[`otherMember${index + 1}`] = memberId; // 새로운 값 할당
             }
         });
-
-    };
+        setOtherMembers(newMembers); // 상태 업데이트
+    }
 
     // 피드백 버튼 클릭 처리
     const handlePostButtonClick1 = async (menteeId) => {
         // 여기에 피드백 전송 로직을 추가할 수 있습니다.
         try {
-            const response = await axios.post(process.env.REACT_APP_API_URL + "mentee/feedback/" + `${roomId}/` + memberId, {
+            const response = await axios.post(process.env.REACT_APP_API_URL + "mentee/feedback/" + `${roomId}/` + menteeId, {
                 content: tutor1
             },{
                 headers: {
@@ -352,7 +350,7 @@ const WebRTC = () => {
     const handlePostButtonClick2 = async (menteeId) => {
         // 여기에 피드백 전송 로직을 추가할 수 있습니다.
         try {
-            const response = await axios.post(process.env.REACT_APP_API_URL + "mentee/feedback/" + `${roomId}/` + memberId, {
+            const response = await axios.post(process.env.REACT_APP_API_URL + "mentee/feedback/" + `${roomId}/` + menteeId, {
                 content: tutor2
             },{
                 headers: {
@@ -370,7 +368,7 @@ const WebRTC = () => {
     const handlePostButtonClick3 = async (menteeId) => {
         // 여기에 피드백 전송 로직을 추가할 수 있습니다.
         try {
-            const response = await axios.post(process.env.REACT_APP_API_URL + "mentee/feedback/" + `${roomId}/` + memberId, {
+            const response = await axios.post(process.env.REACT_APP_API_URL + "mentee/feedback/" + `${roomId}/` + menteeId, {
                 content: tutor3
             },{
                 headers: {
