@@ -49,7 +49,7 @@ const Signup = () => {
         break;
       case '비밀번호':
         const validationMessage = passwordValidation(value);
-        setPasswordValidationMessage(validationMessage ? '비밀번호에는 숫자, 문자, 특수문자가 포함되어야 합니다.' : '');
+        setPasswordValidationMessage(validationMessage ? '' : '비밀번호에는 숫자, 문자, 특수문자가 포함되어야 합니다.');
         break;
       case '닉네임':
         nicknameValidation(value);
@@ -264,7 +264,7 @@ const Signup = () => {
   };
 
   return (
-    <div style={styles.container}>
+    <div style={{ ...styles.container, maxWidth: '800px', marginTop: '70px' }}>
       <h2 style={styles.titleContainer}>
         <span style={styles.mainTitle}>회원가입</span>
         <span style={styles.divider}>|</span>
@@ -353,7 +353,7 @@ const Signup = () => {
       {/* 개인정보 */}
       <div style={styles.sectionContainer}>
         <h3 style={styles.sectionTitle}>개인정보</h3>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '20px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px', marginBottom: '15px' }}>
           <div>
             <label style={styles.label}>이름</label>
             <input
@@ -408,7 +408,7 @@ const Signup = () => {
       {/* 관심분야 */}
       <div style={styles.sectionContainer}>
         <h3 style={styles.sectionTitle}>관심분야</h3>
-        <div style={{ display: 'flex', gap: '20px', marginBottom: '20px' }}>
+        <div style={{ display: 'flex', gap: '15px', marginBottom: '15px' }}>
           <div style={{ flex: '1' }}>
             <label style={styles.label}>직군</label>
             <select
@@ -438,7 +438,7 @@ const Signup = () => {
       </div>
 
       {/* 회원가입 버튼 */}
-      <div style={{ textAlign: 'center', marginTop: '30px' }}>
+      <div style={{ textAlign: 'center', marginTop: '40px' }}>
         <StyledButton onClick={handleSignup}>회원가입</StyledButton>
       </div>
     </div>
@@ -446,9 +446,9 @@ const Signup = () => {
 };
 
 const StyledButton = styled.div`
-  width: 200px;
-  height: 55px;
-  font-size: 18px;
+  width: 180px;
+  height: 50px;
+  font-size: 16px;
   color: #000;
   font-family: 'Pretendard', sans-serif;
   display: flex;
@@ -459,6 +459,7 @@ const StyledButton = styled.div`
   color: white;
   border-radius: 8px;
   transition: color 0.3s ease, box-shadow 0.3s ease;
+  margin: 0 auto;
 
   &:hover {
     color: #ddd;
@@ -468,9 +469,9 @@ const StyledButton = styled.div`
 `;
 
 const StyledSmallButton = styled.div`
-  width: 180px;
-  height: 44px;
-  font-size: 16px;
+  width: 160px;
+  height: 40px;
+  font-size: 14px;
   color: #000;
   font-family: 'Pretendard', sans-serif;
   display: flex;
@@ -489,58 +490,60 @@ const StyledSmallButton = styled.div`
   }
 `;
 
-const styles = {
-  container: {
-    marginTop: '50px',
-    maxWidth: '800px',
-    margin: '0 auto',
-    padding: '30px',
-    backgroundColor: '#f9f9f9',
-    borderRadius: '12px',
-    boxShadow: '0 6px 18px rgba(0, 0, 0, 0.2)',
-  },
+  const styles = {
+    container: {
+      marginTop: '100px',
+      maxWidth: '1000px',
+      margin: '0 auto',
+      padding: '30px',
+      backgroundColor: '#f9f9f9',
+      borderRadius: '12px',
+      boxShadow: '0 6px 18px rgba(0, 0, 0, 0.2)',
+      marginBottom: '100px',
+    },
+  
   titleContainer: {
     textAlign: 'center',
-    marginBottom: '40px',
+    marginBottom: '30px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
   },
   mainTitle: {
-    fontSize: '32px',
+    fontSize: '28px',
     fontWeight: 'bold',
     color: '#333',
   },
   subTitle: {
-    fontSize: '18px',
+    fontSize: '16px',
     color: '#888',
     marginLeft: '10px',
   },
   divider: {
-    fontSize: '28px',
+    fontSize: '24px',
     color: '#888',
     marginLeft: '10px',
   },
   sectionContainer: {
-    marginBottom: '40px',
-    padding: '20px',
+    marginBottom: '30px',
+    padding: '15px',
     backgroundColor: '#fff',
     borderRadius: '8px',
     boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
   },
   sectionTitle: {
-    fontSize: '22px',
+    fontSize: '20px',
     fontWeight: 'bold',
-    marginBottom: '20px',
+    marginBottom: '15px',
     color: '#333',
   },
   inputGroup: {
-    marginBottom: '20px',
+    marginBottom: '15px',
   },
   label: {
     display: 'block',
     marginBottom: '8px',
-    fontSize: '16px',
+    fontSize: '14px',
     color: '#555',
   },
   inputContainer: {
@@ -550,16 +553,16 @@ const styles = {
   },
   input: {
     width: '100%',
-    padding: '12px',
+    padding: '10px',
     border: '1px solid #ccc',
-    fontSize: '16px',
+    fontSize: '14px',
     color: '#333',
   },
   longSelect: {
     width: '100%',
-    padding: '12px',
+    padding: '10px',
     border: '1px solid #ccc',
-    fontSize: '16px',
+    fontSize: '14px',
     color: '#333',
   },
   disabledInput: {
@@ -568,25 +571,25 @@ const styles = {
   },
   select: {
     width: '100%',
-    padding: '12px',
+    padding: '10px',
     border: '1px solid #ccc',
-    fontSize: '16px',
+    fontSize: '14px',
     color: '#333',
   },
   errorText: {
     color: 'red',
-    fontSize: '14px',
+    fontSize: '12px',
     marginTop: '5px',
     display: 'block',
   },
   successText: {
     color: 'green',
-    fontSize: '16px',
+    fontSize: '14px',
     marginTop: '10px',
   },
   infoText: {
     display: 'block',
-    fontSize: '14px',
+    fontSize: '12px',
     color: '#888',
     marginTop: '8px',
   },
