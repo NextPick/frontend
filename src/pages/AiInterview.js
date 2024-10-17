@@ -202,16 +202,16 @@ const AiInterview = () => {
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-            <Box height="90vh" width="70vw" border="none" alignItems="flex-start" justify="flex-start">
-                <Font font="PretendardM" size="27px" color="#000000" margintop="5px" spacing="2px" paddingleft="13px" paddingtop="5px" marginbottom="8px">
-                    AI코치가 묻는 질문에 마이크를 켜고 대답해주세요
+            <Box height="80vh" width="70vw" border="none" alignItems="flex-start" justify="flex-start" top="30px">
+                <Font font="Pretendard" size="27px" color="#000000" margintop="5px" spacing="2px" paddingleft="13px" paddingtop="5px" marginbottom="8px">
+                    AI코치가 묻는 질문에 대답해주세요
                 </Font>
 
                 <Container>
                     <img src={AiCoach} alt="Ai" style={{ width: '360px', height: '400px', marginLeft: "20px" }} />
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', marginLeft: '10px' }}>
                         <QuestionBubble>
-                            <Font font="PretendardM" size="18px" color="#000000">
+                            <Font font="Pretendard" size="18px" color="#000000">
                                 {exampleQuestion}
                             </Font>
                         </QuestionBubble>
@@ -225,44 +225,52 @@ const AiInterview = () => {
                     </div>
                 </Container>
 
-                <ReactMediaRecorder
-                    audio
-                    onStop={(blobUrl) => {
-                        setMediaBlobUrl(blobUrl);
-                    }}
-                    render={({ startRecording, stopRecording }) => (
-                        <MicrophoneContainer>
-                            <Button color="#FFFFFF" onClick={() => toggleRecording(startRecording, stopRecording)}>
-                                <img src={mic} alt="Mic" style={{ width: '35px', height: '40px' }} />
-                            </Button>
-                            <Font font="PretendardM" size="15px" color="#000000" margintop="5px" spacing="2px" paddingleft="13px" paddingtop="5px" marginbottom="8px">
-                                {isRecording ? "녹음 중..." : "마이크를 눌러 대답을 시작하세요"}
-                            </Font>
-                        </MicrophoneContainer>
-                    )}
-                />
+                <BottomContainer>
+                    <ReactMediaRecorder
+                        audio
+                        onStop={(blobUrl) => {
+                            setMediaBlobUrl(blobUrl);
+                        }}
+                        render={({ startRecording, stopRecording }) => (
+                            <MicrophoneContainer>
+                                <Button color="#FFFFFF" onClick={() => toggleRecording(startRecording, stopRecording)}>
+                                    <img src={mic} alt="Mic" style={{ width: '35px', height: '40px' }} />
+                                </Button>
+                                <Font font="Pretendard" size="20px" color="#000000" margintop="5px" spacing="2px" paddingleft="13px" paddingtop="5px" marginbottom="8px">
+                                    {isRecording ? "녹음 중..." : "마이크를 눌러 대답을 시작하세요"}
+                                </Font>
+                            </MicrophoneContainer>
+                        )}
+                    />
 
-                <Button
-                    width="130px"
-                    height="50px"
-                    fontsize="27px"
-                    radius="15px"
-                    color="#f4fdff"
-                    style={{ marginLeft: '10px' }}
-                    onClick={handleSubmit}
-                >
-                    제출하기
-                </Button>
+                    <Button
+                        width="130px"
+                        height="50px"
+                        fontsize="27px"
+                        radius="15px"
+                        color="#f4fdff"
+                        left="20px"
+                        style={{ marginLeft: '10px' }}
+                        onClick={handleSubmit}
+                    >
+                        제출하기
+                    </Button>
+                </BottomContainer>
             </Box>
         </div>
     );
 };
 
 // Styled-components 정의
+
+const BottomContainer = styled.div`
+  display: flex;
+  justify-content: space-between; /* 요소들 간의 여백을 균등하게 */
+  align-items: center; /* 수직 가운데 정렬 */
+`;
 const MicrophoneContainer = styled.div`
     display: flex;
     align-items: center;
-    margin-top: 30px;
 `;
 
 const Container = styled.div`

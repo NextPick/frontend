@@ -63,7 +63,7 @@ const MainContent = styled.main`
   padding: 20px;
   max-width: 800px;
   height: 100%;
-  background-color: #f1f7fd;
+  background-color: #e7f0f9;
   border-radius: 15px;
   margin-left: 20px;
   text-align: center;
