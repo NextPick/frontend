@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useHeaderMode } from '../hooks/HeaderManager';
-import { useNavigate } from 'react-router-dom';
 import Box from '../components/Box';
 import '../styles/login.css';
 import Font from '../components/Font';
 import styled from 'styled-components';
-import { useMember } from '../hooks/MemberManager'; // 회원 정보를 관리하는 훅
 import SearchBar from '../components/SearchBar';
 import { Modal, Button as ModalButton } from 'react-bootstrap'; // Modal 컴포넌트 추가
 import 'bootstrap/dist/css/bootstrap.min.css'; // Bootstrap 스타일 추가
@@ -92,13 +90,11 @@ const PaginationButton = styled.button`
 
 const FeedbackS = () => {
     const { headerMode, setHeaderMode } = useHeaderMode();
-    const navigate = useNavigate();
     const [reviews, setReviews] = useState([]);
     const [filteredReviews, setFilteredReviews] = useState([]);
     const [selectedReview, setSelectedReview] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
-
     const [page, setPage] = useState(1); // 현재 페이지
     const [size] = useState(10); // 한 페이지에 표시할 항목 수
     const [totalPages, setTotalPages] = useState(1); // 총 페이지 수
@@ -151,9 +147,10 @@ const FeedbackS = () => {
         setSearchTerm(value);
         if (value === '') {
             setFilteredReviews(reviews); // 검색어가 없으면 모든 리뷰를 보여줌
-        } else {
+        }  else {
             const filtered = reviews.filter(review =>
-                review.userComment.toLowerCase().includes(value.toLowerCase())
+                (review.content && review.content.toLowerCase().includes(value.toLowerCase())) || // 피드백 내용
+                (review.createdAt && review.createdAt.toLowerCase().includes(value.toLowerCase())) // 작성 날짜
             );
             setFilteredReviews(filtered);
         }
