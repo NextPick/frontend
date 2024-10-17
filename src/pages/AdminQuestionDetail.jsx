@@ -27,7 +27,7 @@ const Administration = () => {
       <AdminpageSide />
       <MainContent>
         <Title>
-          면접질문 관리
+          면접질문 관리 
           <img src={plusbutton} alt="plusbutton" style={{ width: '25px', height: '25px', marginLeft: '10px' }} />
         </Title>
         <ContentBox>
@@ -50,6 +50,12 @@ const Container = styled.div`
   background-color: #FFF;
   height: 100vh;
   font-family: Arial, sans-serif;
+`;
+
+const PlusButton = styled.img`
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
 `;
 
 const MainContent = styled.main`
