@@ -234,6 +234,7 @@ const styles = {
     cursor: 'pointer',
     fontSize: '18px',
     color: '#2c3e50',
+    marginTop: "10px",
   },
   searchIcon: {
     marginLeft: '5px',

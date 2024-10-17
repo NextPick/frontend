@@ -138,6 +138,7 @@
 .line2 {
     border-bottom: 0.5px solid #aaa9a97a; /* 줄 색상 및 두께 */
     width: 100%; /* 줄의 너비 설정 */
+    margin-bottom: 10px;
 }
 
 .line1 {

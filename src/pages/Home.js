@@ -1,13 +1,15 @@
 import React, { useEffect } from 'react';
 import { useHeaderMode } from '../hooks/HeaderManager.js';
 import '../styles/home.css';
-import { Link } from 'react-router-dom';
 import Button from '../components/Button.js';
 import Font from '../components/Font.js';
 import Arrow from '../components/Arrow.js';
 import Footer from '../components/Footer.js';
+import { useNavigate } from 'react-router-dom'; // useNavigate 추가
 
 const Home = () => {
+  const navigate = useNavigate(); // 페이지 이동을 위한 useNavigate 훅 사용
+
   // 특정 섹션으로 부드럽게 스크롤하는 함수
   const scrollToSection = (index) => {
     const section = document.querySelector(`.section${index}`);
@@ -15,6 +17,8 @@ const Home = () => {
       section.scrollIntoView({ behavior: `smooth` });
     }
   };
+
+
   useEffect(() => {
     const handleScroll = (event) => {
       if (event.deltaV > 0) {
@@ -38,6 +42,23 @@ const Home = () => {
   }, [setHeaderMode]);
 
 
+  // 로그인 상태 확인 함수
+  const isLoggedIn = () => {
+    const accessToken = localStorage.getItem('accessToken'); // 예시로 accessToken 확인
+    return !!accessToken; // 토큰이 있으면 true 반환
+  };
+
+
+   // 체험하기 버튼 클릭 핸들러
+   const handleExperienceClick = () => {
+    if (isLoggedIn()) {
+      navigate('/choice'); // 로그인 상태면 /choice 페이지로 이동
+    } else {
+      navigate('/login'); // 로그아웃 상태면 /login 페이지로 이동
+    }
+  };
+
+
   return (
     <div className='backgroundcolor'>
       <div className='section1'>
@@ -47,7 +68,6 @@ const Home = () => {
             ai 서비스와 엄선된 면접코치를
             <p>바탕으로 취업에 대한 답을 찾아드립니다</p>
           </div>
-            <Link to={'/login'}>
             <Button
               color="#177FF9"
               textcolor="#ffffff"
@@ -56,10 +76,10 @@ const Home = () => {
               radius="10px!important;"
               fontsize="20px;"
               fontcolor="#fff;"
+               onClick={handleExperienceClick} // 링크 대신 onClick 핸들러로 제어
             >
               체험하러 가기
             </Button>
-          </Link>
         </div>
         <div className='mainimg'>
           

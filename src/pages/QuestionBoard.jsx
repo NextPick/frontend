@@ -237,6 +237,7 @@ const styles = {
     cursor: 'pointer',
     fontSize: '18px',
     color: '#2c3e50',
+    marginTop:'10px',
   },
   dropdownContainer: {
     position: 'relative',

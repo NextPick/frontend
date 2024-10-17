@@ -27,6 +27,7 @@ const ReviewContainer = styled.div`
   flex-wrap: wrap;
   width: 100%;
   padding: 10px;
+  height: 47vh;
   gap: 10px;
   margin-top: 20px;
   overflow-y: auto;
@@ -101,7 +102,7 @@ const FeedbackS = () => {
 
     useEffect(() => {
         setHeaderMode('main');
-        
+
         // 피드백 데이터 가져오는 함수
         const fetchFeedback = () => {
             const headers = {
@@ -112,7 +113,7 @@ const FeedbackS = () => {
                 .then(response => {
                     console.log(response.data); // 여기에 추가하여 응답 데이터 확인
                     if (response.status === 200) {
-                        const feedbackData = response.data.data; 
+                        const feedbackData = response.data.data;
                         setReviews(response.data.data); // 피드백 데이터를 저장
                         setFilteredReviews(response.data.data); // 처음에는 모든 리뷰를 보여줌
                         setTotalPages(response.data.pageInfo.totalPages); // 총 페이지 수 저장
@@ -147,7 +148,7 @@ const FeedbackS = () => {
         setSearchTerm(value);
         if (value === '') {
             setFilteredReviews(reviews); // 검색어가 없으면 모든 리뷰를 보여줌
-        }  else {
+        } else {
             const filtered = reviews.filter(review =>
                 (review.content && review.content.toLowerCase().includes(value.toLowerCase())) || // 피드백 내용
                 (review.createdAt && review.createdAt.toLowerCase().includes(value.toLowerCase())) // 작성 날짜
@@ -165,9 +166,9 @@ const FeedbackS = () => {
 
     return (
         <Container>
-            <MypageSide/>
+            <MypageSide />
             <Box
-                height="90%"
+                height="100%"
                 width="35vw"
                 border="none"
                 left="20px"
@@ -175,7 +176,8 @@ const FeedbackS = () => {
                 direction="column"
                 alignitem="center"
                 padding="0px"
-                color="#e7f0f9"
+                color="#fff"
+                border="0.5px solid #ccc"
                 style={{ display: 'flex' }}
             >
                 <div style={{ marginBottom: '5px', width: '100%' }}>
@@ -203,15 +205,13 @@ const FeedbackS = () => {
                     {filteredReviews.map((review, index) => (
                         <ReviewCard key={index} onClick={() => handleReviewClick(review)}>
                             <div style={{ padding: '10px' }}>
-                <Font font="PretendardB" size="15px" color="#3f8cec">
-                    {review.userName || '익명'} {/* userName이 없을 경우 '익명'으로 표시 */}
-                </Font>
-                <Font font="PretendardL" size="10px" color="#000000" margintop="5px" spacing="2px">
-                    피드백: {review.content} {/* content를 사용하여 피드백 내용 표시 */}
-                </Font>
-                <Font font="PretendardL" size="10px" color="#A1A1A1" margintop="5px" spacing="2px">
-                    날짜: {review.createdAt} {/* createdAt 날짜 표시 */}
-                </Font>
+
+                                <Font font="PretendardL" size="14px" color="#A1A1A1" margintop="5px" spacing="2px">
+                                    날짜: {review.createdAt} {/* createdAt 날짜 표시 */}
+                                </Font>
+                                <Font font="PretendardL" size="20px" color="#000000" margintop="5px" spacing="2px">
+                                    피드백: {review.content} {/* content를 사용하여 피드백 내용 표시 */}
+                                </Font>
                             </div>
                         </ReviewCard>
                     ))}
@@ -222,7 +222,7 @@ const FeedbackS = () => {
                     <PaginationButton onClick={() => handlePageChange(page - 1)} disabled={page === 1}>
                         이전
                     </PaginationButton>
-                    <span>{page} / {totalPages}</span>
+                    <span style={{ marginTop: '9px' }} >{page} / {totalPages}</span>
                     <PaginationButton onClick={() => handlePageChange(page + 1)} disabled={page === totalPages}>
                         다음
                     </PaginationButton>
@@ -235,15 +235,14 @@ const FeedbackS = () => {
                     </Modal.Header>
                     <Modal.Body>
                         <ModalContent>
-                        <Font font="PretendardB" size="20px" color="#3f8cec" marginbottom="5px">
-                {selectedReview?.userName || '익명'} {/* userName이 없을 경우 '익명'으로 표시 */}
-            </Font>
-            <Font font="PretendardL" size="20px" color="#000000" margintop="5px">
-                피드백: {selectedReview?.content} {/* content를 사용하여 피드백 내용 표시 */}
-            </Font>
-            <Font font="PretendardL" size="10px" color="#A1A1A1" margintop="5px" spacing="2px">
-                날짜: {selectedReview?.createdAt} {/* createdAt 날짜 표시 */}
-            </Font>
+
+                            <Font font="PretendardL" size="15px" color="#A1A1A1" margintop="5px" spacing="2px">
+                                날짜: {selectedReview?.createdAt} {/* createdAt 날짜 표시 */}
+                            </Font>
+                            <Font font="PretendardL" size="20px" color="#000000" margintop="5px">
+                                피드백: {selectedReview?.content} {/* content를 사용하여 피드백 내용 표시 */}
+                            </Font>
+
                         </ModalContent>
                     </Modal.Body>
                     <Modal.Footer>
