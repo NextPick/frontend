@@ -210,7 +210,7 @@ const styles = {
   searchSortContainer: {
     display: 'flex',
     width: '100%',
-    maxWidth: '800px',
+    maxWidth: '900px',
     marginBottom: '20px',
     gap: '20px',
     alignItems: 'center',
