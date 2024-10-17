@@ -22,7 +22,7 @@ const BarChart = ({ category }) => {
     };
 
     useEffect(() => {
-        fetch('http://localhost:8080/statistics/question')
+        fetch(process.env.REACT_APP_API_URL + 'statistics/question')
             .then(response => response.json())
             .then(data => {
                 const categories = {

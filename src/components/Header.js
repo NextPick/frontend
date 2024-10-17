@@ -33,7 +33,7 @@ const Header = () => {
         if (token) {
             try {
                 // 백엔드에 로그아웃 요청 보내기
-                await axios.post('http://localhost:8080/auth/logout', {}, {
+                await axios.post(process.env.REACT_APP_API_URL + 'auth/logout', {}, {
                     headers: {
                         Authorization: `Bearer ${token}`  // 헤더에 토큰 추가
                     }
