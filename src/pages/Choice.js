@@ -35,6 +35,7 @@ const Choice = () => {
 
     const handlePostInterviewRoom = async () => {
         if (roomTitle.trim() === '' || roomOccupation.trim() === '') {
+            // 필수 입력 필드 확인
             Swal.fire({
                 icon: 'warning',
                 title: '모든 필드를 입력해주세요.',
@@ -47,31 +48,50 @@ const Choice = () => {
         }
 
         try {
-            const response = await axios.post(process.env.REACT_APP_API_URL + 'rooms',
+            // 서버에 방 생성 요청
+            const response = await axios.post(
+                process.env.REACT_APP_API_URL + 'rooms',
                 { title: roomTitle, occupation: roomOccupation },
-                { headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` } }
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                }
             );
+
+            // 방 생성 성공 메시지 표시
             Swal.fire({
                 icon: 'success',
                 title: '방이 성공적으로 생성되었습니다.',
-                confirmButtonText: '확인'
+                confirmButtonText: '확인',
             }).then(() => {
-                let data = response.data.data;
-                roomUuid = data.roomUuid;
-                title = data.title;
-                roomId = data.roomId;
-                memberId = data.memberId;
+                const data = response.data.data;
+                const roomUuid = data.roomUuid;
+                const title = data.title;
+                const roomId = data.roomId;
+                const memberId = data.memberId;
+
+                // 모달 닫기
                 setShowAddModal(false);
-                navigate('/webrtc', { state: { roomUuid: roomUuid, title: title, roomId: roomId, roomOccupation: roomOccupation, memberId: memberId }  }); // 방 생성 후 이동
+
+                // 화면 전환 후 바로 적용될 수 있도록 navigate를 명시적으로 호출
+                setTimeout(() => {
+                    navigate('/webrtc', {
+                        state: { roomUuid, title, roomId, roomOccupation, memberId },
+                    });
+                }, 100); // 짧은 지연을 추가하여 상태가 변경된 후 navigate 호출
             });
         } catch (error) {
+            // 방 생성 실패 시 오류 메시지 표시
             await Swal.fire({
                 icon: 'error',
                 title: '방 만드는 중 오류가 발생했습니다.',
-                confirmButtonText: '확인'
+                confirmButtonText: '확인',
             });
         }
     };
+
 
     const handleGetInterviewRoom = async (occupation) => {
         try {
@@ -82,7 +102,15 @@ const Choice = () => {
             roomUuid = data.roomUuid;
             title = data.title;
             roomId = data.roomId;
-            navigate('/webrtc', { state: { roomUuid, title, roomId, roomOccupation: occupation, memberId: memberId } });
+            // 모달 닫기
+            setShowAddModal(false);
+
+            // 화면 전환 후 바로 적용될 수 있도록 navigate를 명시적으로 호출
+            setTimeout(() => {
+                navigate('/webrtc', {
+                    state: { roomUuid, title, roomId, roomOccupation, memberId },
+                });
+            }, 100); // 짧은 지연을 추가하여 상태가 변경된 후 navigate 호출
         } catch {
             await Swal.fire({icon: 'error', title: '직군의 남은 방이 없습니다.'});
         }
