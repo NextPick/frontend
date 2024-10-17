@@ -492,14 +492,13 @@ const StyledSmallButton = styled.div`
 
   const styles = {
     container: {
-      marginTop: '100px',
+      // marginTop: '100px',
       maxWidth: '1000px',
-      margin: '0 auto',
+      margin: '50px auto 100px',
       padding: '30px',
       backgroundColor: '#f9f9f9',
       borderRadius: '12px',
       boxShadow: '0 6px 18px rgba(0, 0, 0, 0.2)',
-      marginBottom: '100px',
     },
   
   titleContainer: {
