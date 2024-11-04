@@ -16,11 +16,11 @@ const Header = () => {
     useEffect(() => {
         const fetchUserData = async () => {
             const token = localStorage.getItem('accessToken');
-            if (!token) {
-                console.error('토큰이 없습니다. 로그인 페이지로 이동합니다.');
-                navigate('/login'); // 토큰이 없으면 로그인 페이지로 이동
-                return;
-            }
+            // if (!token) {
+            //     console.error('토큰이 없습니다. 로그인 페이지로 이동합니다.');
+            //     navigate('/login'); // 토큰이 없으면 로그인 페이지로 이동
+            //     return;
+            // }
 
             try {
                 const response = await axios.get(process.env.REACT_APP_API_URL + 'members', {
@@ -37,8 +37,8 @@ const Header = () => {
                     console.error('사용자 정보 가져오기 실패', response.status);
                 }
             } catch (error) {
-                console.error('사용자 정보를 가져오는 데 실패했습니다.', error);
-                navigate('/login');  // 오류 발생 시 로그인 페이지로 리다이렉트
+                // console.error('사용자 정보를 가져오는 데 실패했습니다.', error);
+                // navigate('/login');  // 오류 발생 시 로그인 페이지로 리다이렉트
             }
         };
 
