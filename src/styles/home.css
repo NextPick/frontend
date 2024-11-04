@@ -26,6 +26,7 @@
     src: url("../assets/fonts/Pretendard-Black.otf") format("truetype");
   }
 
+
 .backgroundcolor{
     display: flex;
     flex-direction: column;

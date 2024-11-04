@@ -38,6 +38,18 @@
   src: url("../assets/fonts/SF함박눈TTF.ttf") format("truetype");
 }
 
+.navLink {
+  margin: 0 15px;
+  text-decoration: none;
+  color: #343a40;
+  font-size: 16px;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+.navLink:hover {
+    color: rgb(23, 127, 249);
+}
+
 .width-wrapper {
   display: flex; /* Flexbox 사용 */
   justify-content: center; /* 수평 중앙 정렬 */
